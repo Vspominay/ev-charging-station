@@ -1,0 +1,84 @@
+// 
+// _card.scss
+// 
+
+.card {
+  margin-bottom: $grid-gutter-width;
+  box-shadow: $card-box-shadow;
+}
+
+.card-header {
+  border-bottom: 1px solid var(--#{$prefix}border-color);
+}
+
+//Card Header Dropdown
+.card-header-dropdown {
+  .dropdown-btn {
+    padding: $card-cap-padding-y 0;
+  }
+}
+
+.card-footer {
+  border-top: 1px solid var(--#{$prefix}border-color);
+}
+
+.card-title {
+  font-size: 16px;
+  margin: 0 0 7px 0;
+}
+
+.card-height-100 {
+  height: calc(100% - #{$grid-gutter-width});
+}
+
+.card-animate {
+  transition: all 0.4s;
+
+  &:hover {
+    transform: translateY(calc(#{-$grid-gutter-width} / 5));
+    box-shadow: $box-shadow-lg;
+  }
+}
+
+
+// card color variant
+
+@each $color,
+$value in $theme-colors {
+  .card-#{$color} {
+    background-color: $value;
+    color: color-contrast($value);
+
+    .card-header, .card-footer {
+      background-color: rgba($white, 0.1);
+      color: color-contrast($value);
+      border-color: transparent;
+    }
+
+    .card-title {
+      color: color-contrast($value);
+    }
+  }
+}
+
+@each $color,
+$value in $theme-colors {
+  .card-border-#{$color} {
+    border-color: $value !important;
+
+    .card-header, .card-footer {
+      border-color: $value;
+    }
+
+  }
+}
+
+.custom-loader {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg)
+  }
+}

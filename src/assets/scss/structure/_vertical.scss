@@ -1,0 +1,48 @@
+//
+// _vertical.scss
+// 
+
+$header-height: 60px;
+$footer-height: 60px;
+$vertical-menu-z-index: 3;
+$grid-gutter-width: 1rem;
+
+.app-content {
+  margin-left: var(--#{$prefix}vertical-menu-width);
+  overflow: hidden;
+
+  .content {
+    padding: 0 15px 10px 15px;
+    margin-top: $header-height;
+  }
+}
+
+.main-content {
+  transition: all .1s ease-out;
+
+  @media (min-width: 768px) {
+    margin-left: var(--#{$prefix}vertical-menu-width);
+  }
+}
+
+.page-content {
+  padding: calc(#{$header-height} + #{$grid-gutter-width}) calc(#{$grid-gutter-width} * 0.5) $footer-height calc(#{$grid-gutter-width} * 0.5);
+}
+
+
+[data-layout='vertical'][data-bs-theme='dark'] {
+  &[data-layout-style='detached'] {
+
+    @media (min-width: 1024.1px) {
+      &:is([data-sidebar='light'], [data-sidebar='dark'], [data-sidebar='gradient'], [data-sidebar='gradient-2'], [data-sidebar='gradient-3'], [data-sidebar='gradient-4']) {
+        .logo-dark {
+          display: none;
+        }
+
+        .logo-light {
+          display: inline-block;
+        }
+      }
+    }
+  }
+}
