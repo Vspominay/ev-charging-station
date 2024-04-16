@@ -1,0 +1,48 @@
+<div class="card p-3 py-0">
+  <div class="card-header d-flex align-items-center pb-3 border-bottom border-bottom-dashed">
+    <h5 class="flex-grow-1 fw-semibold mb-0">{{ 'depot.stats.power-usage-overview' | translate }}</h5>
+  </div>
+
+  <div class="card-body row">
+    <div id="depot-energy-usage-chart" class="col col-lg-6 apex-charts mt-3" dir="ltr">
+      <apx-chart
+        [series]="$series()"
+        [chart]="chart"
+        [grid]="{ show: false }"
+        [yaxis]="yaxis"
+        [xaxis]="$xaxis()"
+        [tooltip]="tooltip"
+        [plotOptions]="plotOptions"
+        [annotations]="$annotations()"
+        [dataLabels]="datalabels"
+        [colors]="[$panelStyle()]"></apx-chart>
+    </div>
+
+    <div class="mt-4 col col-lg-6">
+      <ul class="list-unstyled vstack gap-4">
+        @for (stats of depot() | depotMainPanelStats: $currentTime(); track stats.value) {
+          <li>
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0">
+                <div class="avatar-xs">
+                  <div class="avatar-title rounded bg-{{stats.style}}-subtle text-{{stats.style}}">
+                    <i [icon]="stats.icon" class="fs-17"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex-grow-1 ms-3">
+                <h5 class="mb-1 fs-15">{{ stats.label | translate }}</h5>
+                @if (stats.subtitle) {
+                  <p class="mb-0 fs-12 text-muted">{{ stats.subtitle | translate }}</p>
+                }
+              </div>
+
+              <b>{{ stats.value }}</b>
+            </div>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</div>

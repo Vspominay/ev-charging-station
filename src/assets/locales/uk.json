@@ -1,0 +1,37 @@
+{
+  "base": {
+    "buttons": {
+      "create": "Створити",
+      "edit": "Редагувати",
+      "delete": "Видалити",
+      "save": "Зберегти",
+      "close": "Закрити"
+    }
+  },
+  "sidebar": {
+    "management": "Управління",
+    "depots": "Депо",
+    "dashboard": "Панель керування",
+    "settings": "Налаштування",
+    "statistics": "Статистика",
+    "reports": "Звіти",
+    "charts": "Графіки"
+  },
+  "depot": {
+    "list": {
+      "title": "Список депо",
+      "alerts": {
+        "energy-limit-reached": "Досягнуто ліміту енергії"
+      }
+    },
+    "statuses": {
+      "online": "В мережі",
+      "offline": "Не в мережі",
+      "faulted": "Несправний"
+    },
+    "upsert": {
+      "add": "Додати депо",
+      "edit": "Редагувати депо"
+    }
+  }
+}

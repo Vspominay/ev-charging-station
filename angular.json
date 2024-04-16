@@ -34,9 +34,9 @@
           "skipTests": true
         }
       },
-      "root": "",
+      "root": "/",
       "sourceRoot": "src",
-      "prefix": "bv",
+      "prefix": "ev",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",

@@ -1,0 +1,13 @@
+:host {
+  .field-wrapper {
+    &:has(.ng-invalid.ng-dirty) .hint-wrapper {
+      display: none;
+    }
+  }
+
+  .field-wrapper.no-hint-on-leave {
+    &:has(.ng-valid.ng-dirty:not(:focus)) .hint-wrapper {
+      display: none;
+    }
+  }
+}

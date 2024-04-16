@@ -1,0 +1,28 @@
+@if (formControl) {
+  <div class="form-control-wrapper">
+    <div class="hide-empty label-wrapper d-flex justify-content-between fw-medium">
+      @if (label) {
+        <label [class.required]="isRequired" [for]="id" class="form-label">{{ label }}</label>
+      }
+
+      <div class="hide-empty text-body-secondary">
+        <ng-content select="[action]"/>
+      </div>
+    </div>
+
+    <div formElementIcons
+         [class.no-hint-on-leave]="hideHintOnFill"
+         class="field-wrapper">
+      <ng-content/>
+
+      <ng-content select="[prefix-icon]"/>
+      <ng-content select="[suffix-icon]"/>
+
+      @if (hint) {
+        <div class="hint-wrapper position-absolute animated-message form-text">
+          <span>{{ hint }}</span>
+        </div>
+      }
+    </div>
+  </div>
+}

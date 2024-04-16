@@ -1,0 +1,53 @@
+{
+  "base": {
+    "buttons": {
+      "create": "Create",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "close": "Close"
+    },
+    "placeholders": {
+      "search": "Start typing to search..."
+    }
+  },
+  "sidebar": {
+    "management": "Management",
+    "depots": "Depots",
+    "dashboard": "Dashboard",
+    "reports": "Reports",
+    "statistics": "Statistics",
+    "settings": "Settings",
+    "charts": "Charts"
+  },
+  "depot": {
+    "list": {
+      "title": "Depot list",
+      "alerts": {
+        "energy-limit-reached": "Energy limit reached"
+      }
+    },
+    "stats": {
+      "power-usage-overview": "Power usage overview"
+    },
+    "configuration": {
+      "max-provision": "Max. provision power",
+      "location": {
+        "title": "Location"
+      },
+      "timezone": {
+        "title": "Timezone",
+        "local-time": "Depot local time"
+      }
+    },
+    "statuses": {
+      "online": "Online",
+      "offline": "Offline",
+      "faulted": "Faulted"
+    },
+    "upsert": {
+      "add": "Add depot",
+      "edit": "Edit depot"
+    }
+  }
+}

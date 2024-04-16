@@ -1,0 +1,43 @@
+<div class="card">
+  <div class="card-header border-0 rounded">
+    <div class="row g-2">
+      <div class="col-xl-3">
+        <div class="search-box">
+          <input type="text"
+                 class="form-control search"
+                 [placeholder]="'base.placeholders.search' | translate"
+                 [formControl]="searchControl">
+          <i icon="search" class="search-icon"></i>
+        </div>
+      </div>
+
+      <!--end col-->
+      <div class="col-xl-3 ms-auto">
+        <ng-content></ng-content>
+      </div>
+      <!--end col-->
+
+      @if (actions | actionPlacement: 'bar'; as barActions) {
+        @if (barActions.length) {
+          <div class="col-lg-auto">
+            <div class="hstack gap-2">
+              @for (action of barActions; track action.value) {
+                <button
+                  type="button"
+                  [disabled]="action.data.disabled"
+                  class="btn btn-label justify-content-center left btn-{{action.data.style}}"
+                  (click)="selectAction.emit(action.value)"
+                >
+                  <span class="label-icon" [icon]="action.data.icon"></span>
+                  {{ action.label | translate }}
+                </button>
+              }
+            </div>
+          </div>
+          <!--end col-->
+        }
+      }
+    </div>
+    <!--end row-->
+  </div>
+</div>

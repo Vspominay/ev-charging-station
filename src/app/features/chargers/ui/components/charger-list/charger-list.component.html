@@ -1,0 +1,42 @@
+<div class="tasks-board mb-3" id="kanbanboard">
+  @for (charger of chargers | keyvalue; track charger.key) {
+    <div class="tasks-list">
+      <div class="d-flex mb-3">
+        <div class="flex-grow-1">
+          <h6 class="fs-14 text-uppercase fw-semibold mb-0">
+            {{ charger.key }}
+            <small class="badge bg-success align-bottom ms-1 totaltask-badge">{{ charger.value.length }}</small>
+          </h6>
+        </div>
+
+        <div class="flex-shrink-0">
+          <!--          <div class="dropdown card-header-dropdown" ngbDropdown>-->
+          <!--            <a class="text-body dropdown-btn arrow-none" href="javascript:void(0);" data-bs-toggle="dropdown"-->
+          <!--               aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>-->
+          <!--                                <span class="fw-medium text-muted fs-12">Priority<i-->
+          <!--                                  class="mdi mdi-chevron-down ms-1"></i></span>-->
+          <!--            </a>-->
+          <!--            <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>-->
+          <!--              <a class="dropdown-item" href="javascript:void(0);">Priority</a>-->
+          <!--              <a class="dropdown-item" href="javascript:void(0);">Date Added</a>-->
+          <!--            </div>-->
+          <!--          </div>-->
+        </div>
+      </div>
+
+      <div class="tasklist-content">
+        @for (connector of charger.value; track connector.id) {
+          <div id="unassigned-task" class="tasks">
+            <!--          <div [dndDraggable]="task" dndEffectAllowed="move" (dndMoved)="onDragged(task, unassignedTasks)">-->
+            <!--            <ng-template [ngTemplateOutlet]="TaskContent" [ngTemplateOutletContext]="{task:task}">-->
+            <!--            </ng-template>-->
+            <!--          </div>-->
+            <div class="task">
+              <ev-connector-card [connector]="connector"/>
+            </div>
+          </div>
+        }
+      </div>
+    </div><!--end tasks-list-->
+  }
+</div>

@@ -1,0 +1,25 @@
+@if ($vm().depot; as depot) {
+  <app-breadcrumbs [title]="depot.name" [breadcrumbItems]="[]"></app-breadcrumbs>
+
+  <div class="row">
+    <div class="col-12 col-xxl-6">
+      <div class="row row-cols-md-3">
+        @for (stats of depot.chargerStats | depotStats; track stats.value) {
+          <div class="col">
+            <app-stats-card
+              [icon]="stats.icon"
+              [label]="stats.label | translate"
+              [value]="stats.value"
+              [style]="stats.style"
+            ></app-stats-card>
+          </div>
+        }
+
+      </div>
+    </div>
+
+    <app-depot-energy-usage class="col-12 col-xxl-6" [depot]="depot" [powerUsage]="97"/>
+  </div>
+}
+
+<router-outlet/>
