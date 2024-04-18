@@ -4,7 +4,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { TAddress } from '@core/types/address.type';
 import { DESCRIPTION_MAX_LENGTH, FIELD_MAX_LENGTH } from '@core/validators/field-max-length.validators';
 import { trimRequiredValidator } from '@core/validators/trim-required.validator';
-import { TDepot } from '@features/depot/data-access/models/depot.model';
+import { TCreateDepot, TDepot } from '@features/depot/data-access/models/depot.model';
 import { NgbActiveModal, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormElementModule } from '@shared/components/form-control/form-control.module';
@@ -33,11 +33,15 @@ export class UpsertDepotComponent {
   readonly dialog = inject(NgbActiveModal);
   private readonly fb = inject(NonNullableFormBuilder);
 
-  @Input({ required: true }) set depot(value: TDepot) {
-    this.upsertForm.patchValue(value);
+  @Input({ required: true }) set depot({ country, city, street, building, ...depot }: TDepot) {
+    const address = { country, city, street, building };
+    this.upsertForm.patchValue({
+      ...depot,
+      address
+    });
   }
 
-  @Input({ required: true }) labels!: Record<'label' | 'save', string>;
+  @Input() labels!: Record<'label' | 'save', string>;
 
   readonly upsertForm = this.fb.group<ControlsOf<TUpsertDepotForm>>({
     name: this.fb.control('', [trimRequiredValidator, FIELD_MAX_LENGTH]),
@@ -56,4 +60,23 @@ export class UpsertDepotComponent {
 
   readonly formControlNames = getFormControlsNames(this.upsertForm);
   readonly addressControlNames = getFormControlsNames(this.upsertForm.controls.address);
+
+  onSubmit() {
+    if (this.upsertForm.invalid) return;
+
+    const payload = this.adaptDepot(this.upsertForm.value as TUpsertDepotForm);
+    this.dialog.close(payload);
+  }
+
+  close() {
+    this.dialog.dismiss(false);
+  }
+
+  private adaptDepot({ address, ...depot }: TUpsertDepotForm): TCreateDepot {
+    return {
+      ...depot,
+      ...address,
+    };
+  }
 }
+

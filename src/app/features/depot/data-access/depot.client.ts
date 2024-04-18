@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
 import { BaseCrudService } from '@core/services/base-crud.service';
-import { TDepot, TDepotListItem } from '@features/depot/data-access/models/depot.model';
+import { TCreateDepot, TDepot, TDepotListItem } from '@features/depot/data-access/models/depot.model';
+
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-type TDepotResponse = Omit<TDepotListItem, 'email' | 'phoneNumber' | 'description' | 'image' | 'chargerStats'>;
+export type TDepotResponse = Omit<TDepotListItem, 'image' | 'chargerStats'>;
 
 @Injectable({
   providedIn: 'root'
 })
-export class DepotClientService extends BaseCrudService<TDepotResponse> {
+export class DepotClientService extends BaseCrudService<TDepotResponse, TCreateDepot> {
   readonly domain = 'Depot';
 
   loadList(searchQuery: string): Observable<Array<TDepotListItem>> {
     return this.getList()
-               .pipe(map((depots) => depots.map(depot => this.adaptListItem(depot))));
+               .pipe(map(({ collection }) => collection.map(depot => this.adaptListItem(depot))));
   }
 
   loadById(depotId: TDepot['id']): Observable<TDepotListItem> {
@@ -25,9 +26,6 @@ export class DepotClientService extends BaseCrudService<TDepotResponse> {
   private adaptListItem(response: TDepotResponse): TDepotListItem {
     return {
       ...response,
-      email: '',
-      phoneNumber: '',
-      description: '',
       image: this.getRandomImage(),
       chargerStats: this.getStats()
     };

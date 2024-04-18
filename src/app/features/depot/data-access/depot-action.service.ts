@@ -1,11 +1,14 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, Injector, runInInjectionContext } from '@angular/core';
 import { AActionService } from '@core/abstractions/base-acitons.abstraction';
-import { AddDepotStrategy } from '@features/depot/data-access/depot.strategies';
-import { TDepotListItem } from '@features/depot/data-access/models/depot.model';
+import { DepotClientService } from '@features/depot/data-access/depot.client';
+import { DepotStore } from '@features/depot/data-access/depot.store';
+import { AddDepotStrategy, AUpsertDepot, EditDepotStrategy } from '@features/depot/data-access/depot.strategies';
+import { TDepot, TDepotListItem } from '@features/depot/data-access/models/depot.model';
 import { UpsertDepotComponent } from '@features/depot/ui/components/upsert-depot/upsert-depot.component';
+
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TActionsMap, TActionWithIcon } from '@shared/utils/types/actions.types';
-import { filter, take } from 'rxjs';
+import { filter, switchMap, take } from 'rxjs';
 
 export enum DepotAction {
   Create = 'Create',
@@ -18,6 +21,10 @@ export enum DepotAction {
 })
 export class DepotActionService extends AActionService<DepotAction, TDepotListItem> {
   private readonly dialog = inject(NgbModal);
+  private readonly depotClient = inject(DepotClientService);
+  private injector = inject(Injector);
+  private readonly store = inject(DepotStore);
+
 
   protected readonly actionsMap: TActionsMap<DepotAction, TDepotListItem, TActionWithIcon> = {
     [DepotAction.Create]: {
@@ -31,7 +38,7 @@ export class DepotActionService extends AActionService<DepotAction, TDepotListIt
     },
     [DepotAction.Edit]: {
       label: 'base.buttons.edit',
-      handler: () => {},
+      handler: this.editDepot.bind(this),
       data: {
         icon: 'edit',
         style: 'primary',
@@ -40,7 +47,7 @@ export class DepotActionService extends AActionService<DepotAction, TDepotListIt
     },
     [DepotAction.Delete]: {
       label: 'base.buttons.delete',
-      handler: () => {},
+      handler: this.deleteDepot.bind(this),
       data: {
         icon: 'delete',
         style: 'danger',
@@ -51,32 +58,51 @@ export class DepotActionService extends AActionService<DepotAction, TDepotListIt
 
 
   private createDepot() {
+    const strategy = runInInjectionContext(this.injector, () => new AddDepotStrategy());
+
+    this.upsertDepot(strategy);
+  }
+
+  private deleteDepot({ id }: TDepot) {
+    this.store.delete(id);
+  }
+
+  private editDepot(depot: TDepot) {
+    const strategy = runInInjectionContext(this.injector, () => new EditDepotStrategy(depot.id));
+
+    this.upsertDepot(strategy, depot);
+  }
+
+  private upsertDepot(strategy: AUpsertDepot, depot?: TDepot) {
     const dialogRef = this.dialog.open(UpsertDepotComponent);
 
-    const strategy = new AddDepotStrategy();
+    console.log(strategy);
 
-    strategy.initialValue$
-            .pipe()
-            .subscribe((depot) => {
-              Object.assign(dialogRef.componentInstance, {
-                labels: strategy.labels,
-                depot
-              });
-            });
-
+    Object.assign(dialogRef.componentInstance, {
+      depot: depot || {},
+      labels: strategy.labels
+    });
 
     dialogRef.closed
              .pipe(
                filter(Boolean),
-               take(1)
+               take(1),
+               switchMap((depot) => strategy.save(depot))
              )
-             .subscribe((depot) => {
-               console.log(depot);
+             .subscribe({
+               next: (result) => {
+                 this.store.upsert({
+                   ...result,
+                   chargerStats: {
+                     online: 0,
+                     offline: 0,
+                     faulted: 0,
+                   }
+                 });
+               },
+               error: (error) => {
+                 console.warn(error);
+               }
              });
-
-  }
-
-  private deleteDepot() {
-
   }
 }

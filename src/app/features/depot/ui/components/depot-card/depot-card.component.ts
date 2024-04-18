@@ -65,7 +65,9 @@ import { DepotStatsPipe } from '../../pipes/depot-stats.pipe';
 
             <div ngbDropdownMenu>
               @for (action of hostActions.actions | actionPlacement: 'item'; track action.value) {
-                <button ngbDropdownItem>{{ action.label | translate }}</button>
+                <button (click)="hostActions.selectAction.emit(action)"
+                        ngbDropdownItem>{{ action.label | translate }}
+                </button>
               }
             </div>
           </div>

@@ -25,6 +25,7 @@ import DepotCardComponent from '../depot-card/depot-card.component';
             [depot]="depot"
             [actions]="facade.$actions()"
             [chargerStats]="depot.chargerStats"
+            (selectAction)="facade.handleAction($event.value, depot)"
           />
         </div>
       }
