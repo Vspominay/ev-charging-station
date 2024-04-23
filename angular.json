@@ -55,6 +55,7 @@
             ],
             "styles": [
               "src/styles.scss",
+              "node_modules/flatpickr/dist/flatpickr.css",
               "src/assets/scss/config/interactive/bootstrap.scss",
               "src/assets/scss/config/interactive/app.scss"
             ],

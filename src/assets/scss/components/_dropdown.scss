@@ -3,10 +3,13 @@
 // 
 
 .dropdown-toggle::after {
-  display: none;
+  display: inline-block;
+  font-size: 15px;
   line-height: 15px;
-  content: '';
+  font-family: 'Material Symbols Outlined';
+  content: '\e5d3';
   border-top: none;
+  vertical-align: middle;
 }
 
 .dropdown-menu {

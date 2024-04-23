@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BaseCrudService } from '@core/services/base-crud.service';
+import { BaseCrudService, TListResponse } from '@core/services/base-crud.service';
 import { TCreateDepot, TDepot, TDepotListItem } from '@features/depot/data-access/models/depot.model';
 
 import { Observable } from 'rxjs';
@@ -13,14 +13,19 @@ export type TDepotResponse = Omit<TDepotListItem, 'image' | 'chargerStats'>;
 export class DepotClientService extends BaseCrudService<TDepotResponse, TCreateDepot> {
   readonly domain = 'Depot';
 
-  loadList(searchQuery: string): Observable<Array<TDepotListItem>> {
-    return this.getList()
-               .pipe(map(({ collection }) => collection.map(depot => this.adaptListItem(depot))));
+  override getList(): Observable<TListResponse<TDepotResponse>> {
+    return super.getList()
+                .pipe(map(({ collection, ...payload }) => {
+                  return {
+                    ...payload,
+                    collection: collection.map((depot) => this.adaptListItem(depot))
+                  };
+                }));
   }
 
-  loadById(depotId: TDepot['id']): Observable<TDepotListItem> {
-    return this.getById(depotId)
-               .pipe(map(depot => this.adaptListItem(depot)));
+  override getById(depotId: TDepot['id']): Observable<TDepotListItem> {
+    return super.getById(depotId)
+                .pipe(map(depot => this.adaptListItem(depot)));
   }
 
   private adaptListItem(response: TDepotResponse): TDepotListItem {

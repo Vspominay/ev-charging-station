@@ -6,6 +6,13 @@
       "delete": "Видалити",
       "save": "Зберегти",
       "close": "Закрити"
+    },
+    "placeholders": {
+      "search": "Почніть вводити для пошуку"
+    },
+    "statuses": {
+      "active": "активний",
+      "blocked": "заблокований"
     }
   },
   "sidebar": {

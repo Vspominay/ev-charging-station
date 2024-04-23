@@ -1,0 +1,109 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="OCPP Tags"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card" id="leadsList">
+      <div class="card-header border-0">
+
+        <div class="row g-4 align-items-center">
+          <div class="col-sm-3">
+            <div class="search-box">
+              <input type="text" name="searchTerm" class="form-control" placeholder="Search for...">
+              <i icon="search" class="search-icon"></i>
+            </div>
+          </div>
+          <div class="col-sm-auto ms-auto">
+            <div class="hstack gap-2">
+              <button class="btn btn-soft-danger" id="remove-actions" style="display: none">
+                <i class="ri-delete-bin-2-line"></i></button>
+              <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas"
+                      href="javascript:void(0);"><i
+                class="ri-filter-3-line align-bottom me-1"></i> Filters
+              </button>
+              <button type="button" class="btn btn-secondary add-btn" data-bs-toggle="modal"
+                      id="create-btn" data-bs-target="#showModal"
+                      (click)="openUpsert()"
+              ><i
+                class="ri-add-line align-bottom me-1"></i> Add Tag
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div>
+          <div class="table-responsive table-card">
+            <table class="table">
+              <thead>
+              <tr class="bg-light text-muted">
+                <th scope="col" style="width: 50px;">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                  </div>
+                </th>
+                <th class="sort">ID</th>
+                <th>Parent tag ID</th>
+                <th>Expiration</th>
+                <th>Status</th>
+                <th data-sort="action">Action</th>
+              </tr>
+              </thead>
+              <tbody>
+                @for (tag of $tags(); track tag.id) {
+                  <tr>
+                    <th scope="row">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkAll">
+                      </div>
+                    </th>
+
+                    <td>
+                      {{ tag.tagId }}
+                    </td>
+                    <td>
+                      {{ tag.parentTagId | emptyValue }}
+                    </td>
+                    <td>
+                      {{ tag.expiryDate | date }}
+                    </td>
+                    <td>
+                      <span class="text-capitalize" [badge]="tag.blocked ? 'danger' : 'success'">
+                        {{
+                          (tag.blocked ? 'base.statuses.blocked' : 'base.statuses.active') | translate
+                        }}
+                      </span>
+                    </td>
+                    <td>
+                      <div ngbDropdown class="dropdown" container="body">
+                        <button ngbDropdownToggle
+                                class="btn btn-soft-secondary dropdown-toggle btn-sm dropdown" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                        </button>
+                        <ul ngbDropdownMenu class="dropdown-menu dropdown-menu-end">
+                          <li><a class="dropdown-item edit-item-btn" href="javascript:void(0);"
+                                 data-bs-toggle="modal"
+                                 (click)="openUpsert(tag)">Update</a>
+                          </li>
+                          <li><a class="dropdown-item remove-item-btn" data-bs-toggle="modal"
+                                 href="javascript:void(0);"
+                                 (click)="delete(tag)">Delete</a></li>
+                        </ul>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->

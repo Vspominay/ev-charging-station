@@ -1,1 +1,1 @@
-export const EMPTY_PLACEHOLDER = '——';
+export const EMPTY_PLACEHOLDER = '--';

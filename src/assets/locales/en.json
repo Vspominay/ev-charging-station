@@ -9,6 +9,10 @@
     },
     "placeholders": {
       "search": "Start typing to search..."
+    },
+    "statuses": {
+      "active": "active",
+      "blocked": "blocked"
     }
   },
   "sidebar": {

@@ -20,16 +20,16 @@ export class DepotListFacade {
   });
 
   readonly $viewModel = computed(() => {
-    const { depots, isLoading } = this.store;
+    const { entities, isLoading } = this.store;
 
     return {
-      depots: depots(),
+      depots: entities(),
       isLoading: isLoading()
     };
   });
 
   searchDepots(query: string) {
-    this.store.loadByQuery(query);
+    this.store.loadAll(query);
   }
 
   handleAction(action: DepotAction, depot?: TDepotListItem) {

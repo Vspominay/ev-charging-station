@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-type TListResponse<TEntity> = { collection: Array<TEntity> } & Array<TEntity>;
+export type TListResponse<TEntity> = { collection: Array<TEntity> } & Array<TEntity>;
 
 @Injectable({
   providedIn: 'root'

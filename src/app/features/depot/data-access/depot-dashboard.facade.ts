@@ -10,10 +10,10 @@ export class DepotDashboardFacade {
   private readonly store = inject(DepotStore);
 
   readonly $viewModel: Signal<{ depot: TDepotListItem | null, isLoading: boolean }> = computed(() => {
-    const { currentDepot, isLoading } = this.store;
+    const { currentEntity, isLoading } = this.store;
 
     return {
-      depot: currentDepot(),
+      depot: currentEntity(),
       isLoading: isLoading()
     };
   });

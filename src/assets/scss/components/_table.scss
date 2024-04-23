@@ -82,21 +82,11 @@ $value in $theme-colors {
     position: relative;
 
     &::before {
-      content: '\f035d';
+      content: '\e8d5';
       position: absolute;
       right: 0.5rem;
-      top: 18px;
-      font-size: 0.8rem;
-      font-family: 'Material Design Icons';
-    }
-
-    &::after {
-      position: absolute;
-      right: 0.5rem;
-      content: '\f0360';
-      font-family: 'Material Design Icons';
-      font-size: 0.8rem;
-      top: 12px;
+      font-size: 1em;
+      font-family: 'Material Symbols Outlined';
     }
   }
 }
