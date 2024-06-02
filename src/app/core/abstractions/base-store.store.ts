@@ -1,6 +1,6 @@
-import { inject, InjectionToken } from '@angular/core';
+import { computed, inject, InjectionToken } from '@angular/core';
 import { BaseCrudService } from '@core/services/base-crud.service';
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { firstValueFrom, pipe } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
@@ -18,6 +18,11 @@ export interface GenericStore<T extends GenericEntity> {
   isLoading: boolean;
 }
 
+export type TListViewModel<T> = {
+  entities: Array<T>,
+  isLoading: boolean
+};
+
 // Generic Store Initial State
 const initialState: GenericStore<any> = {
   entities: [],
@@ -32,14 +37,23 @@ export function createGenericStore<T extends GenericEntity, TCreateEntity = T>(
 ) {
   return signalStore(
     withState<GenericStore<T>>(initialState),
+    withComputed(({
+      entities,
+      isLoading
+    }) => ({
+      viewModel: computed<TListViewModel<T>>(() => ({
+        entities: entities(),
+        isLoading: isLoading()
+      })),
+    })),
     withMethods((store, client = inject(clientType)) => ({
-      loadAll: rxMethod<string>(
+      loadAll: rxMethod<Record<keyof Partial<T>, string> | {}>(
         pipe(
           debounceTime(300),
           distinctUntilChanged(),
           tap(() => patchState(store, { isLoading: true })),
-          switchMap((query) => {
-            return client.getList().pipe(
+          switchMap((params) => {
+            return client.getList(params).pipe(
               tap({
                 next: ({ collection: entities }) => patchState(store, { entities }),
                 error: console.error,
@@ -88,6 +102,9 @@ export function createGenericStore<T extends GenericEntity, TCreateEntity = T>(
           })
         )
       ),
+      setSelectedEntity: (entity: T) => {
+        patchState(store, { currentEntity: entity });
+      },
       upsert: (entity: T) => {
         let isUpdated = false;
         const entities = store.entities().map((existingEntity) => {
