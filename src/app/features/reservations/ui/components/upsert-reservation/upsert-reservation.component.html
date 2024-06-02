@@ -1,0 +1,107 @@
+@if (labels) {
+  <form [formGroup]="upsertForm" (ngSubmit)="saveChanges()">
+    <div class="modal-header">
+      <h5 class="modal-title" id="addSellerLabel">{{ labels.label | translate }}</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              (click)="close()"></button>
+    </div>
+
+    <div class="modal-body row">
+      <app-form-control class="col-12" [label]="'Reservation Name'">
+        <input type="text"
+               placeholder="High priority"
+               [formControlName]="formControlNames.name">
+      </app-form-control>
+
+      <app-form-control class="col-12" [label]="'Short Description'">
+        <textarea type="text"
+                  placeholder="Describe reservation"
+                  [formControlName]="formControlNames.description"
+        ></textarea>
+      </app-form-control>
+
+      <app-form-control class="col-12" [label]="'Ocpp Tag'">
+        <ng-select
+          class="p-0"
+          [items]="$ocppTags()"
+          bindLabel="tagId"
+          [placeholder]="'base.placeholders.click-to-select' | translate"
+          [formControlName]="formControlNames.ocppTagId"
+        />
+      </app-form-control>
+
+      <app-form-control class="col-12" [label]="'Charger'">
+        <ng-select
+          class="p-0"
+          [items]="$chargers()"
+          bindLabel="name"
+          [placeholder]="'base.placeholders.click-to-select' | translate"
+          [formControlName]="formControlNames.chargePointId"
+        />
+      </app-form-control>
+
+
+      <app-form-control class="col-12" [label]="'reservation.upsert.connector.title' | translate">
+        <ng-select
+          class="p-0"
+          [items]="$connectors()"
+          bindLabel="connectorId"
+          bindValue="connectorId"
+          [readonly]="!upsertForm.value.chargePointId"
+          [placeholder]=" (upsertForm.value.chargePointId ? 'base.placeholders.click-to-select' : 'reservation.upsert.connector.placeholder') | translate"
+          [formControlName]="formControlNames.connectorId"
+        />
+      </app-form-control>
+
+      <app-form-control class="col-6" [label]="'Start date'">
+        <input
+          class="form-control"
+          type="text"
+          [formControlName]="formControlNames.startDateTime"
+          mwlFlatpickr
+          [placeholder]="'base.placeholders.time' | translate"
+          [time24hr]="true"
+          [enableTime]="true"
+          [noCalendar]="true"
+          [convertModelValue]="true"
+          [dateFormat]="'H:i'"
+        >
+      </app-form-control>
+
+      <app-form-control class="col-6" [label]="'Expired date'">
+        <input
+          class="form-control"
+          type="text"
+          [formControlName]="formControlNames.expiryDateTime"
+          mwlFlatpickr
+          [placeholder]="'base.placeholders.time' | translate"
+          [time24hr]="true"
+          [enableTime]="true"
+          [noCalendar]="true"
+          [convertModelValue]="true"
+          [dateFormat]="'H:i'"
+        >
+      </app-form-control>
+    </div>
+
+    <div class="modal-footer">
+      <div class="col-lg-12">
+        <div class="hstack gap-2 justify-content-end">
+          <button
+            class="btn btn-link link-success text-decoration-none fw-medium"
+            data-bs-dismiss="modal" (click)="close()">
+            {{ 'base.buttons.close' | translate }}
+          </button>
+          <button
+            [disabled]="upsertForm.invalid"
+            type="submit"
+            class="btn btn-primary"
+          >
+            <i class="align-bottom me-1" icon="save"></i>
+            {{ labels.save | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+}
