@@ -5,6 +5,7 @@ import { TDepot } from '@features/depot/data-access/models/depot.model';
 import { DepotMainPanelStatsPipe } from '@features/depot/ui/pipes/depot-main-panel-stats.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconDirective } from '@shared/directives/icon.directive';
+import { PowerPipe } from '@shared/pipes/power.pipe';
 import { getChartColorsArray } from '@shared/utils/get-chart-colors.util';
 import { getNextPowerValue } from '@shared/utils/get-next-power-value.util';
 import dayjs from 'dayjs';
@@ -98,7 +99,7 @@ export class DepotEnergyUsageComponent {
   tooltip: ApexTooltip = { enabled: false };
 
   datalabels: ApexDataLabels = {
-    formatter: (val: string) => `${val} kW`
+    formatter: (val: string) => new PowerPipe().transform(val),
   };
 
   plotOptions: ApexPlotOptions = {

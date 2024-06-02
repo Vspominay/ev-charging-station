@@ -1,7 +1,7 @@
 import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { DepotAction } from '@features/depot/data-access/depot-action.service';
+import { DepotAction } from '@features/depot/data-access/services/depot-action.service';
 import { NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { ActionPlacementPipe } from '@shared/components/card/action-placement.pipe';
@@ -36,15 +36,7 @@ import { DepotStatsPipe } from '../../pipes/depot-stats.pipe';
           <a [routerLink]="['depots', depot.id]" class="text-body text-truncate-two-lines">{{ depot.name }}</a>
         </h5>
 
-        <p class="text-muted mb-4">{{ depot | address }}</p>
-
-        <div class="row justify-content-center">
-          <div class="col-lg-8">
-            <!--            <apx-chart [series]="data.chart.series" [chart]="data.chart.chart"-->
-            <!--                       [dataLabels]="data.chart.dataLabels" [stroke]="data.chart.stroke" [fill]="data.chart.fill"-->
-            <!--                       [colors]="data.chart.colors" dir="ltr"></apx-chart>-->
-          </div>
-        </div>
+        <p class="text-muted mb-1">{{ depot | address }}</p>
 
         <div class="row mt-4">
           @for (stats of chargerStats | depotStats; track stats.value) {
@@ -56,12 +48,13 @@ import { DepotStatsPipe } from '../../pipes/depot-stats.pipe';
         </div>
 
         <div class="mt-4 d-flex gap-3">
-          <a [routerLink]="['/', 'depots', depot.id]" class="btn btn-light w-100">View Details</a>
+          <a [routerLink]="['/', 'depots', depot.id]"
+             class="btn btn-light w-100">{{ 'depot.list.view' | translate }}</a>
 
           <div ngbDropdown>
-            <button ngbDropdownToggle type="button" class="btn btn-light btn-icon waves-effect waves-light p-3">
-              <i icon="settings" class="fs-20"></i>
-            </button>
+            <button ngbDropdownToggle
+                    type="button"
+                    class="btn btn-light btn-icon waves-effect waves-light p-3"></button>
 
             <div ngbDropdownMenu>
               @for (action of hostActions.actions | actionPlacement: 'item'; track action.value) {

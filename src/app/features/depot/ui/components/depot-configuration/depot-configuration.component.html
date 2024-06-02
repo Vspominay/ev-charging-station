@@ -1,0 +1,372 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Depot configuration"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  <div class="col-12">
+    <form [formGroup]="form" (ngSubmit)="saveConfig()" class="card">
+      <div class="card-body checkout-tab">
+        <div class="step-arrow-nav mt-n3 mx-n3 mb-3">
+          <ul ngbNav #customNav="ngbNav"
+              [activeId]="1"
+              class="nav nav-pills custom-nav nav-justified"
+              role="tablist">
+            <li [formGroupName]="formControlNames.general" [ngbNavItem]="1" class="nav-item">
+              <a ngbNavLink class="nav-link fs-15 p-3" data-bs-toggle="tab" role="tab">
+                <i
+                  icon="settings"
+                  class="fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle mx-2">
+
+                </i>
+                General
+              </a>
+              <ng-template ngbNavContent>
+                <div>
+                  <h5 class="mb-1">General</h5>
+                  <p class="text-muted mb-4">
+                    General depot configuration & restrictions
+                  </p>
+                </div>
+                <div>
+                  <div class="row gy-3">
+                    <app-form-control class="col-12" [label]="'Depot max power output (kW)'">
+                      <input type="number"
+                             placeholder="1st connector id"
+                             [formControlName]="'depotEnergyLimit'">
+                    </app-form-control>
+
+                    <app-form-control class="col-sm-6" [label]="'Start date'">
+                      <input
+                        class="form-control"
+                        type="text"
+                        [formControlName]="'validFrom'"
+                        mwlFlatpickr
+                        [time24hr]="true"
+                        [convertModelValue]="true"
+                      >
+                    </app-form-control>
+
+                    <app-form-control class="col-sm-6" [label]="'End date'">
+                      <input
+                        class="form-control"
+                        type="text"
+                        [formControlName]="'validTo'"
+                        mwlFlatpickr
+                        [time24hr]="true"
+                        [convertModelValue]="true"
+                      >
+                    </app-form-control>
+                  </div>
+
+                  <div class="d-flex align-items-start gap-3 mt-3">
+                    <button
+                      (click)="customNav.select(2)"
+                      type="button" class="btn btn-secondary btn-label right ms-auto nexttab"
+                      data-nexttab="pills-bill-address-tab">
+                      <i icon="arrow_forward" class="label-icon align-middle fs-16 ms-2"></i>
+                      Proceed to chargers config
+                    </button>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+
+            <li [formArrayName]="formControlNames.chargers" [ngbNavItem]="2" class="nav-item">
+              <a ngbNavLink class="nav-link fs-15 p-3" data-bs-toggle="tab" role="tab">
+                <i
+                  icon="ev_charger"
+                  class="fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle mx-2"></i>
+                Chargers
+              </a>
+              <ng-template ngbNavContent>
+                <div>
+                  <h5 class="mb-1">Chargers power limits</h5>
+                  <p class="text-muted mb-4">
+                    Configure power limits for each connector
+                  </p>
+                </div>
+
+                <div class="mt-4">
+                  <div class="table-responsive table-card mb-3">
+                    <table class="table align-middle table-nowrap mb-0">
+                      <thead class="table-light">
+                      <tr>
+                        <th scope="col">Chager Nam</th>
+                        <th class="sort" scope="col">Power Usage</th>
+                      </tr>
+                      </thead>
+                      <tbody class="list form-check-all">
+                        @for (charger of chargersArrayControl.controls | keyvalue; track charger.key) {
+                          <tr id="charger_{{charger.key}}">
+                            <td class="name">{{ $chargerIdNameMap()[charger.key] }}</td>
+                            <td>
+                              <input
+                                type="text"
+                                mask="9*"
+                                suffix=" W"
+                                class="form-control"
+                                [formControlName]="charger.key"
+                              >
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="d-flex align-items-start gap-3 mt-4">
+                  <button (click)="customNav.select(1)"
+                          type="button"
+                          class="btn btn-light btn-label previestab"
+                          data-previous="pills-bill-info-tab">
+                    <i icon="arrow_back" class="label-icon align-middle fs-16 me-2"></i>
+                    Back to General
+                  </button>
+                  <button (click)="customNav.select(3)"
+                          type="button"
+                          class="btn btn-secondary btn-label right ms-auto nexttab"
+                          data-nexttab="pills-payment-tab">
+                    <i icon="arrow_forward" class="label-icon align-middle fs-16 ms-2"></i>
+                    Continue to time slots
+                  </button>
+                </div>
+              </ng-template>
+            </li>
+
+            <li [ngbNavItem]="3" class="nav-item">
+              <a ngbNavLink class="nav-link fs-15 p-3" data-bs-toggle="tab" role="tab">
+                <i
+                  icon="schedule"
+                  class="fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle mx-2"></i>
+                Time Slots
+              </a>
+              <ng-template ngbNavContent>
+                <div>
+                  <h5 class="mb-1">Time slots</h5>
+                  <p class="text-muted mb-4">
+                    Configure time slots for energy consumption
+                  </p>
+                </div>
+
+                <ev-depot-energy-intervals
+                  [intervals]="intervalsArrayControl.value"
+                  [depotLimits]="generalDepotRestrictions"
+                  (changeIntervals)="updateIntervals($event)"
+                />
+
+                @if (intervalsArrayControl.hasError('invalidTotalEnergy')) {
+                  <div class="alert alert-warning">
+                    <p class="mb-0">
+                      <span class="fw-semibold text-uppercase">{{ 'depot.config.intervals.error.over-limit.title' | translate }}
+                        : </span>
+                      <span id="time-slots-warning"
+                            [innerHtml]="'depot.config.intervals.error.over-limit.message' | translate: { energy: intervalsArrayControl.getError('invalidTotalEnergy') | power }"></span>
+                    </p>
+                  </div>
+                }
+
+                <div class="d-flex align-items-start gap-3 mt-4">
+                  <button
+                    (click)="customNav.select(2)"
+                    type="button" class="btn btn-light btn-label previestab"
+                    data-previous="pills-bill-info-tab">
+                    <i icon="arrow_back" class="label-icon align-middle fs-16 me-2"></i>
+                    Back to Chargers
+                  </button>
+
+                  <button
+                    [disabled]="intervalsArrayControl.invalid"
+                    (click)="customNav.select(4)"
+                    type="button" class="btn btn-secondary btn-label right ms-auto nexttab"
+                    data-nexttab="pills-finish-tab">
+                    <i icon="arrow_forward" class="label-icon align-middle fs-16 ms-2"></i>
+                    Review configuration
+                  </button>
+                </div>
+              </ng-template>
+            </li>
+
+            <li [ngbNavItem]="4" class="nav-item" [disabled]="intervalsArrayControl.hasError('invalidTotalEnergy')">
+              <a ngbNavLink class="nav-link fs-15 p-3" data-bs-toggle="tab" role="tab">
+                <i
+                  icon="check_small"
+                  class="fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle mx-2"></i>Finish
+              </a>
+              <ng-template ngbNavContent>
+                <div class="row">
+                  <div class="col-lg-12">
+                    @if ($depot(); as depot) {
+                      <div class="card-header border-bottom-dashed p-4">
+                        <div class="d-flex flex-wrap">
+                          <div class="flex-grow-1">
+                            @if (depot.image; as depotLogo) {
+                              <img [ngSrc]="depotLogo"
+                                   [alt]="depot.name + ' logo'"
+                                   class="card-logo"
+                                   alt="logo dark"
+                                   width="45"
+                                   height="45">
+                            }
+                            <div class="mt-sm-5 mt-4">
+                              <h6 class="text-muted text-uppercase fw-semibold">Address</h6>
+                              <p class="mb-0" id="address-details">{{ depot | address }}</p>
+                            </div>
+                          </div>
+
+                          <div class="flex-shrink-0 mt-sm-0 mt-3">
+                            <h6>
+                              <span class="text-muted fw-normal me-1">Name:</span>
+                              <span id="legal-register-no">{{ depot.name | emptyValue }}</span>
+                            </h6>
+                            <h6>
+                              <span class="text-muted fw-normal me-1">Email:</span>
+                              <span id="email">{{ depot.email | emptyValue }}</span>
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                    <!--end card-header-->
+                  </div><!--end col-->
+
+                  <div class="col-lg-12">
+                    <div class="card-body p-4">
+                      <div class="row g-3">
+                        <div class="col-lg-4 col-12">
+                          <p class="text-muted mb-2 text-uppercase fw-semibold">Depot max power output (kW)</p>
+                          <h5 class="fs-14 mb-0">{{ generalForm.value.depotEnergyLimit | power }}</h5>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-4 col-12">
+                          <p class="text-muted mb-2 text-uppercase fw-semibold">Start Date</p>
+                          <h5 class="fs-14 mb-0">
+                            <span id="invoice-start-date" class="me-1">{{ generalForm.value.validFrom | date }}</span>
+                          </h5>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-4 col-12">
+                          <p class="text-muted mb-2 text-uppercase fw-semibold">End Date</p>
+                          <h5 class="fs-14 mb-0">
+                            <span id="invoice-end-date" class="me-1">{{ generalForm.value.validTo | date }}</span>
+                          </h5>
+                        </div>
+                        <!--end col-->
+                      </div>
+                      <!--end row-->
+                    </div>
+                    <!--end card-body-->
+                  </div><!--end col-->
+
+                  <div class="col-lg-12">
+                    <div class="card-body p-4">
+                      <div class="table-responsive">
+                        <table class="table table-borderless text-center table-nowrap align-middle mb-0">
+                          <thead>
+                          <tr class="table-active">
+                            <th scope="col" style="width: 50px;">#</th>
+                            <th scope="col" class="text-start">Charger Name</th>
+                            <th scope="col" class="text-end">Power Usage</th>
+                          </tr>
+                          </thead>
+                          <tbody id="products-list">
+                            @for (charger of chargersArrayControl.controls | keyvalue; track charger.key) {
+                              <tr>
+                                <th scope="row">{{ $index + 1 }}</th>
+                                <td class="text-start">
+                                  <span class="fw-medium">{{ $chargerIdNameMap()[charger.key] }}</span>
+                                </td>
+                                <td class="text-end">{{ charger.value.value | power }}</td>
+                              </tr>
+                            }
+                          </tbody>
+                        </table><!--end table-->
+                      </div>
+
+                      <div class="border-top border-bottom border-top-dashed border-bottom-dashed py-2 mt-2">
+                        <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto"
+                               style="width:250px">
+                          <tbody>
+
+                            @for (statsConfig of chargersArrayControl.getRawValue() | chargersStats: generalForm.value.depotEnergyLimit; track statsConfig.value) {
+                              <tr>
+                                <td>{{ statsConfig.label | translate }}</td>
+                                <td class="text-end">{{ statsConfig.value }}</td>
+                              </tr>
+                            }
+
+                          </tbody>
+                        </table>
+                        <!--end table-->
+                      </div>
+
+                      <div class="mt-2">
+                        <div class="table-responsive">
+                          <table class="table table-borderless text-center table-nowrap align-middle mb-0">
+                            <thead>
+                            <tr class="table-active">
+                              <th scope="col" class="text-start">Start Time</th>
+                              <th scope="col" class="text-start">End Time</th>
+                              <th scope="col" class="text-end">Power Usage</th>
+                            </tr>
+                            </thead>
+                            <tbody id="time-intervals">
+                              @for (interval of intervalsArrayControl.value; track interval.energyLimit) {
+                                <tr>
+                                  <th class="text-start">{{ interval.startTime.toDate() | date }}</th>
+                                  <td class="text-start">{{ interval.endTime.toDate() | date }}</td>
+                                  <td class="text-end">{{ interval.energyLimit | power }}</td>
+                                </tr>
+                              }
+                            </tbody>
+                          </table><!--end table-->
+                        </div>
+                        <!--end table-->
+                      </div>
+
+                      <div class="mt-4">
+                        <div class="alert alert-info">
+                          <p class="mb-0">
+                            <span class="fw-semibold text-uppercase">{{ 'depot.config.notify.title' | translate }}
+                              : </span>
+                            <span id="note">{{ 'depot.config.notify.message' | translate }}</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <!--end card-body-->
+                  </div><!--end col-->
+                </div><!--end row-->
+
+
+                <div class="d-flex align-items-start gap-3 mt-4">
+                  <button
+                    (click)="customNav.select(3)"
+                    type="button" class="btn btn-light btn-label previestab"
+                    data-previous="pills-bill-address-tab">
+                    <i icon="arrow_back" class="label-icon align-middle fs-16 me-2"></i>
+                    Back to Time slots
+                  </button>
+                  <button class="btn btn-success btn-label right ms-auto nexttab"
+                          data-nexttab="pills-finish-tab">
+                    <i icon="save" class="label-icon align-middle fs-16 ms-2"></i>
+                    Save Configuration
+                  </button>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+        </div>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div [ngbNavOutlet]="customNav"></div>
+        </div>
+
+      </div>
+      <!-- end card body -->
+    </form>
+    <!-- end card -->
+  </div>
+  <!-- end col -->
+</div>
+<!-- end row -->

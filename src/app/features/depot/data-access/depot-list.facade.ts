@@ -1,7 +1,9 @@
 import { computed, inject, Injectable } from '@angular/core';
-import { DepotAction, DepotActionService } from '@features/depot/data-access/depot-action.service';
+import { $currentRole } from '@features/auth/utils/current-role.util';
 import { DepotStore } from '@features/depot/data-access/depot.store';
 import { TDepotListItem } from '@features/depot/data-access/models/depot.model';
+import { DepotAction, DepotActionService } from '@features/depot/data-access/services/depot-action.service';
+import { getSearchCriteria } from '@shared/utils/get-search-criteria.util';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +12,14 @@ export class DepotListFacade {
   private readonly store = inject(DepotStore);
   private readonly actionService = inject(DepotActionService);
 
+  private readonly $role = $currentRole();
 
   readonly $actions = computed(() => {
     const actions = this.actionService.$actions();
 
-    // TODO: add role-based actions filtering
-
+    // TODO: uncomment befroe commit
     return actions;
+    // return hasRole(this.$role(), ERole.SuperAdministrator) ? actions : [];
   });
 
   readonly $viewModel = computed(() => {
@@ -29,7 +32,7 @@ export class DepotListFacade {
   });
 
   searchDepots(query: string) {
-    this.store.loadAll(query);
+    this.store.loadAll(getSearchCriteria<TDepotListItem>(query, ['name']));
   }
 
   handleAction(action: DepotAction, depot?: TDepotListItem) {

@@ -3,6 +3,7 @@ import { TContactInfo } from '@core/types/contact-info.type';
 import { TCoordinates } from '@core/types/coordinates.type';
 import { TUpsertInfo } from '@core/types/upsert-info.type';
 import { ConnectorStatus } from '@features/chargers/data-access/models/connector.model';
+import { TDepotViewConfiguration } from '@features/depot/data-access/models/depot-configuration.model';
 import { PartialByKeys } from '@shared/utils/types/partial-by-keys.util';
 import { WithGuid } from '@shared/utils/types/with-guid.type';
 
@@ -32,4 +33,8 @@ export type TCreateDepot = PartialByKeys<Omit<TDepot, 'id' | 'createdAt' | 'upda
 
 export type TDepotChargerStats = Record<ConnectorStatus, number>;
 
-export type TDepotListItem = TDepot & { chargerStats: TDepotChargerStats };
+export type TDepotListItem = TDepot & { chargePointsStatistics: TDepotChargerStats };
+
+export type TDepotDetailsResponse = TDepot & {
+  energyConsumptionSettings: TDepotViewConfiguration | null
+};

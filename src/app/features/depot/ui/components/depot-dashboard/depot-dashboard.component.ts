@@ -1,5 +1,7 @@
+import { KeyValuePipe, NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ConnectorStatusPipe } from '@features/chargers/ui/pipes/connector-status.pipe';
 import { DepotDashboardFacade } from '@features/depot/data-access/depot-dashboard.facade';
 import {
   DepotEnergyUsageComponent
@@ -19,7 +21,10 @@ import { StatsCardComponent } from '@shared/components/stats-card/stats-card.com
     TranslateModule,
     DepotEnergyUsageComponent,
     BreadcrumbsComponent,
-    RouterOutlet
+    RouterOutlet,
+    KeyValuePipe,
+    ConnectorStatusPipe,
+    NgClass
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

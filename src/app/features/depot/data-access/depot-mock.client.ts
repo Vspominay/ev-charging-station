@@ -22,10 +22,10 @@ export class DepotMockClientService {
     'energyLimit': 500.0,
     'createdAt': '2023-01-01T00:00:00.000Z',
     'updatedAt': '2023-01-02T00:00:00.000Z',
-    'chargerStats': {
+    'chargePointsStatistics': {
       'online': 5,
       'offline': 1,
-      'faulted': 0
+      'hasErrors': 0
     }
   },
     {
@@ -44,10 +44,10 @@ export class DepotMockClientService {
       'energyLimit': 300.0,
       'createdAt': '2023-02-01T00:00:00.000Z',
       'updatedAt': '2023-02-02T00:00:00.000Z',
-      'chargerStats': {
+      'chargePointsStatistics': {
         'online': 2,
         'offline': 6,
-        'faulted': 0
+        'hasErrors': 0
       }
     },
     {
@@ -66,10 +66,10 @@ export class DepotMockClientService {
       'energyLimit': 400.0,
       'createdAt': '2023-03-01T00:00:00.000Z',
       'updatedAt': '2023-03-02T00:00:00.000Z',
-      'chargerStats': {
+      'chargePointsStatistics': {
         'online': 2,
         'offline': 6,
-        'faulted': 9
+        'hasErrors': 9
       }
     },
     {
@@ -88,10 +88,10 @@ export class DepotMockClientService {
       'energyLimit': 600.0,
       'createdAt': '2023-04-01T00:00:00.000Z',
       'updatedAt': '2023-04-02T00:00:00.000Z',
-      'chargerStats': {
+      'chargePointsStatistics': {
         'online': 0,
         'offline': 0,
-        'faulted': 0
+        'hasErrors': 0
       }
     },
     {
@@ -110,10 +110,10 @@ export class DepotMockClientService {
       'energyLimit': 700.0,
       'createdAt': '2023-05-01T00:00:00.000Z',
       'updatedAt': '2023-05-02T00:00:00.000Z',
-      'chargerStats': {
+      'chargePointsStatistics': {
         'online': 0,
         'offline': 0,
-        'faulted': 0
+        'hasErrors': 0
       }
     }];
 

@@ -1,0 +1,103 @@
+<div class="table-responsive table-card mb-3">
+  <table class="table align-middle table-nowrap mb-0">
+    <thead class="table-light">
+    <tr>
+      <th scope="col">{{ 'depot.config.intervals.table.interval' | translate }}</th>
+      <th class="sort" scope="col">{{ 'depot.config.intervals.table.limit' | translate }}</th>
+      <th [style.width.px]="50"></th>
+    </tr>
+    </thead>
+    <tbody class="list form-check-all">
+      @for (rangeLimit of intervalArray.controls; track rangeLimit) {
+        <tr [formGroup]="rangeLimit" (ngSubmit)="newInterval.updateValueAndValidity()">
+          <td>
+            <input
+              class="form-control"
+              type="text"
+              mwlFlatpickr
+              [time24hr]="true"
+              [convertModelValue]="true"
+              [enableTime]="true"
+              mode="range"
+              [formControlName]="'interval'"
+              [minDate]="$dateRestrictions().min"
+              [maxDate]="$dateRestrictions().max"
+              [parseDate]="parseDateFn"
+              [formatDate]="formatDateFn"
+              [placeholder]="'depot.config.intervals.table.select-interval' | translate"
+            >
+          </td>
+          <td>
+            <input
+              formControlName="limit"
+              type="text"
+              class="visually-hidden"
+            />
+
+            <input
+              [ngModel]="rangeLimit.value.limit"
+              [ngModelOptions]="{standalone: true}"
+              (blur)="rangeLimit.get('limit')?.setValue(+limitEl.value.replace(' W', ''))"
+              #limitEl
+              custom-control
+              mask="9*"
+              suffix=" Wh"
+              type="text"
+              class="form-control"
+            />
+
+          </td>
+
+          @if ($count > 1 && (rangeLimit.value.limit !== $intervalsRestriction().energyLimit)) {
+            <td>
+              <button type="button" (click)="removeInterval($index)" class="btn btn-ghost-danger btn-icon">
+                <i icon="delete"></i>
+              </button>
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+    <tfoot>
+
+    <tr [formGroup]="newInterval">
+      <td>
+        <input
+          class="form-control"
+          type="text"
+          mwlFlatpickr
+          [time24hr]="true"
+          [convertModelValue]="true"
+          [enableTime]="true"
+          mode="range"
+          [formControlName]="'interval'"
+          [minDate]="$dateRestrictions().min"
+          [maxDate]="$dateRestrictions().max"
+          [parseDate]="parseDateFn"
+          [formatDate]="formatDateFn"
+          [placeholder]="'depot.config.intervals.table.new-interval' | translate"
+        >
+      </td>
+
+      <td>
+        <input
+          formControlName="limit"
+          mask="9*"
+          suffix=" Wh"
+          type="text"
+          class="form-control"
+        >
+      </td>
+
+      <td>
+        <button [disabled]="newInterval.invalid"
+                type="button"
+                class="float-end btn btn-ghost-primary btn-icon"
+                (click)="addInterval()">
+          <i icon="add_box"></i>
+        </button>
+      </td>
+    </tr>
+    </tfoot>
+  </table>
+</div>

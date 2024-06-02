@@ -1,20 +1,29 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
-export type TListResponse<TEntity> = { collection: Array<TEntity> } & Array<TEntity>;
+export type TListResponse<TEntity> = { collection: Array<TEntity> };
 
 @Injectable({
   providedIn: 'root'
 })
 export abstract class BaseCrudService<TEntity, TUpsertEntity> {
-  private readonly http = inject(HttpClient);
-  private readonly baseUrl = environment.baseUrl;
+  protected readonly http = inject(HttpClient);
+  protected readonly baseUrl = environment.baseUrl;
   protected abstract domain: string;
 
-  getList(): Observable<TListResponse<TEntity>> {
-    return this.http.post<TListResponse<TEntity>>(`${this.fullUrl}/getall`, {});
+  getList(params?: Record<keyof Partial<TEntity>, string> | {}): Observable<TListResponse<TEntity>> {
+    return this.http.post<TListResponse<TEntity>>(`${this.fullUrl}/getall`, params || {})
+               .pipe(
+                 catchError(() => (of({ collection: [] }))),
+                 map((response) => {
+                   if (!response) return { collection: [] };
+
+                   return response;
+                 })
+               );
   }
 
   getById(id: string): Observable<TEntity> {
@@ -36,7 +45,7 @@ export abstract class BaseCrudService<TEntity, TUpsertEntity> {
     return this.http.delete(`${this.fullUrl}/${id}`);
   }
 
-  private get fullUrl(): string {
+  protected get fullUrl(): string {
     return `${this.baseUrl}${this.domain}`;
   }
 }

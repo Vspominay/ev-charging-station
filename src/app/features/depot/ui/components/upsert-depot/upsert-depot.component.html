@@ -11,60 +11,47 @@
           role="tablist">
         <li [ngbNavItem]="1" class="nav-item">
           <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
-            Personal Details
+            {{ 'depot.upsert.general.title' | translate }}
           </a>
 
           <ng-template ngbNavContent>
             <div class="tab-pane active" id="personalDetails" role="tabpanel">
               <form action="#">
                 <div class="row">
-                  <div class="col-lg-6">
-                    <div class="mb-3">
-                      <app-form-control [label]="'Depot name'">
-                        <input type="text"
-                               placeholder="Main City Depot"
-                               [formControlName]="formControlNames.name"
-                        >
-                      </app-form-control>
-                    </div>
-                  </div>
-                  <!--end col-->
-                  <div class="col-lg-6">
-                    <div class="mb-3">
-                      <app-form-control [label]="'Energy limit (kWh)'">
-                        <input type="number" placeholder="1500" [formControlName]="formControlNames.energyLimit">
-                      </app-form-control>
-                    </div>
-                  </div>
-                  <!--end col-->
-                  <div class="col-lg-6">
-                    <div class="mb-3">
-                      <app-form-control [label]="'Contact number'">
-                        <input type="tel"
-                               placeholder="(000) 00 000 00"
-                               [formControlName]="formControlNames.phoneNumber">
-                      </app-form-control>
-                    </div>
-                  </div>
-                  <!--end col-->
-                  <div class="col-lg-6">
-                    <div class="mb-3">
-                      <app-form-control [label]="'Email'">
-                        <input type="email" placeholder="depot@clev.uk" [formControlName]="formControlNames.email">
-                      </app-form-control>
-                    </div>
-                  </div>
-                  <!--end col-->
-                  <div class="col">
-                    <div class="mb-3">
-                      <app-form-control [label]="'Depot description'">
-                      <textarea placeholder="The larges depot in the city..."
+                  <app-form-control class="col-lg-6" [label]="'depot.upsert.general.name.title' | translate">
+                    <input type="text"
+                           [placeholder]="'depot.upsert.general.name.placeholder' | translate"
+                           [formControlName]="formControlNames.name"
+                    >
+                  </app-form-control>
+
+                  <app-form-control class="col-lg-6" [label]="'depot.upsert.general.energy-limit' | translate">
+                    <input type="text"
+                           placeholder="6.1"
+                           mask="0*.00"
+                           suffix=" kWh"
+                           [formControlName]="formControlNames.energyLimit"
+                    />
+                  </app-form-control>
+
+                  <app-form-control class="col-lg-6" [label]="'depot.upsert.general.contact-tel' | translate">
+                    <input
+                      type="text"
+                      [mask]="PHONE_MASK"
+                      [showMaskTyped]="true"
+                      [formControlName]="formControlNames.phoneNumber">
+                  </app-form-control>
+
+                  <app-form-control class="col-lg-6" [label]="'base.labels.email' | translate">
+                    <input type="email" placeholder="depot@clev.uk" [formControlName]="formControlNames.email">
+                  </app-form-control>
+
+                  <app-form-control class="col" [label]="'depot.upsert.general.description.title' | translate">
+                      <textarea [placeholder]="'depot.upsert.general.description.placeholder' | translate"
                                 rows="3"
                                 [formControlName]="formControlNames.description"></textarea>
-                      </app-form-control>
-                    </div>
-                  </div>
-                  <!--end col-->
+                  </app-form-control>
+
                 </div>
                 <!--end row-->
               </form>
@@ -74,44 +61,36 @@
 
         <li [ngbNavItem]="2" class="nav-item">
           <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
-            Business Details
+            {{ 'depot.upsert.business.title' | translate }}
           </a>
           <ng-template ngbNavContent>
             <div class="tab-pane" id="businessDetails" role="tabpanel">
               <form formGroupName="address">
                 <div class="row">
-                  <div class="col-lg-6">
-                    <div class="mb-3">
-                      <app-form-control [label]="'Country'">
-                        <input type="text" placeholder="Ukraine" [formControlName]="addressControlNames.country">
-                      </app-form-control>
-                    </div>
-                  </div>
-                  <!--end col-->
-                  <div class="col-lg-6">
-                    <div class="mb-3">
-                      <app-form-control [label]="'City'">
-                        <input type="text" placeholder="Kharkov" [formControlName]="addressControlNames.city">
-                      </app-form-control>
-                    </div>
-                  </div>
-                  <!--end col-->
-                  <div class="col-lg-6">
-                    <div class="mb-3">
-                      <app-form-control [label]="'Street'">
-                        <input type="text" placeholder="Main St" [formControlName]="addressControlNames.street">
-                      </app-form-control>
-                    </div>
-                  </div>
-                  <!--end col-->
-                  <div class="col-lg-6">
-                    <div class="mb-3">
-                      <app-form-control [label]="'Building, apartment'">
-                        <input type="text" placeholder="36, 124" [formControlName]="addressControlNames.building">
-                      </app-form-control>
-                    </div>
-                  </div>
-                  <!--end col-->
+                  <app-form-control class="col-lg-6" [label]="'depot.upsert.business.country.title' | translate">
+                    <input type="text"
+                           [placeholder]="'depot.upsert.business.country.placeholder' | translate"
+                           [formControlName]="addressControlNames.country">
+                  </app-form-control>
+
+                  <app-form-control class="col-lg-6" [label]="'depot.upsert.business.city.title' | translate">
+                    <input type="text"
+                           [placeholder]="'depot.upsert.business.city.placeholder' | translate"
+                           [formControlName]="addressControlNames.city">
+                  </app-form-control>
+
+                  <app-form-control class="col-lg-6" [label]="'depot.upsert.business.street.title' | translate">
+                    <input type="text"
+                           [placeholder]="'depot.upsert.business.street.placeholder' | translate"
+                           [formControlName]="addressControlNames.street">
+                  </app-form-control>
+
+                  <app-form-control class="col-lg-6" [label]="'depot.upsert.business.building.title' | translate">
+                    <input type="text"
+                           [placeholder]="'depot.upsert.business.building.placeholder' | translate"
+                           [formControlName]="addressControlNames.building">
+                  </app-form-control>
+
                 </div>
                 <!--end row-->
               </form>

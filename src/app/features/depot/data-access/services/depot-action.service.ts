@@ -76,8 +76,6 @@ export class DepotActionService extends AActionService<DepotAction, TDepotListIt
   private upsertDepot(strategy: AUpsertDepot, depot?: TDepot) {
     const dialogRef = this.dialog.open(UpsertDepotComponent);
 
-    console.log(strategy);
-
     Object.assign(dialogRef.componentInstance, {
       depot: depot || {},
       labels: strategy.labels
@@ -93,10 +91,10 @@ export class DepotActionService extends AActionService<DepotAction, TDepotListIt
                next: (result) => {
                  this.store.upsert({
                    ...result,
-                   chargerStats: {
+                   chargePointsStatistics: {
                      online: 0,
                      offline: 0,
-                     faulted: 0,
+                     hasErrors: 0,
                    }
                  });
                },

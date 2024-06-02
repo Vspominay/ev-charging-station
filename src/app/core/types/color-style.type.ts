@@ -14,3 +14,7 @@ export type TLabelStyledConfig = {
   label: string;
   style: TColorStyle;
 };
+
+export type TLabelStyleIconConfig = TLabelStyledConfig & {
+  icon: string;
+}

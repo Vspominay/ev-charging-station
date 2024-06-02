@@ -1,25 +1,31 @@
-@if ($vm().depot; as depot) {
-  <app-breadcrumbs [title]="depot.name" [breadcrumbItems]="[]"></app-breadcrumbs>
+@if ($vm(); as vm) {
+  @if (vm.depot; as depot) {
 
-  <div class="row">
-    <div class="col-12 col-xxl-6">
-      <div class="row row-cols-md-3">
-        @for (stats of depot.chargerStats | depotStats; track stats.value) {
-          <div class="col">
-            <app-stats-card
-              [icon]="stats.icon"
-              [label]="stats.label | translate"
-              [value]="stats.value"
-              [style]="stats.style"
-            ></app-stats-card>
-          </div>
-        }
+    <app-breadcrumbs [title]="depot.name" [breadcrumbItems]="[]"></app-breadcrumbs>
 
+    <div class="row mb-4">
+      <div class="col-12 col-xxl-5">
+        <div class="row row-cols-md-2">
+          @for (stats of vm.connectorStatuses | keyvalue; track stats.key) {
+            @if ($any(stats.key) | connectorStatus; as statsConfig) {
+              <div class="col">
+                <app-stats-card
+                  class="transition"
+                  [class.opacity-50]="!stats.value"
+                  [icon]="statsConfig.icon"
+                  [label]="statsConfig.label | translate"
+                  [value]="stats.value + ''"
+                  [style]="statsConfig.style"
+                ></app-stats-card>
+              </div>
+            }
+          }
+        </div>
       </div>
-    </div>
 
-    <app-depot-energy-usage class="col-12 col-xxl-6" [depot]="depot" [powerUsage]="97"/>
-  </div>
+      <app-depot-energy-usage class="col-12 col-xxl-7" [depot]="depot" [powerUsage]="$vm().energyUsage"/>
+    </div>
+  }
 }
 
 <router-outlet/>

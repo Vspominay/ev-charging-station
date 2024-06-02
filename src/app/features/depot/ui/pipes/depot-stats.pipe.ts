@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { TLabelStyledConfig } from '@core/types/color-style.type';
+import { ConnectorStatus } from '@features/chargers/data-access/models/connector.model';
 import { TDepotChargerStats } from '../../data-access/models/depot.model';
 
 type TDepotStats = TLabelStyledConfig & { value: string, icon: string };
@@ -11,22 +12,22 @@ type TDepotStats = TLabelStyledConfig & { value: string, icon: string };
 })
 export class DepotStatsPipe implements PipeTransform {
   private readonly depotStatsConfig: Record<keyof TDepotChargerStats, (stats: TDepotChargerStats) => TDepotStats> = {
-    online: (stats) => ({
+    [ConnectorStatus.Online]: (stats) => ({
       label: 'depot.statuses.online',
       style: 'success',
       value: stats.online.toString(),
       icon: 'charger'
     }),
-    offline: (stats) => ({
+    [ConnectorStatus.Offline]: (stats) => ({
       label: 'depot.statuses.offline',
       style: 'warning',
       value: stats.offline.toString(),
       icon: 'wifi_off'
     }),
-    faulted: (stats) => ({
+    [ConnectorStatus.HasErrors]: (stats) => ({
       label: 'depot.statuses.faulted',
       style: 'danger',
-      value: stats.faulted.toString(),
+      value: stats.hasErrors.toString(),
       icon: 'battery_error'
     }),
   };
@@ -37,6 +38,6 @@ export class DepotStatsPipe implements PipeTransform {
   }
 
   private getPercentage(stats: TDepotChargerStats, key: keyof TDepotChargerStats): number {
-    return (stats[key] / (stats.online + stats.offline + stats.faulted)) * 100;
+    return (stats[key] / (stats.online + stats.offline + stats.hasErrors)) * 100;
   }
 }

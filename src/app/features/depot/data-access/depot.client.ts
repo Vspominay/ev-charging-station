@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BaseCrudService, TListResponse } from '@core/services/base-crud.service';
-import { TCreateDepot, TDepot, TDepotListItem } from '@features/depot/data-access/models/depot.model';
+import { ConnectorStatus } from '@features/chargers/data-access/models/connector.model';
+import {
+  TCreateDepot, TDepot, TDepotDetailsResponse, TDepotListItem
+} from '@features/depot/data-access/models/depot.model';
+import { hashCode } from '@shared/utils/get-hash.util';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -13,41 +17,44 @@ export type TDepotResponse = Omit<TDepotListItem, 'image' | 'chargerStats'>;
 export class DepotClientService extends BaseCrudService<TDepotResponse, TCreateDepot> {
   readonly domain = 'Depot';
 
-  override getList(): Observable<TListResponse<TDepotResponse>> {
-    return super.getList()
-                .pipe(map(({ collection, ...payload }) => {
-                  return {
-                    ...payload,
-                    collection: collection.map((depot) => this.adaptListItem(depot))
-                  };
-                }));
+  override getList(params: Record<keyof Partial<TDepot>, string>): Observable<TListResponse<TDepotResponse>> {
+    return this.http.post<Array<TDepotResponse>>(`${this.aggregatorUrl}getall`, params)
+               .pipe(
+                 map((depots) => {
+                   return {
+                     collection: depots.map((depot) => this.adaptListItem(depot))
+                   };
+                 }));
   }
 
   override getById(depotId: TDepot['id']): Observable<TDepotListItem> {
-    return super.getById(depotId)
-                .pipe(map(depot => this.adaptListItem(depot)));
+    return this.http.get<TDepotDetailsResponse>(`${this.aggregatorUrl}${depotId}`)
+               .pipe(map(depot => this.adaptListItem({
+                 ...depot,
+                 energyLimit: depot.energyConsumptionSettings?.depotEnergyLimit,
+                 chargePointsStatistics: {
+                   [ConnectorStatus.HasErrors]: 0,
+                   [ConnectorStatus.Offline]: 0,
+                   [ConnectorStatus.Online]: 0,
+                 }
+               })));
   }
 
   private adaptListItem(response: TDepotResponse): TDepotListItem {
     return {
       ...response,
-      image: this.getRandomImage(),
-      chargerStats: this.getStats()
+      image: this.getImageByDepot(response.email ?? response.name),
     };
   }
 
-  private getRandomImage() {
-    const imageUrl = 'https://themesbrand.com/velzon/html/interactive/assets/images/companies/';
-    const images = ['img-1.png', 'img-3.png', 'img-4.png', 'img-5.png', 'img-6.png'];
-
-    return imageUrl + images[Math.floor(Math.random() * images.length)];
+  private getImageByDepot(email: TDepot['email']) {
+    const index = hashCode(email) % this.images.length;
+    return this.images[index];
   }
 
-  private getStats() {
-    return {
-      online: Math.floor(Math.random() * 10),
-      offline: Math.floor(Math.random() * 10),
-      faulted: Math.floor(Math.random() * 10)
-    };
+  private readonly images = Array.from({ length: 6 }, (_, i) => `https://themesbrand.com/velzon/html/interactive/assets/images/companies/img-${i + 1}.png`);
+
+  private get aggregatorUrl() {
+    return `${this.baseUrl}aggregator/${this.domain}/`;
   }
 }
