@@ -1,10 +1,14 @@
-import { AfterViewInit, ComponentRef, DestroyRef, Directive, ElementRef, inject, InjectionToken, Input, ViewContainerRef } from '@angular/core';
+import {
+  AfterViewInit, ComponentRef, DestroyRef, Directive, ElementRef, inject, InjectionToken, Input, ViewContainerRef
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DEFAULT_STRENGTH_OPTIONS } from '@core/constants/strong-password.validator';
+
+import {
+  StrengthCheckInfoComponent
+} from '@shared/components/form-control/directives/password-field/strength-check-info.component';
 
 import { debounceTime, distinctUntilChanged, fromEvent } from 'rxjs';
-
-import { DEFAULT_STRENGTH_OPTIONS, } from '@core/constants/validators/strong-password.validator';
-import { StrengthCheckInfoComponent } from '@shared/components/form-control/directives/password-field/strength-check-info.component';
 
 export type TStrengthOption = {
   label: string,

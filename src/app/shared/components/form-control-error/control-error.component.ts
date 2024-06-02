@@ -14,19 +14,19 @@ import { ErrorMessagePipe } from './error-message.pipe';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-      @for (error of (errors | keyvalue);track error.key) {
-          @if (error.key | errorMessage:error.value;as messageConfig) {
-              <div [translate]="messageConfig.message"
-                   [translateParams]="messageConfig.params"
-                   class="animated-message mt-0 form-text text-danger">
-              </div>
-          }
-      }`,
+    @for (error of (errors | keyvalue); track error.key) {
+      @if (error.key | errorMessage:error.value; as messageConfig) {
+        <div [translate]="messageConfig.message"
+             [translateParams]="messageConfig.params"
+             class="animated-message mt-0 form-text text-danger">
+        </div>
+      }
+    }`,
   styles: [
     `
       :host {
         display: block;
-        position: absolute;
+        //position: absolute;
       }
     `
   ]

@@ -19,7 +19,9 @@
       <ng-content select="[suffix-icon]"/>
 
       @if (hint) {
-        <div class="hint-wrapper position-absolute animated-message form-text">
+        <div
+          [class.position-absolute]="!withRelativeError"
+          class="hint-wrapper animated-message form-text">
           <span>{{ hint }}</span>
         </div>
       }

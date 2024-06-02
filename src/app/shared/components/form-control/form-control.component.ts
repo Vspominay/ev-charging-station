@@ -1,5 +1,5 @@
 import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ContentChild, Input } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, ContentChild, Input } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { trimRequiredValidator } from '@core/validators/trim-required.validator';
 
@@ -27,6 +27,7 @@ export class FormControlComponent {
 
   @Input() hint: string = '';
   @Input() hideHintOnFill: boolean = false;
+  @Input({ transform: booleanAttribute }) withRelativeError = false;
 
   get isRequired(): boolean {
     const control = this.formControl?.ngControl?.control;

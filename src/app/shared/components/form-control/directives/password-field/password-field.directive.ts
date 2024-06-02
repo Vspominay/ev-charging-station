@@ -1,6 +1,4 @@
-import { AfterViewInit, DestroyRef, Directive, ElementRef, HostListener, inject, Input, Renderer2, signal } from '@angular/core';
-
-import { getIcon } from '@shared/utils/get-icon.util';
+import { AfterViewInit, DestroyRef, Directive, ElementRef, inject, Input, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: 'input[passwordField]',
@@ -18,8 +16,8 @@ export class PasswordFieldDirective implements AfterViewInit {
   private unlistenFns: Array<() => void> = [];
 
   @Input() eyeIcons: Record<'show' | 'hide', string> = {
-    show: getIcon('eye'),
-    hide: getIcon('eye-off'),
+    show: 'visibility',
+    hide: 'visibility_off',
   };
 
   constructor() {
@@ -31,6 +29,10 @@ export class PasswordFieldDirective implements AfterViewInit {
   ngAfterViewInit() {
     const { toggleButton, iconElement } = this.initTogglePasswordView();
     this.iconElement = iconElement;
+
+    this.renderer.addClass(iconElement, 'material-symbols-outlined');
+    this.renderer.addClass(iconElement, 'align-middle');
+
     this.changeType('password');
 
     this.unlistenFns.push(this.listenToggle(toggleButton), this.listenFocusOut());
@@ -102,7 +104,11 @@ export class PasswordFieldDirective implements AfterViewInit {
 
     const [icon, prevIcon] = type === 'text' ? [this.eyeIcons.show, this.eyeIcons.hide] : [this.eyeIcons.hide, this.eyeIcons.show];
 
-    this.renderer.removeClass(iconEl, prevIcon);
-    this.renderer.addClass(iconEl, icon);
+    const iconElText = iconEl.firstChild;
+    if (iconElText) {
+      this.renderer.removeChild(iconEl, iconEl.firstChild as Node);
+    }
+
+    this.renderer.appendChild(iconEl, this.renderer.createText(icon));
   }
 }
