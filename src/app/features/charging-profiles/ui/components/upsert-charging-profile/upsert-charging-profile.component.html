@@ -1,0 +1,268 @@
+@if (labels) {
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-header">
+      <h5 class="modal-title" id="addSellerLabel">{{ labels.label | translate }}</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              (click)="close()"></button>
+    </div>
+
+    <div class="modal-content border-0 mt-3">
+      <ul ngbNav #customNav="ngbNav" [activeId]="1" class="nav nav-tabs nav-tabs-custom nav-success p-2 pb-0 bg-light"
+          role="tablist">
+        <li [ngbNavItem]="1" class="nav-item">
+          <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+            {{ 'profile.upsert.general.title' | translate }}
+          </a>
+
+          <ng-template ngbNavContent>
+            <div class="tab-pane active" id="personalDetails" role="tabpanel">
+              <div class="row">
+                <app-form-control class="col-lg-6" [label]="'base.labels.name' | translate">
+                  <input type="text"
+                         [placeholder]="'profile.upsert.general.name-placeholder' | translate"
+                         [formControlName]="formControlNames.name"
+                  >
+                </app-form-control>
+
+                <app-form-control class="col-lg-6" [label]="'profile.upsert.general.priority.title' | translate">
+                  <input type="number"
+                         [placeholder]="'profile.upsert.general.priority.placeholder' | translate"
+                         [formControlName]="formControlNames.stackLevel">
+                </app-form-control>
+
+                <app-form-control class="col-lg-6" [label]="'profile.upsert.general.purpose.title' | translate">
+                  <ng-select
+                    [placeholder]="'profile.upsert.general.purpose.placeholder' | translate"
+                    class="p-0"
+                    [clearable]="false"
+                    bindValue="value"
+                    [items]="purposeOptions"
+                    [formControlName]="formControlNames.chargingProfilePurpose"
+                  >
+                    <ng-template ng-label-tmp ng-option-tmp let-item="item">{{ item.label | translate }}</ng-template>
+                  </ng-select>
+                </app-form-control>
+
+                <app-form-control class="col-lg-6" [label]="'profile.upsert.general.kind.title' | translate">
+                  <ng-select
+                    [placeholder]="'profile.upsert.general.kind.placeholder' | translate"
+                    class="p-0"
+                    [clearable]="false"
+                    bindValue="value"
+                    [items]="kindOptions"
+                    [formControlName]="formControlNames.chargingProfileKind"
+                  >
+                    <ng-template ng-label-tmp ng-option-tmp let-item="item">{{ item.label | translate }}</ng-template>
+                  </ng-select>
+                </app-form-control>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+
+        <li [ngbNavItem]="2" class="nav-item">
+          <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+            {{ 'profile.upsert.validity.title' | translate }}
+          </a>
+
+          <ng-template ngbNavContent>
+            <div class="tab-pane" id="businessDetails" role="tabpanel">
+              <div class="row">
+                <app-form-control class="col-sm-6" [label]="'profile.upsert.validity.valid-from.title' | translate ">
+                  <input
+                    class="form-control"
+                    type="text"
+                    [placeholder]="'base.placeholders.date' | translate"
+                    [formControlName]="formControlNames.validFrom"
+                    mwlFlatpickr
+                    [time24hr]="true"
+                    [convertModelValue]="true"
+                  >
+                </app-form-control>
+
+                <app-form-control class="col-sm-6" [label]="'profile.upsert.validity.valid-to.title' | translate">
+                  <input
+                    class="form-control"
+                    type="text"
+                    [placeholder]="'base.placeholders.date' | translate"
+                    [formControlName]="formControlNames.validTo"
+                    mwlFlatpickr
+                    [time24hr]="true"
+                    [convertModelValue]="true"
+                  >
+                </app-form-control>
+
+                <app-form-control class="col-sm-6"
+                                  [label]="'profile.upsert.validity.start-schedule.title' | translate ">
+                  <input
+                    class="form-control"
+                    type="text"
+                    [placeholder]="'base.placeholders.date' | translate"
+                    [formControlName]="formControlNames.startSchedule"
+                    mwlFlatpickr
+                    [time24hr]="true"
+                    [convertModelValue]="true"
+                  >
+                </app-form-control>
+
+                <app-form-control class="col-sm-6" [label]="'profile.upsert.validity.duration.title' | translate">
+                  <input type="text"
+                         [placeholder]="'profile.upsert.validity.duration.placeholder' | translate"
+                         mask="9*"
+                         [suffix]="' ' + ('profile.upsert.validity.duration.suffix' | translate)"
+                         [formControlName]="formControlNames.duration">
+                </app-form-control>
+
+                <app-form-control class="col-12" [label]="'profile.upsert.validity.recurrency.title' | translate">
+                  <ng-select
+                    [placeholder]="'profile.upsert.validity.recurrency.placeholder' | translate"
+                    [clearable]="false"
+                    class="p-0"
+                    bindValue="value"
+                    [items]="recurrencyOptions"
+                    [formControlName]="formControlNames.chargingProfilePurpose"
+                  >
+                    <ng-template ng-label-tmp ng-option-tmp let-item="item">{{ item.label | translate }}</ng-template>
+                  </ng-select>
+                </app-form-control>
+              </div>
+              <!--end row-->
+            </div>
+          </ng-template>
+        </li>
+
+        <li [ngbNavItem]="3" class="nav-item">
+          <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+            {{ 'profile.upsert.periods.title' | translate }}
+          </a>
+
+          <ng-template ngbNavContent>
+            <div class="tab-pane" id="limits-periods" role="tabpanel">
+              <div class="row">
+                <app-form-control class="col-sm-6" [label]="'profile.upsert.periods.unit.title' | translate">
+                  <ng-select
+                    [clearable]="false"
+                    [placeholder]="'profile.upsert.periods.unit.placeholder' | translate"
+                    class="p-0"
+                    bindValue="value"
+                    [items]="unitOptions"
+                    [formControlName]="formControlNames.schedulingUnit"
+                  >
+                    <ng-template ng-label-tmp ng-option-tmp let-item="item">{{ item.label | translate }}</ng-template>
+                  </ng-select>
+                </app-form-control>
+
+                <app-form-control class="col-sm-6" [label]="'profile.upsert.periods.min-rate.title' | translate">
+                  <input type="text"
+                         [placeholder]="'profile.upsert.periods.min-rate.title' | translate"
+                         mask="9*"
+                         [suffix]="' ' + ($any(form.value.schedulingUnit) | scheduleUnitTranslation | translate)"
+                         [formControlName]="formControlNames.minChargingRate">
+                </app-form-control>
+
+                <div [style.height.px]="90">
+                  <full-calendar
+                    class="h-100 col-12"
+                    #calendar
+                    [options]="$calendarOptions()"
+                  ></full-calendar>
+                </div>
+              </div>
+              <!--end row-->
+            </div>
+          </ng-template>
+        </li>
+      </ul>
+    </div>
+
+    <div class="modal-body">
+      <div class="tab-content">
+        <div [ngbNavOutlet]="customNav"></div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="col-lg-12">
+        <div class="hstack gap-2 justify-content-end">
+          <button
+            class="btn btn-link link-success text-decoration-none fw-medium"
+            data-bs-dismiss="modal" (click)="close()">
+            {{ 'base.buttons.close' | translate }}
+          </button>
+
+          @if (!form.getRawValue().id) {
+            <button
+              [disabled]="form.invalid"
+              type="submit"
+              class="btn btn-primary"
+            >
+              <i class="align-bottom me-1" icon="save"></i>
+              {{ labels.save | translate }}
+            </button>
+          }
+
+        </div>
+      </div>
+    </div>
+  </form>
+}
+
+<ng-template #upsertModal let-modal>
+  <form [formGroup]="newPeriodForm" (ngSubmit)="saveNewInterval(modal)">
+    <div class="modal-header">
+      <h5 class="modal-title" id="intervalLabel">{{ 'profile.upsert.periods.add-period.title' | translate }}</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              (click)="modal.dismiss()"></button>
+    </div>
+
+    <div class="modal-body border-0 mt-3">
+      <div class="row">
+        <app-form-control class="col-12" [label]="'profile.upsert.periods.limit.title' | translate">
+          <input type="text"
+                 mask="9*"
+                 [suffix]="' ' + ($any(form.value.schedulingUnit) | scheduleUnitTranslation | translate)"
+                 [placeholder]="'profile.upsert.periods.limit.placeholder' | translate"
+                 [formControlName]="newPeriodControlNames.limit">
+        </app-form-control>
+
+        <div class="col-12">
+          <label class="form-label d-block">{{ 'profile.upsert.periods.phases.title' | translate }}</label>
+
+          @for (phase of phasesOptions; track phase.value) {
+            <div class="form-check form-check-inline">
+              <input [formControlName]="newPeriodControlNames.phase"
+                     class="form-check-input"
+                     type="radio"
+                     [value]="phase.value"
+                     [id]="'phase-' + phase.value">
+              <label class="form-check-label" [for]="'phase-' + phase.value">{{ phase.label | translate }}</label>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="col-lg-12">
+        <div class="hstack gap-2 justify-content-end">
+          <button
+            type="button"
+            class="btn btn-link link-success text-decoration-none fw-medium"
+            (click)="modal.dismiss()"
+          >
+            {{ 'base.buttons.close' | translate }}
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+          >
+            <i class="align-bottom me-1" icon="save"></i>
+            {{ 'base.buttons.add' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>
+
