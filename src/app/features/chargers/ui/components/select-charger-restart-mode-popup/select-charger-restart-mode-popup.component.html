@@ -1,0 +1,52 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="intervalLabel">{{ 'charger.restart.title' | translate }}</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="close()"></button>
+</div>
+
+<div class="modal-body border-0 mt-3">
+  <div class="row">
+    <div class="col-12">
+      <label class="form-label d-block">{{ 'charger.restart.method' | translate }}</label>
+
+      @for (option of restartModes; track option.value) {
+        <div class="form-check d-flex form-check-inline">
+          <input
+            [formControl]="restartMode"
+            class="form-check-input me-2"
+            type="radio"
+            [value]="option.value"
+            [id]="'option-' + option.value"
+          />
+
+          <label class="form-check-label" [for]="'option-' + option.value">
+            <dl>
+              <dt class="fs-16">{{ option.label | translate }}</dt>
+              <dd class="text-muted">{{ option.details }}</dd>
+            </dl>
+          </label>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="col-lg-12">
+    <div class="hstack gap-2 justify-content-end">
+      <button
+        class="btn btn-link link-success text-decoration-none fw-medium"
+        data-bs-dismiss="modal" (click)="close()">
+        {{ 'base.buttons.close' | translate }}
+      </button>
+      <button
+        (click)="save()"
+        type="submit"
+        class="btn btn-primary"
+      >
+        <i class="align-bottom me-1" icon="restart_alt"></i>
+        {{ 'charger.restart.submit' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

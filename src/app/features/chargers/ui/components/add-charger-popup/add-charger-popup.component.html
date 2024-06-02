@@ -1,0 +1,42 @@
+@if (labels) {
+  <form [formGroup]="upsertForm" (ngSubmit)="saveChanges()">
+    <div class="modal-header">
+      <h5 class="modal-title" id="addSellerLabel">{{ labels.label | translate }}</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              (click)="close()"></button>
+    </div>
+
+    <div class="modal-body d-flex flex-column gap-3">
+      <app-form-control [label]="'Charger Name'">
+        <input type="text"
+               placeholder="Fast charger 1"
+               [formControlName]="formControlNames.name">
+      </app-form-control>
+
+      <app-form-control [label]="'Charger Description'">
+        <textarea placeholder="Some details about the charger"
+                  [formControlName]="formControlNames.description"></textarea>
+      </app-form-control>
+    </div>
+
+    <div class="modal-footer">
+      <div class="col-lg-12">
+        <div class="hstack gap-2 justify-content-end">
+          <button
+            class="btn btn-link link-success text-decoration-none fw-medium"
+            data-bs-dismiss="modal" (click)="close()">
+            {{ 'base.buttons.close' | translate }}
+          </button>
+          <button
+            [disabled]="upsertForm.invalid"
+            type="submit"
+            class="btn btn-primary"
+          >
+            <i class="align-bottom me-1" icon="save"></i>
+            {{ labels.save | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+}

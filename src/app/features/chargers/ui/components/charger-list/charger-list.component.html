@@ -1,42 +1,71 @@
+<ev-list-control-bar
+  [actions]="$actions()"
+  (selectAction)="chargersFacade.handleBarAction($event)"
+  (changeSearch)="chargersFacade.search($event)"
+/>
+
 <div class="tasks-board mb-3" id="kanbanboard">
-  @for (charger of chargers | keyvalue; track charger.key) {
+  @for (charger of $chargers(); track charger.id) {
     <div class="tasks-list">
       <div class="d-flex mb-3">
         <div class="flex-grow-1">
           <h6 class="fs-14 text-uppercase fw-semibold mb-0">
-            {{ charger.key }}
-            <small class="badge bg-success align-bottom ms-1 totaltask-badge">{{ charger.value.length }}</small>
+            {{ charger.name || charger.id }}
+            <small class="badge bg-success align-bottom ms-1 totaltask-badge">{{ charger.connectors.length }}</small>
           </h6>
         </div>
 
         <div class="flex-shrink-0">
-          <!--          <div class="dropdown card-header-dropdown" ngbDropdown>-->
-          <!--            <a class="text-body dropdown-btn arrow-none" href="javascript:void(0);" data-bs-toggle="dropdown"-->
-          <!--               aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>-->
-          <!--                                <span class="fw-medium text-muted fs-12">Priority<i-->
-          <!--                                  class="mdi mdi-chevron-down ms-1"></i></span>-->
-          <!--            </a>-->
-          <!--            <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>-->
-          <!--              <a class="dropdown-item" href="javascript:void(0);">Priority</a>-->
-          <!--              <a class="dropdown-item" href="javascript:void(0);">Date Added</a>-->
-          <!--            </div>-->
-          <!--          </div>-->
+          <div class="dropdown card-header-dropdown" ngbDropdown>
+            <a class="text-body dropdown-btn arrow-none" href="javascript:void(0);" data-bs-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+                <span class="fw-medium text-muted fs-12">
+                  <i icon="more_horiz" class="ms-1"></i>
+                </span>
+            </a>
+
+            <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+              @for (action of chargersFacade.$actions().card; track action.value) {
+                <button (click)="chargersFacade.handleCarAction(action.value, charger)"
+                        ngbDropdownItem>{{ action.label | translate }}
+                </button>
+              }
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="tasklist-content">
-        @for (connector of charger.value; track connector.id) {
-          <div id="unassigned-task" class="tasks">
-            <!--          <div [dndDraggable]="task" dndEffectAllowed="move" (dndMoved)="onDragged(task, unassignedTasks)">-->
-            <!--            <ng-template [ngTemplateOutlet]="TaskContent" [ngTemplateOutletContext]="{task:task}">-->
-            <!--            </ng-template>-->
-            <!--          </div>-->
+        <div class="tasks">
+          @for (connector of charger.connectors; track connector.id) {
             <div class="task">
-              <ev-connector-card [connector]="connector"/>
+              <ev-connector-card
+                [connector]="connector"
+                [actions]="$any(chargersFacade.$actions().connector)"
+                (selectAction)="chargersFacade.handleConnectorAction($event.value, connector)"
+              />
             </div>
-          </div>
-        }
+          } @empty {
+            @if ($loaders().connectors; as isLoading) {
+              <ev-empty-results [isLoading]="isLoading"/>
+            } @else {
+              <div [style.max-width.px]="300" class="task">
+                <div class="text-center">
+                  <lord-icon src="https://cdn.lordicon.com/yspjfnoa.json"
+                             trigger="in"
+                             delay="2000"
+                             colors="primary:#405189,secondary:#0ab39c" style="width:72px;height:72px">
+                  </lord-icon>
+
+                  <h6 class="text-muted" [innerHtml]="'charger.list.empty-charger' | translate"></h6>
+                </div>
+              </div>
+            }
+          }
+        </div>
       </div>
     </div><!--end tasks-list-->
+  } @empty {
+    <ev-empty-results [isLoading]="$loaders().chargers"/>
   }
 </div>
