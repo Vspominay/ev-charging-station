@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { SidebarComponent } from '../core/layouts/sidebar/sidebar.component';
-import { TopbarComponent } from '../core/layouts/topbar/topbar.component';
+import { SidebarComponent } from '@core/layouts/sidebar/sidebar.component';
+import { TopbarComponent } from '@core/layouts/topbar/topbar.component';
 
 @Component({
   selector: 'app-features-root',
