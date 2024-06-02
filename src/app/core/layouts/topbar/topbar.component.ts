@@ -1,10 +1,13 @@
-import { DOCUMENT, NgClass, NgForOf, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { DOCUMENT, NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Inject, OnInit, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AuthFacade } from '@features/auth/data-access/auth.facade';
+import { RolePipe } from '@features/auth/ui/pipes/role.pipe';
 import {
   NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbNavContent, NgbNavOutlet
 } from '@ng-bootstrap/ng-bootstrap';
-import { IconDirective } from '../../../shared/directives/icon.directive';
+import { TranslateModule } from '@ngx-translate/core';
+import { IconDirective } from '@shared/directives/icon.directive';
 
 // Language
 //Logout
@@ -26,11 +29,17 @@ import { CartModel } from './topbar.model';
     NgIf,
     NgbNavOutlet,
     NgbNavContent,
-    IconDirective
+    IconDirective,
+    RolePipe,
+    TranslateModule,
+    NgOptimizedImage
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TopbarComponent implements OnInit {
+  private readonly authFacade = inject(AuthFacade);
+
+  readonly $vm = this.authFacade.$vm;
 
   element: any;
   mode: string | undefined;
@@ -153,13 +162,6 @@ export class TopbarComponent implements OnInit {
    */
   listLang = [
     { text: 'English', flag: 'assets/images/flags/us.svg', lang: 'en' },
-    { text: 'Española', flag: 'assets/images/flags/spain.svg', lang: 'es' },
-    { text: 'Deutsche', flag: 'assets/images/flags/germany.svg', lang: 'de' },
-    { text: 'Italiana', flag: 'assets/images/flags/italy.svg', lang: 'it' },
-    { text: 'русский', flag: 'assets/images/flags/russia.svg', lang: 'ru' },
-    { text: '中国人', flag: 'assets/images/flags/china.svg', lang: 'ch' },
-    { text: 'français', flag: 'assets/images/flags/french.svg', lang: 'fr' },
-    { text: 'Arabic', flag: 'assets/images/flags/ae.svg', lang: 'ar' },
   ];
 
   /***
@@ -172,90 +174,7 @@ export class TopbarComponent implements OnInit {
     // this.languageService.setLanguage(lang);
   }
 
-  oncheckboxchange(evnt: any) {
-  }
-
-  /**
-   * Logout the user
-   */
   logout() {
-    // this.authService.logout();
-    // if (environment.defaultauth === 'firebase') {
-    //   this.authService.logout();
-    // } else {
-    //   this.authFackservice.logout();
-    // }
-    // this.router.navigate(['/auth/login']);
+    this.logout();
   }
-
-  windowScroll() {
-    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-      (document.getElementById('back-to-top') as HTMLElement).style.display = 'block';
-      document.getElementById('page-topbar')?.classList.add('topbar-shadow');
-    } else {
-      (document.getElementById('back-to-top') as HTMLElement).style.display = 'none';
-      document.getElementById('page-topbar')?.classList.remove('topbar-shadow');
-    }
-  }
-
-  // Delete Item
-  deleteItem(event: any, id: any) {
-    var price = event.target.closest('.dropdown-item').querySelector('.item_price').innerHTML;
-    var Total_price = this.total - price;
-    this.total = Total_price;
-    this.cart_length = this.cart_length - 1;
-    this.total > 1 ? (document.getElementById('empty-cart') as HTMLElement).style.display = 'none' : (document.getElementById('empty-cart') as HTMLElement).style.display = 'block';
-    document.getElementById('item_' + id)?.remove();
-  }
-
-  // Search Topbar
-  Search() {
-    var searchOptions = document.getElementById('search-close-options') as HTMLAreaElement;
-    var dropdown = document.getElementById('search-dropdown') as HTMLAreaElement;
-    var input: any, filter: any, ul: any, li: any, a: any | undefined, i: any, txtValue: any;
-    input = document.getElementById('search-options') as HTMLAreaElement;
-    filter = input.value.toUpperCase();
-    var inputLength = filter.length;
-
-    if (inputLength > 0) {
-      dropdown.classList.add('show');
-      searchOptions.classList.remove('d-none');
-      var inputVal = input.value.toUpperCase();
-      var notifyItem = document.getElementsByClassName('notify-item');
-
-      Array.from(notifyItem).forEach(function (element: any) {
-        var notifiTxt = '';
-        if (element.querySelector('h6')) {
-          var spantext = element.getElementsByTagName('span')[0].innerText.toLowerCase();
-          var name = element.querySelector('h6').innerText.toLowerCase();
-          if (name.includes(inputVal)) {
-            notifiTxt = name;
-          } else {
-            notifiTxt = spantext;
-          }
-        } else if (element.getElementsByTagName('span')) {
-          notifiTxt = element.getElementsByTagName('span')[0].innerText.toLowerCase();
-        }
-        if (notifiTxt)
-          element.style.display = notifiTxt.includes(inputVal) ? 'block' : 'none';
-
-      });
-    } else {
-      dropdown.classList.remove('show');
-      searchOptions.classList.add('d-none');
-    }
-  }
-
-  /**
-   * Search Close Btn
-   */
-  closeBtn() {
-    var searchOptions = document.getElementById('search-close-options') as HTMLAreaElement;
-    var dropdown = document.getElementById('search-dropdown') as HTMLAreaElement;
-    var searchInputReponsive = document.getElementById('search-options') as HTMLInputElement;
-    dropdown.classList.remove('show');
-    searchOptions.classList.add('d-none');
-    searchInputReponsive.value = '';
-  }
-
 }

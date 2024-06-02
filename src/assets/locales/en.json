@@ -4,15 +4,57 @@
       "create": "Create",
       "edit": "Edit",
       "delete": "Delete",
+      "add": "Add",
       "save": "Save",
-      "close": "Close"
+      "close": "Close",
+      "view": "View",
+      "restart": "Restart"
     },
     "placeholders": {
-      "search": "Start typing to search..."
+      "search": "Start typing to search...",
+      "date": "Select date",
+      "time": "Select time",
+      "email": "Enter email",
+      "click-to-select": "Click to select"
     },
     "statuses": {
+      "title": "Status",
       "active": "active",
       "blocked": "blocked"
+    },
+    "labels": {
+      "name": "Name",
+      "email": "Email",
+      "actions": "Actions",
+      "last-update": "Last update"
+    },
+    "errors": {
+      "validators": {
+        "required": "Required",
+        "pattern": "Invalid format",
+        "minlength": "Minimum length is {{length}} characters",
+        "maxlength": "Maximum length is {{length}} characters",
+        "mask": "Invalid format. Example: {{mask}}",
+        "password-match": "Passwords do not match",
+        "same-fields": "Fields must be different",
+        "access-min-date": "Can not be earlier than \"Start date\"",
+        "email-already-use": "Email already in use",
+        "email-not-found": "User not found",
+        "email-in-wrong-format": "Email in wrong format",
+        "wrong-confirmation-code": "Invalid confirmation code",
+        "compare-dates": "The end date cannot be earlier than the start date"
+      }
+    },
+    "password": {
+      "title": "Password",
+      "placeholder": "Enter password",
+      "validation": {
+        "title": "Password must contain:",
+        "length": "Minimum <b>8</b> characters",
+        "uppercase": "At least <b>1 uppercase</b> letter (A-Z)",
+        "lowercase": "At least <b>1 lowercase</b> letter (a-z)",
+        "number": "At least <b>1</b> number"
+      }
     }
   },
   "sidebar": {
@@ -22,17 +64,108 @@
     "reports": "Reports",
     "statistics": "Statistics",
     "settings": "Settings",
-    "charts": "Charts"
+    "charts": "Charts",
+    "depot-config": "Depot configuration",
+    "users": "Users",
+    "reservations": "Reservations",
+    "ocpp-tags": "OCPP tags"
+  },
+  "auth": {
+    "role": {
+      "title": "Role",
+      "SuperAdministrator": "Owner",
+      "Administrator": "Administrator",
+      "Employee": "Employee",
+      "Driver": "Driver",
+      "unspecified": "Unspecified"
+    },
+    "labels": {
+      "first-name": "First name",
+      "last-name": "Last name",
+      "full-name": "Full name"
+    },
+    "placeholders": {
+      "first-name": "John",
+      "last-name": "Doe"
+    },
+    "welcome": "Welcome {{name}}!",
+    "logout": "Logout"
+  },
+  "profile": {
+    "upsert": {
+      "add": "Add smart profile",
+      "edit": "View smart profile",
+      "general": {
+        "title": "General information",
+        "name-placeholder": "High performance charging",
+        "priority": {
+          "title": "Priority",
+          "placeholder": "The bigger the number, the higher priority"
+        },
+        "purpose": {
+          "title": "Purpose",
+          "placeholder": "Select Purpose"
+        },
+        "kind": {
+          "title": "Kind",
+          "placeholder": "Select Kind"
+        }
+      },
+      "validity": {
+        "title": "Validity & Scheduling",
+        "valid-from": {
+          "title": "Valid from"
+        },
+        "valid-to": {
+          "title": "Valid to"
+        },
+        "start-schedule": {
+          "title": "Start profile schedule"
+        },
+        "duration": {
+          "title": "Duration",
+          "placeholder": "Duration in seconds",
+          "suffix": "sec."
+        },
+        "recurrency": {
+          "title": "Recurrence",
+          "placeholder": "Select Recurrence"
+        }
+      },
+      "periods": {
+        "title": "Limits & Periods",
+        "add-period": {
+          "title": "Add period"
+        },
+        "unit": {
+          "title": "Unit",
+          "placeholder": "Amperes or Watts"
+        },
+        "min-rate": {
+          "title": "Min Rate",
+          "placeholder": "Minimum charging rate allowed during the profile"
+        },
+        "limit": {
+          "title": "Charging rate limit",
+          "placeholder": "Maximum charging rate allowed during the period"
+        },
+        "phases": {
+          "title": "Phases"
+        }
+      }
+    },
+    "empty-profile": "There are no connectors assigned to this profile. <br/> Drag and drop connectors from the list above to assign them to this profile"
   },
   "depot": {
     "list": {
       "title": "Depot list",
+      "view": "View details",
       "alerts": {
         "energy-limit-reached": "Energy limit reached"
       }
     },
     "stats": {
-      "power-usage-overview": "Power usage overview"
+      "power-usage-overview": "Power/Energy usage overview"
     },
     "configuration": {
       "max-provision": "Max. provision power",
@@ -47,11 +180,165 @@
     "statuses": {
       "online": "Online",
       "offline": "Offline",
-      "faulted": "Faulted"
+      "faulted": "Has errors",
+      "unknown": "Unknown"
     },
     "upsert": {
       "add": "Add depot",
-      "edit": "Edit depot"
+      "edit": "Edit depot",
+      "general": {
+        "title": "General Details",
+        "contact-tel": "Contact number",
+        "energy-limit": "Energy limit (kWh)",
+        "name": {
+          "title": "Depot name",
+          "placeholder": "Main City Depot"
+        },
+        "description": {
+          "title": "Depot description",
+          "placeholder": "The larges depot in the city..."
+        }
+      },
+      "business": {
+        "title": "Business Details",
+        "country": {
+          "title": "Country",
+          "placeholder": "Ukraine"
+        },
+        "city": {
+          "title": "City",
+          "placeholder": "Kyiv"
+        },
+        "street": {
+          "title": "Street",
+          "placeholder": "Khreshchatyk"
+        },
+        "building": {
+          "title": "Building, apartment",
+          "placeholder": "12, 34"
+        }
+      }
+    },
+    "config": {
+      "charger-stats": {
+        "total-chargers": "Total chargers",
+        "configured-chargers": "Configured chargers",
+        "available-chargers": "Available chargers",
+        "total-power": "Total used power",
+        "left-power": "Left power"
+      },
+      "notify": {
+        "title": "Note",
+        "message": "Please note that if any issues arise, they will be displayed on the depot dashboard. You can adjust the settings at any time."
+      },
+      "intervals": {
+        "table": {
+          "interval": "Interval",
+          "limit": "Limit (Wh)",
+          "select-interval": "Click to specify time interval",
+          "new-interval": "New Interval time range"
+        },
+        "error": {
+          "over-limit": {
+            "title": "Exceeded limit",
+            "message": "The total amount of charging energy exceeds the limit by <b>{{energy}}</b>. Please update the overall depot restrictions or reduce the time interval restrictions"
+          }
+        }
+      }
+    },
+    "options": {
+      "recurrency": {
+        "daily": "Daily",
+        "weekly": "Weekly"
+      },
+      "purpose": {
+        "maxProfile": "Max Profile",
+        "default": "Default",
+        "profile": "Profile"
+      },
+      "kind": {
+        "absolute": "Absolute",
+        "recurring": "Recurring",
+        "relative": "Relative"
+      },
+      "rateUnit": {
+        "amperes": "Amperes",
+        "watts": "Watts"
+      },
+      "phases": {
+        "singlePhase": "Single Phase",
+        "threePhase": "Three Phase"
+      }
+    }
+  },
+  "connector": {
+    "statuses": {
+      "available": "Available",
+      "occupied": "Occupied",
+      "reserved": "Reserved",
+      "unavailable": "Unavailable",
+      "faulted": "Faulted",
+      "charging": "Charging",
+      "suspendedev": "Suspended",
+      "unknown": "Unknown"
+    }
+  },
+  "charger": {
+    "details": {
+      "serial-number": "Serial number",
+      "model": "Model",
+      "vendor": "Vendor",
+      "firmware": {
+        "update-timestamp": "Firmware update timestamp",
+        "version": "Firmware version"
+      },
+      "iccid": "ICCID",
+      "imsi": "IMSI",
+      "meter": {
+        "serial-number": "Meter serial number",
+        "type": "Meter type"
+      },
+      "ocpp-protocol": "OCPP protocol"
+    },
+    "restart": {
+      "title": "Select method to restart",
+      "method": "Charger restart method",
+      "submit": "Restart"
+    },
+    "list": {
+      "empty-charger": "There are no connectors connected to this charger. <br/> Plug in connectors and they will appear here"
+    }
+  },
+  "reservation": {
+    "upsert": {
+      "connector": {
+        "title": "Connector",
+        "placeholder": "Please select charge station first"
+      }
+    }
+  },
+  "users": {
+    "title": "Users",
+    "invite": {
+      "title": "Invite",
+      "user": "User",
+      "long-title": "Invite user",
+      "new-user-email": "Invited user email",
+      "enter-hint": "Enter email to send invite link"
+    },
+    "update": {
+      "title": "Update",
+      "long-title": "Update user"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    }
+  },
+  "ocpp-tags": {
+    "title": "Ocpp tags",
+    "labels": {
+      "tag": "Ocpp Tag"
     }
   }
 }

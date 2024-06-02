@@ -2,3 +2,9 @@
 
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+
+body {
+  .row {
+    --vz-gutter-y: 1rem;
+  }
+}

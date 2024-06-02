@@ -116,8 +116,6 @@
 
 //passowrd validations 
 #password-contain {
-  display: none;
-
   p {
     padding-left: 13px;
 
@@ -127,7 +125,7 @@
       &::before {
         position: relative;
         left: -8px;
-        content: '✔';
+        content: '✅';
       }
     }
 
@@ -137,7 +135,7 @@
       &::before {
         position: relative;
         left: -8px;
-        content: '✖';
+        content: '⛔';
       }
     }
   }

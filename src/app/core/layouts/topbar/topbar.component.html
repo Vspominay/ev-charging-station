@@ -1,24 +1,15 @@
-<header id="page-topbar" data-scroll-header (window:scroll)="windowScroll()">
+<header id="page-topbar" data-scroll-header>
   <div class="layout-width">
     <div class="navbar-header">
       <div class="d-flex">
         <!-- LOGO -->
         <div class="navbar-brand-box horizontal-logo">
-          <a routerLink="" class="logo logo-dark">
-                        <span class="logo-sm">
-                            <img src="assets/images/logo-sm.png" alt="" height="22">
-                        </span>
-            <span class="logo-lg">
-                            <img src="assets/images/logo-dark.png" alt="" height="17">
-                        </span>
-          </a>
-
           <a routerLink="" class="logo logo-light">
                         <span class="logo-sm">
-                            <img src="assets/images/logo-sm.png" alt="" height="22">
+                            <img ngSrc="assets/images/logo-sm.svg" alt="logo" height="50" width="50">
                         </span>
             <span class="logo-lg">
-                            <img src="assets/images/logo-light.png" alt="" height="17">
+                            <img ngSrc="assets/images/logo.svg" alt="logo" height="70" width="160">
                         </span>
           </a>
         </div>
@@ -34,27 +25,6 @@
       </div>
 
       <div class="d-flex align-items-center">
-
-        <div class="dropdown d-md-none topbar-head-dropdown header-item" ngbDropdown>
-          <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
-                  id="page-header-search-dropdown" ngbDropdownToggle aria-haspopup="true" aria-expanded="false">
-            <i class="bx bx-search fs-22"></i>
-          </button>
-          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
-               aria-labelledby="page-header-search-dropdown" ngbDropdownMenu>
-            <form class="p-3">
-              <div class="form-group m-0">
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search ..."
-                         aria-label="Recipient's username">
-                  <button class="btn btn-primary" type="submit"><i
-                    class="mdi mdi-magnify"></i></button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-
         <div class="dropdown ms-1 topbar-head-dropdown header-item" ngbDropdown>
           <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
                   data-bs-toggle="dropdown" ngbDropdownToggle aria-haspopup="true" aria-expanded="false">
@@ -89,29 +59,19 @@
                             <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg"
                                  alt="Header Avatar">
                             <span class="text-start ms-xl-2">
-                                <span
-                                  class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ userData.first_name }}
-                                  {{ userData.last_name }}</span>
-                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">{{
-                                    userData.role
-                                    == 0 ? 'Admin' : 'User'
-                                  }}</span>
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ $vm().user.fullName }}</span>
+                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">{{ $vm().user.role | role | translate }}</span>
                             </span>
                         </span>
           </button>
           <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
-            <!-- item-->
-            <h6 class="dropdown-header">Welcome {{ userData.first_name }}!</h6>
-            <a class="dropdown-item" routerLink="/pages/profile">
-              <i icon="person" class="text-muted fs-16 align-middle me-1"></i>
-              <span class="align-middle">Profile</span>
-            </a>
-            <a class="dropdown-item" routerLink="/pages/profile">
-              <i icon="manage_accounts" class="text-muted fs-16 align-middle me-1"></i>
-              <span class="align-middle">Settings</span></a>
+            <h6 class="dropdown-header">
+              {{ 'auth.welcome' | translate : { name: $vm().user.fullName } }}
+            </h6>
             <a class="dropdown-item" href="javascript: void(0);" (click)="logout()">
               <i icon="logout" class="text-muted fs-16 align-middle me-1"></i>
-              <span class="align-middle" data-key="t-logout">Logout</span></a>
+              <span class="align-middle" data-key="t-logout">{{ 'auth.logout' | translate }}</span>
+            </a>
           </div>
         </div>
       </div>

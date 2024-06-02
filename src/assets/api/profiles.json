@@ -1,0 +1,64 @@
+{
+  "collection": [
+    {
+      "id": "guid-1",
+      "createdAt": "2023-01-15T08:00:00Z",
+      "updatedAt": "2023-05-10T08:00:00Z",
+      "chargingProfileId": 101,
+      "stackLevel": 1,
+      "validFrom": "2023-01-01T00:00:00Z",
+      "validTo": "2023-12-31T23:59:59Z",
+      "recurrencyKind": 0,
+      "chargingProfilePurpose": 0,
+      "chargingProfileKind": 0,
+      "duration": 3600,
+      "startSchedule": "2023-01-01T08:00:00Z",
+      "schedulingUnit": "W",
+      "minChargingRate": 22.5,
+      "chargingSchedulePeriods": [
+        {
+          "id": "period-guid-1",
+          "startPeriod": 0,
+          "limit": 50,
+          "numberPhases": 3
+        },
+        {
+          "id": "period-guid-2",
+          "startPeriod": 1800,
+          "limit": 30,
+          "numberPhases": 1
+        }
+      ]
+    },
+    {
+      "id": "guid-2",
+      "createdAt": "2023-02-20T08:00:00Z",
+      "updatedAt": "2023-05-12T08:00:00Z",
+      "chargingProfileId": 102,
+      "stackLevel": 2,
+      "validFrom": "2023-02-01T00:00:00Z",
+      "validTo": "2023-11-30T23:59:59Z",
+      "recurrencyKind": 1,
+      "chargingProfilePurpose": 1,
+      "chargingProfileKind": 1,
+      "duration": 7200,
+      "startSchedule": "2023-02-01T08:00:00Z",
+      "schedulingUnit": "A",
+      "minChargingRate": 10.5,
+      "chargingSchedulePeriods": [
+        {
+          "id": "period-guid-3",
+          "startPeriod": 0,
+          "limit": 40,
+          "numberPhases": 2
+        },
+        {
+          "id": "period-guid-4",
+          "startPeriod": 3600,
+          "limit": 20,
+          "numberPhases": 3
+        }
+      ]
+    }
+  ]
+}

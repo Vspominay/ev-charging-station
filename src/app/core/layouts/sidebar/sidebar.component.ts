@@ -1,10 +1,11 @@
-import { NgClass, NgForOf, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import {
+  ChangeDetectionStrategy, Component, ElementRef, EventEmitter, inject, OnInit, Output, ViewChild
+} from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { SidebarService } from '@core/layouts/sidebar/sidebar.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconDirective } from '../../../shared/directives/icon.directive';
-
-import { MENU } from './menu';
 import { MenuItem } from './menu.model';
 
 @Component({
@@ -17,7 +18,8 @@ import { MenuItem } from './menu.model';
     RouterLink,
     NgForOf,
     TranslateModule,
-    IconDirective
+    IconDirective,
+    NgOptimizedImage
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -25,7 +27,7 @@ export class SidebarComponent implements OnInit {
 
   menu: any;
   toggle: any = true;
-  menuItems: MenuItem[] = [];
+  $menuItems = inject(SidebarService).$menu;
   @ViewChild('sideMenu') sideMenu!: ElementRef;
   @Output() mobileMenuButtonClicked = new EventEmitter();
 
@@ -34,7 +36,6 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     // Menu Items
-    this.menuItems = MENU;
     this.router.events.subscribe((event) => {
       if (document.documentElement.getAttribute('data-layout') != 'twocolumn') {
         if (event instanceof NavigationEnd) {

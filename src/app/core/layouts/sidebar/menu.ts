@@ -2,33 +2,49 @@ import { MenuItem } from './menu.model';
 
 export const MENU: MenuItem[] = [
   {
-    id: 1,
     label: 'sidebar.management',
     isTitle: true
   },
   {
-    id: 2,
     label: 'sidebar.depots',
+    link: 'depots',
     icon: 'emoji_transportation',
   },
   {
-    id: 3,
     label: 'sidebar.dashboard',
+    link: 'dashboard',
     icon: 'dashboard',
   },
+  // {
+  //   label: 'sidebar.statistics',
+  //   icon: 'query_stats',
+  // },
   {
-    id: 4,
-    label: 'sidebar.statistics',
-    isTitle: true
+    label: 'sidebar.depot-config',
+    link: 'configuration',
+    icon: 'manufacturing'
   },
   {
-    id: 5,
-    label: 'sidebar.reports',
-    icon: 'summarize',
+    label: 'sidebar.users',
+    link: 'users',
+    icon: 'group',
   },
   {
-    id: 6,
-    label: 'sidebar.charts',
-    icon: 'query_stats',
+    label: 'sidebar.ocpp-tags',
+    link: 'ocpp-tags',
+    icon: 'sell',
   },
+  {
+    label: 'sidebar.reservations',
+    link: 'reservations',
+    icon: 'today'
+  }
 ];
+
+export const DEPOT_SCOPED_LINKS: Set<string> = new Set([
+  'dashboard',
+  'configuration',
+  'users',
+  'ocpp-tags',
+  'reservations'
+]);
