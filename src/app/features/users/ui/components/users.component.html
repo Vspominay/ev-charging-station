@@ -1,106 +1,82 @@
 <!-- Start Breadcrumbs -->
-<app-breadcrumbs title="Users"></app-breadcrumbs>
+<app-breadcrumbs [title]="'users.title' | translate"></app-breadcrumbs>
 <!-- End Breadcrumbs -->
 
 <div class="row">
   <div class="col-lg-12">
+    <ev-list-control-bar
+      [actions]="$actions() | actionPlacement: 'bar'"
+      (changeSearch)="facade.search($event)"
+      (selectAction)="facade.handleAction($event, null)"
+    />
+  </div>
+
+  <div class="col-lg-12">
     <div class="card" id="leadsList">
-      <div class="card-header border-0">
-
-        <div class="row g-4 align-items-center">
-          <div class="col-sm-3">
-            <div class="search-box">
-              <input type="text" name="searchTerm" class="form-control" placeholder="Search for...">
-              <i icon="search" class="search-icon"></i>
-            </div>
-          </div>
-          <div class="col-sm-auto ms-auto">
-            <div class="hstack gap-2">
-              <button class="btn btn-soft-danger" id="remove-actions" style="display: none">
-                <i class="ri-delete-bin-2-line"></i></button>
-              <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas"
-                      href="javascript:void(0);"><i
-                class="ri-filter-3-line align-bottom me-1"></i> Filters
-              </button>
-              <button type="button" class="btn btn-secondary add-btn" data-bs-toggle="modal"
-                      id="create-btn" data-bs-target="#showModal"><i
-                class="ri-add-line align-bottom me-1"></i> Add Employee
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div class="card-body">
         <div>
           <div class="table-responsive table-card">
             <table class="table">
               <thead>
               <tr class="bg-light text-muted">
-                <th scope="col" style="width: 50px;">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="checkAll" value="option">
-                  </div>
-                </th>
-                <th class="sort">Full Name</th>
-                <th class="sort">User ID</th>
-                <th class="sort">User Type</th>
-                <th class="sort">Status</th>
-                <th class="sort">Last login</th>
-                <th class="sort" data-sort="action">Action</th>
+                <th class="sort">{{ 'auth.labels.full-name' | translate }}</th>
+                <th class="sort">{{ 'base.labels.email' | translate }}</th>
+                <th>{{ 'auth.role.title' | translate }}</th>
+                <th class="sort">{{ 'base.labels.last-update' | translate }}</th>
+                <th>{{ 'base.labels.actions' | translate }}</th>
               </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let data of leads">
-                <th scope="row">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="checkAll">
-                  </div>
-                </th>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                      <img src="{{data.image_src}}" alt=""
-                           class="avatar-xxs rounded-circle image_src object-fit-cover">
-                    </div>
-                    <div class="flex-grow-1 ms-2 name">{{ data.name }}</div>
-                  </div>
-                </td>
-                <td>
-                  <!--                  <ngb-highlight [result]="data.company">-->
-                  <!--                  </ngb-highlight>-->
-                  {{ data.user_id }}
-                </td>
-                <td>
-                  {{ data.user_type }}
+                @for (user of $vm().entities; track user.id) {
+                  <tr>
+                    @if (user.image; as image) {
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="flex-shrink-0">
+                            <img [ngSrc]="image" width="20" height="20" alt=""
+                                 class="avatar-xxs rounded-circle image_src object-fit-cover">
+                          </div>
+                          <div class="flex-grow-1 ms-2 name">
+                            <span> {{ user.firstName | emptyValue }} </span>
+                            <span> {{ user.lastName | emptyValue }} </span>
+                          </div>
+                        </div>
+                      </td>
+                    }
 
-                </td>
-                <td>
-                  {{ data.status }}
-                </td>
-                <td>
-                  {{ data.last_login }}
-                </td>
-                <td>
-                  <ul class="list-inline hstack gap-2 mb-0">
-                    <li class="list-inline-item edit" ngbTooltip="Create" placement="top">
-                      <a href="javascript:void(0);" class="text-muted d-inline-block">
-                        <i icon="add_circle" class="fs-16"></i>
-                      </a>
-                    </li>
-                    <li class="list-inline-item edit" ngbTooltip="Edit" placement="top">
-                      <a href="javascript:void(0);" class="text-muted d-inline-block">
-                        <i icon="edit" class="fs-16"></i>
-                      </a>
-                    </li>
-                    <li class="list-inline-item edit" ngbTooltip="Call" placement="top">
-                      <a href="javascript:void(0);" class="text-muted d-inline-block">
-                        <i icon="call" class="fs-16"></i>
-                      </a>
-                    </li>
-                  </ul>
-                </td>
-              </tr>
+                    <td>
+                      <span> {{ user.email | emptyValue }} </span>
+                    </td>
+
+                    <td>
+                      {{ user.role | role | translate | emptyValue }}
+                    </td>
+
+                    <td>
+                      {{ user.updatedAt | date }}
+                    </td>
+
+                    <td>
+                      <ul class="list-inline hstack gap-2 mb-0">
+                        @for (action of ($actions() | actionPlacement: 'item'); track action.value) {
+                          <li class="list-inline-item edit cursor-pointer"
+                              (click)="facade.handleAction(action.value, user)"
+                              [ngbTooltip]="action.label | translate"
+                              placement="top"
+                          >
+                            <span class="text-muted" [icon]="action.data.icon"></span>
+                          </li>
+                        }
+                      </ul>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="100">
+                      <ev-empty-results [isLoading]="$vm().isLoading"/>
+                    </td>
+                  </tr>
+                }
               </tbody>
             </table>
           </div>

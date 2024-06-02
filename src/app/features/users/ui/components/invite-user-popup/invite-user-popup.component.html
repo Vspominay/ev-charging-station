@@ -1,0 +1,86 @@
+@if (labels) {
+  <form [formGroup]="upsertForm" (ngSubmit)="saveChanges()">
+    <div class="modal-header">
+      <h5 class="modal-title" id="addSellerLabel">{{ labels.label | translate }}</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              (click)="close()"></button>
+    </div>
+
+    <div class="modal-body row row-cols-1 row-cols-md-2">
+      <app-form-control class="col" [label]="'users.invite.user' | translate">
+        <ng-select class="p-0"
+                   [items]="$filteredUsers().entities"
+                   [editableSearchTerm]="true"
+                   [typeahead]="searchTerm$"
+                   bindValue="email"
+                   [formControlName]="formControlNames.email"
+                   [placeholder]="'base.placeholders.email' | translate"
+                   [addTag]="true"
+                   [addTagText]="('users.invite.new-user-email' | translate) + ':'"
+                   [typeToSearchText]="'users.invite.enter-hint' | translate"
+                   (change)="selectUser($event.label ? $event.label: $event)"
+        >
+          <ng-template ng-label-tmp
+                       ng-option-tmp
+                       let-item="item">{{ item | userLabel }}
+          </ng-template>
+        </ng-select>
+      </app-form-control>
+
+      <app-form-control class="col" [label]="'ocpp-tags.labels.tag' | translate">
+        <ng-select
+          class="p-0"
+          [items]="$ocppTags()"
+          bindLabel="tagId"
+          [placeholder]="'base.placeholders.click-to-select' | translate"
+          [formControlName]="formControlNames.ocppTagId"
+        />
+      </app-form-control>
+
+      <app-form-control class="col" [label]="'auth.labels.first-name' | translate">
+        <input type="text"
+               [placeholder]="'auth.labels.first-name' | translate"
+               [formControlName]="formControlNames.firstName">
+      </app-form-control>
+
+      <app-form-control class="col" [label]="'auth.labels.last-name' | translate">
+        <input type="text"
+               [placeholder]="'auth.labels.last-name' | translate"
+               [formControlName]="formControlNames.lastName">
+      </app-form-control>
+
+      <app-form-control class="col" [label]="'auth.role.title' | translate">
+        <ng-select
+          [placeholder]="'base.placeholders.click-to-select' | translate"
+          class="p-0"
+          [clearable]="false"
+          bindValue="value"
+          [items]="roles"
+          [formControlName]="formControlNames.role"
+        >
+          <ng-template ng-label-tmp ng-option-tmp let-item="item">{{ item.label | translate }}</ng-template>
+        </ng-select>
+      </app-form-control>
+    </div>
+
+    <div class="modal-footer">
+      <div class="col-lg-12">
+        <div class="hstack gap-2 justify-content-end">
+          <button
+            class="btn btn-link link-success text-decoration-none fw-medium"
+            data-bs-dismiss="modal" (click)="close()">
+            {{ 'base.buttons.close' | translate }}
+          </button>
+          <button
+            [disabled]="upsertForm.invalid"
+            type="submit"
+            class="btn btn-primary"
+          >
+            <i class="align-bottom me-1" icon="send"></i>
+            {{ labels.save | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+}
