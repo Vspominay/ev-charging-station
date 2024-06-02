@@ -3,29 +3,50 @@
 //
 
 
-.form-icon{
+.form-icon {
+  position: relative;
+
+  .form-control-icon {
+    padding-left: calc(#{$input-padding-x} * 3);
     position: relative;
+  }
+
+  i {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 18px;
+    display: flex;
+    align-items: center;
+  }
+
+  &.right {
     .form-control-icon {
-        padding-left: calc(#{$input-padding-x} * 3);
-        position: relative;
+      padding-right: calc(#{$input-padding-x} * 3);
+      padding-left: $input-padding-x;
+      position: relative;
     }
+
     i {
-        position: absolute;
-        top: 0px;
-        bottom: 0px;
-        left: 18px;
-        display: flex;
-        align-items: center;
+      left: auto;
+      right: 18px;
     }
-    &.right{
-        .form-control-icon {
-            padding-right: calc(#{$input-padding-x} * 3);
-            padding-left: $input-padding-x;
-            position: relative;
-        }
-        i {
-            left: auto;
-            right: 18px;
-        }
-    }
+  }
+}
+
+
+@keyframes control-message {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.animated-message {
+  animation-name: control-message;
+  animation-duration: 300ms;
 }
