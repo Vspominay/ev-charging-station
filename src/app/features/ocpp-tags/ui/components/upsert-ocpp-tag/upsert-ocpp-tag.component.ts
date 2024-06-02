@@ -1,7 +1,8 @@
 import { Component, inject, Input } from '@angular/core';
 import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FIELD_MAX_LENGTH } from '@core/validators/field-max-length.validators';
 import { trimRequiredValidator } from '@core/validators/trim-required.validator';
-import { TCreateOcppTag, TOcppTag } from '@features/ocpp-tags/data-access/models/ocpp-tag.model';
+import { TOcppTag, TUpsertOcppTag } from '@features/ocpp-tags/data-access/models/ocpp-tag.model';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormElementDirective } from '@shared/components/form-control/directives/form-element.directive';
@@ -38,8 +39,8 @@ export class UpsertOcppTagComponent {
     this.upsertForm.patchValue(value);
   }
 
-  upsertForm = this.fb.group<ControlsOf<TCreateOcppTag>>({
-    tagId: this.fb.control('', [trimRequiredValidator]),
+  upsertForm = this.fb.group<ControlsOf<TUpsertOcppTag>>({
+    tagId: this.fb.control('', [trimRequiredValidator, FIELD_MAX_LENGTH]),
     parentTagId: this.fb.control(''),
     expiryDate: this.fb.control(dayjs().add(3, 'months').toISOString())
   });

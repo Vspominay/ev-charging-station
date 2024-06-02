@@ -8,4 +8,4 @@ export type TOcppTag = TUpsertInfo & WithGuid<{
   blocked: boolean,
 }>;
 
-export type TCreateOcppTag = Pick<TOcppTag, 'tagId' | 'parentTagId' | 'expiryDate'>;
+export type TUpsertOcppTag = Pick<TOcppTag, 'tagId' | 'parentTagId' | 'expiryDate'>;
