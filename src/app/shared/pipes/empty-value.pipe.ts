@@ -7,6 +7,6 @@ import { EMPTY_PLACEHOLDER } from '@core/constants/empty-placeholder.constant';
 })
 export class EmptyValuePipe implements PipeTransform {
   public transform(value: any) {
-    return Boolean(value) || EMPTY_PLACEHOLDER;
+    return value ? value : EMPTY_PLACEHOLDER;
   }
 }

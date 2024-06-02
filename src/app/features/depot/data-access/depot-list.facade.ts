@@ -1,9 +1,11 @@
 import { computed, inject, Injectable } from '@angular/core';
+import { ERole } from '@features/auth/data-access/models/roles.enum';
 import { $currentRole } from '@features/auth/utils/current-role.util';
 import { DepotStore } from '@features/depot/data-access/depot.store';
 import { TDepotListItem } from '@features/depot/data-access/models/depot.model';
 import { DepotAction, DepotActionService } from '@features/depot/data-access/services/depot-action.service';
 import { getSearchCriteria } from '@shared/utils/get-search-criteria.util';
+import { hasRole } from '@shared/utils/has-role.util';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +19,7 @@ export class DepotListFacade {
   readonly $actions = computed(() => {
     const actions = this.actionService.$actions();
 
-    // TODO: uncomment befroe commit
-    return actions;
-    // return hasRole(this.$role(), ERole.SuperAdministrator) ? actions : [];
+    return hasRole(this.$role(), ERole.SuperAdministrator) ? actions : [];
   });
 
   readonly $viewModel = computed(() => {

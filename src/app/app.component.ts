@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { SignalrService } from '@core/services/signalr.service';
+import { NgSelectConfig } from '@ng-select/ng-select';
 
 @Component({
   selector: 'bv-root',
@@ -11,6 +13,8 @@ import { RouterOutlet } from '@angular/router';
   styles: [],
 })
 export class AppComponent implements OnInit {
+  private readonly selectConfig = inject(NgSelectConfig);
+
   ngOnInit(): void {
     if (document.documentElement.getAttribute('data-layout') == 'semibox') {
       document.documentElement.setAttribute('data-layout', 'semibox');
@@ -38,5 +42,11 @@ export class AppComponent implements OnInit {
         document.querySelector('.hamburger-icon')?.classList.remove('open');
       }
     });
+  }
+
+  private signalR = inject(SignalrService);
+
+  constructor() {
+    this.selectConfig.bindValue = 'id';
   }
 }
