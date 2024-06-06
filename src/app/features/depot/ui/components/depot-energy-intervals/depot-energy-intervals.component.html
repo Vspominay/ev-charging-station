@@ -37,7 +37,7 @@
             <input
               [ngModel]="rangeLimit.value.limit"
               [ngModelOptions]="{standalone: true}"
-              (blur)="rangeLimit.get('limit')?.setValue(+limitEl.value.replace(' W', ''))"
+              (blur)="rangeLimit.get('limit')?.setValue(+limitEl.value.replace(' Wh', ''))"
               #limitEl
               custom-control
               mask="9*"

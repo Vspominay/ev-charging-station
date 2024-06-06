@@ -30,6 +30,7 @@ import { FormControlComponent } from '@shared/components/form-control/form-contr
 import { IconDirective } from '@shared/directives/icon.directive';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { EmptyValuePipe } from '@shared/pipes/empty-value.pipe';
+import { EnergyPipe } from '@shared/pipes/energy.pipe';
 import { PowerPipe } from '@shared/pipes/power.pipe';
 import { getFormControlsNames } from '@shared/utils/get-form-controls-names.util';
 import { FlatpickrModule } from 'angularx-flatpickr';
@@ -66,7 +67,7 @@ const totalChargersPowerValidator = (maxPower: number): ValidatorFn => (control:
 @Component({
   selector: 'ev-depot-configuration',
   standalone: true,
-  imports: [CommonModule, BreadcrumbsComponent, NgbNavItem, NgbNavLink, NgbNav, RouterLink, NgbNavOutlet, IconDirective, NgbNavContent, FormControlComponent, FormElementDirective, ReactiveFormsModule, FlatpickrModule, NgForOf, NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, DepotEnergyUsageComponent, DepotEnergyIntervalsComponent, FormsModule, PowerPipe, AddressPipe, NgOptimizedImage, EmptyValuePipe, DepotConfigChargerStatsPipe, TranslateModule, NgxMaskDirective],
+  imports: [CommonModule, BreadcrumbsComponent, NgbNavItem, NgbNavLink, NgbNav, RouterLink, NgbNavOutlet, IconDirective, NgbNavContent, FormControlComponent, FormElementDirective, ReactiveFormsModule, FlatpickrModule, NgForOf, NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, DepotEnergyUsageComponent, DepotEnergyIntervalsComponent, FormsModule, PowerPipe, AddressPipe, NgOptimizedImage, EmptyValuePipe, DepotConfigChargerStatsPipe, TranslateModule, NgxMaskDirective, EnergyPipe],
   templateUrl: './depot-configuration.component.html',
 })
 export default class DepotConfigurationComponent {

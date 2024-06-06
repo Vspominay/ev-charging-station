@@ -1,13 +1,14 @@
-import { ChangeDetectionStrategy, Component, computed, input, numberAttribute, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, numberAttribute, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TColorStyle } from '@core/types/color-style.type';
 import { TDepot } from '@features/depot/data-access/models/depot.model';
 import { DepotMainPanelStatsPipe } from '@features/depot/ui/pipes/depot-main-panel-stats.pipe';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { IconDirective } from '@shared/directives/icon.directive';
-import { PowerPipe } from '@shared/pipes/power.pipe';
+import { EnergyPipe } from '@shared/pipes/energy.pipe';
 import { getChartColorsArray } from '@shared/utils/get-chart-colors.util';
 import { getNextPowerValue } from '@shared/utils/get-next-power-value.util';
+import { $getSelectedLanguage } from '@shared/utils/selected-language.util';
 import dayjs from 'dayjs';
 import {
   ApexAnnotations, ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexPlotOptions, ApexTooltip, ApexXAxis, ApexYAxis,
@@ -29,8 +30,13 @@ import { map } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DepotEnergyUsageComponent {
+  readonly colors = getChartColorsArray(['--vz-primary', '--vz-danger']);
+  private readonly translate = inject(TranslateService);
+
   depot = input.required<TDepot>();
   powerUsage = input.required<number, number>({ transform: numberAttribute });
+
+  $language = $getSelectedLanguage();
 
   $currentTime = toSignal(interval(1000)
     .pipe(
@@ -60,7 +66,7 @@ export class DepotEnergyUsageComponent {
               color: '#fff',
               background: panelStyle,
             },
-            text: 'Max. provision power',
+            text: this.translate.instant('depot.stats.max-energy-usage'),
           },
         }
       ],
@@ -82,9 +88,6 @@ export class DepotEnergyUsageComponent {
     return { max: getNextPowerValue(Math.max(numberAttribute(energyLimit), powerUsage)) };
   });
 
-
-  readonly colors = getChartColorsArray(['--vz-primary', '--vz-danger']);
-
   chart: ApexChart = {
     type: 'bar',
     toolbar: {
@@ -99,7 +102,7 @@ export class DepotEnergyUsageComponent {
   tooltip: ApexTooltip = { enabled: false };
 
   datalabels: ApexDataLabels = {
-    formatter: (val: string) => new PowerPipe().transform(val),
+    formatter: (val: string) => new EnergyPipe().transform(val),
   };
 
   plotOptions: ApexPlotOptions = {

@@ -1,5 +1,5 @@
 <!-- Start Breadcrumbs -->
-<app-breadcrumbs title="Depot configuration"></app-breadcrumbs>
+<app-breadcrumbs [title]="'depot.configuration.title' | translate"></app-breadcrumbs>
 <!-- End Breadcrumbs -->
 
 <div class="row">
@@ -12,46 +12,53 @@
               class="nav nav-pills custom-nav nav-justified"
               role="tablist">
             <li [formGroupName]="formControlNames.general" [ngbNavItem]="1" class="nav-item">
-              <a ngbNavLink class="nav-link fs-15 p-3" data-bs-toggle="tab" role="tab">
+              <a ngbNavLink
+                 class="nav-link d-flex align-items-center justify-content-center fs-15 p-3"
+                 data-bs-toggle="tab"
+                 role="tab">
                 <i
                   icon="settings"
                   class="fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle mx-2">
-
                 </i>
-                General
+
+                <span class="d-none d-lg-block">
+                  {{ 'depot.configuration.general.title' | translate }}
+                </span>
               </a>
               <ng-template ngbNavContent>
                 <div>
-                  <h5 class="mb-1">General</h5>
+                  <h5 class="mb-1">{{ 'depot.configuration.general.title' | translate }}</h5>
                   <p class="text-muted mb-4">
-                    General depot configuration & restrictions
+                    {{ 'depot.configuration.general.subtitle' | translate }}
                   </p>
                 </div>
                 <div>
                   <div class="row gy-3">
-                    <app-form-control class="col-12" [label]="'Depot max power output (kW)'">
+                    <app-form-control class="col-12" [label]="'depot.upsert.general.energy-limit' | translate">
                       <input type="number"
-                             placeholder="1st connector id"
+                             placeholder="6.1"
                              [formControlName]="'depotEnergyLimit'">
                     </app-form-control>
 
-                    <app-form-control class="col-sm-6" [label]="'Start date'">
+                    <app-form-control class="col-sm-6" [label]="'base.labels.start-date' | translate">
                       <input
                         class="form-control"
                         type="text"
                         [formControlName]="'validFrom'"
                         mwlFlatpickr
+                        [placeholder]="'base.placeholders.click-to-select' | translate"
                         [time24hr]="true"
                         [convertModelValue]="true"
                       >
                     </app-form-control>
 
-                    <app-form-control class="col-sm-6" [label]="'End date'">
+                    <app-form-control class="col-sm-6" [label]="'base.labels.end-date' | translate">
                       <input
                         class="form-control"
                         type="text"
                         [formControlName]="'validTo'"
                         mwlFlatpickr
+                        [placeholder]="'base.placeholders.click-to-select' | translate"
                         [time24hr]="true"
                         [convertModelValue]="true"
                       >
@@ -62,9 +69,10 @@
                     <button
                       (click)="customNav.select(2)"
                       type="button" class="btn btn-secondary btn-label right ms-auto nexttab"
-                      data-nexttab="pills-bill-address-tab">
+                      data-nexttab="pills-bill-address-tab"
+                    >
                       <i icon="arrow_forward" class="label-icon align-middle fs-16 ms-2"></i>
-                      Proceed to chargers config
+                      {{ 'depot.configuration.general.move-to-chargers' | translate }}
                     </button>
                   </div>
                 </div>
@@ -72,17 +80,25 @@
             </li>
 
             <li [formArrayName]="formControlNames.chargers" [ngbNavItem]="2" class="nav-item">
-              <a ngbNavLink class="nav-link fs-15 p-3" data-bs-toggle="tab" role="tab">
+              <a ngbNavLink
+                 class="nav-link d-flex align-items-center justify-content-center fs-15 p-3"
+                 data-bs-toggle="tab"
+                 role="tab">
                 <i
                   icon="ev_charger"
                   class="fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle mx-2"></i>
-                Chargers
+
+                <span class="d-none d-lg-block">
+                  {{ 'depot.config.chargers.tab-title' | translate }}
+                </span>
               </a>
               <ng-template ngbNavContent>
                 <div>
-                  <h5 class="mb-1">Chargers power limits</h5>
+                  <h5 class="mb-1">
+                    {{ 'depot.config.chargers.title' | translate }}
+                  </h5>
                   <p class="text-muted mb-4">
-                    Configure power limits for each connector
+                    {{ 'depot.config.chargers.subtitle' | translate }}
                   </p>
                 </div>
 
@@ -91,8 +107,8 @@
                     <table class="table align-middle table-nowrap mb-0">
                       <thead class="table-light">
                       <tr>
-                        <th scope="col">Chager Nam</th>
-                        <th class="sort" scope="col">Power Usage</th>
+                        <th scope="col">{{ 'depot.config.chargers.charger-name' | translate }}</th>
+                        <th class="sort" scope="col">{{ 'depot.config.intervals.table.limit' | translate }}</th>
                       </tr>
                       </thead>
                       <tbody class="list form-check-all">
@@ -103,7 +119,7 @@
                               <input
                                 type="text"
                                 mask="9*"
-                                suffix=" W"
+                                suffix=" Wh"
                                 class="form-control"
                                 [formControlName]="charger.key"
                               >
@@ -121,31 +137,39 @@
                           class="btn btn-light btn-label previestab"
                           data-previous="pills-bill-info-tab">
                     <i icon="arrow_back" class="label-icon align-middle fs-16 me-2"></i>
-                    Back to General
+                    {{ 'depot.config.chargers.back-general' | translate }}
                   </button>
                   <button (click)="customNav.select(3)"
                           type="button"
                           class="btn btn-secondary btn-label right ms-auto nexttab"
                           data-nexttab="pills-payment-tab">
                     <i icon="arrow_forward" class="label-icon align-middle fs-16 ms-2"></i>
-                    Continue to time slots
+                    {{ 'depot.config.chargers.to-time' | translate }}
                   </button>
                 </div>
               </ng-template>
             </li>
 
             <li [ngbNavItem]="3" class="nav-item">
-              <a ngbNavLink class="nav-link fs-15 p-3" data-bs-toggle="tab" role="tab">
+              <a ngbNavLink
+                 class="nav-link d-flex align-items-center justify-content-center fs-15 p-3"
+                 data-bs-toggle="tab"
+                 role="tab">
                 <i
                   icon="schedule"
                   class="fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle mx-2"></i>
-                Time Slots
+
+                <span class="d-none d-lg-block">
+                  {{ 'depot.config.intervals.title' | translate }}
+                </span>
               </a>
               <ng-template ngbNavContent>
                 <div>
-                  <h5 class="mb-1">Time slots</h5>
+                  <h5 class="mb-1">
+                    {{ 'depot.config.intervals.title' | translate }}
+                  </h5>
                   <p class="text-muted mb-4">
-                    Configure time slots for energy consumption
+                    {{ 'depot.config.intervals.subtitle' | translate }}
                   </p>
                 </div>
 
@@ -161,7 +185,7 @@
                       <span class="fw-semibold text-uppercase">{{ 'depot.config.intervals.error.over-limit.title' | translate }}
                         : </span>
                       <span id="time-slots-warning"
-                            [innerHtml]="'depot.config.intervals.error.over-limit.message' | translate: { energy: intervalsArrayControl.getError('invalidTotalEnergy') | power }"></span>
+                            [innerHtml]="'depot.config.intervals.error.over-limit.message' | translate: { energy: intervalsArrayControl.getError('invalidTotalEnergy') | energy }"></span>
                     </p>
                   </div>
                 }
@@ -172,7 +196,7 @@
                     type="button" class="btn btn-light btn-label previestab"
                     data-previous="pills-bill-info-tab">
                     <i icon="arrow_back" class="label-icon align-middle fs-16 me-2"></i>
-                    Back to Chargers
+                    {{ 'depot.config.intervals.back-chargers' | translate }}
                   </button>
 
                   <button
@@ -181,17 +205,24 @@
                     type="button" class="btn btn-secondary btn-label right ms-auto nexttab"
                     data-nexttab="pills-finish-tab">
                     <i icon="arrow_forward" class="label-icon align-middle fs-16 ms-2"></i>
-                    Review configuration
+                    {{ 'depot.config.intervals.review-config' | translate }}
                   </button>
                 </div>
               </ng-template>
             </li>
 
             <li [ngbNavItem]="4" class="nav-item" [disabled]="intervalsArrayControl.hasError('invalidTotalEnergy')">
-              <a ngbNavLink class="nav-link fs-15 p-3" data-bs-toggle="tab" role="tab">
+              <a ngbNavLink
+                 class="nav-link d-flex align-items-center justify-content-center fs-15 p-3"
+                 data-bs-toggle="tab"
+                 role="tab">
                 <i
                   icon="check_small"
-                  class="fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle mx-2"></i>Finish
+                  class="fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle mx-2"></i>
+
+                <span class="d-none d-lg-block">
+                  {{ 'depot.config.finish' | translate }}
+                </span>
               </a>
               <ng-template ngbNavContent>
                 <div class="row">
@@ -209,18 +240,19 @@
                                    height="45">
                             }
                             <div class="mt-sm-5 mt-4">
-                              <h6 class="text-muted text-uppercase fw-semibold">Address</h6>
+                              <h6 class="text-muted text-uppercase fw-semibold">{{ 'base.labels.address' | translate }}
+                                :</h6>
                               <p class="mb-0" id="address-details">{{ depot | address }}</p>
                             </div>
                           </div>
 
                           <div class="flex-shrink-0 mt-sm-0 mt-3">
                             <h6>
-                              <span class="text-muted fw-normal me-1">Name:</span>
+                              <span class="text-muted fw-normal me-1">{{ 'base.labels.name' | translate }}:</span>
                               <span id="legal-register-no">{{ depot.name | emptyValue }}</span>
                             </h6>
                             <h6>
-                              <span class="text-muted fw-normal me-1">Email:</span>
+                              <span class="text-muted fw-normal me-1">{{ 'base.labels.email' | translate }}:</span>
                               <span id="email">{{ depot.email | emptyValue }}</span>
                             </h6>
                           </div>
@@ -233,20 +265,20 @@
                   <div class="col-lg-12">
                     <div class="card-body p-4">
                       <div class="row g-3">
-                        <div class="col-lg-4 col-12">
-                          <p class="text-muted mb-2 text-uppercase fw-semibold">Depot max power output (kW)</p>
-                          <h5 class="fs-14 mb-0">{{ generalForm.value.depotEnergyLimit | power }}</h5>
+                        <div class="col-md-4 col-12">
+                          <p class="text-muted mb-2 text-uppercase fw-semibold">{{ 'depot.upsert.general.energy-limit' | translate }}</p>
+                          <h5 class="fs-14 mb-0">{{ (generalForm.value.depotEnergyLimit ?? 0) * 1000 | energy }}</h5>
                         </div>
                         <!--end col-->
-                        <div class="col-lg-4 col-12">
-                          <p class="text-muted mb-2 text-uppercase fw-semibold">Start Date</p>
+                        <div class="col-md-4 col-12">
+                          <p class="text-muted mb-2 text-uppercase fw-semibold">{{ 'base.labels.start-date' | translate }}</p>
                           <h5 class="fs-14 mb-0">
                             <span id="invoice-start-date" class="me-1">{{ generalForm.value.validFrom | date }}</span>
                           </h5>
                         </div>
                         <!--end col-->
-                        <div class="col-lg-4 col-12">
-                          <p class="text-muted mb-2 text-uppercase fw-semibold">End Date</p>
+                        <div class="col-md-4 col-12">
+                          <p class="text-muted mb-2 text-uppercase fw-semibold">{{ 'base.labels.end-date' | translate }}</p>
                           <h5 class="fs-14 mb-0">
                             <span id="invoice-end-date" class="me-1">{{ generalForm.value.validTo | date }}</span>
                           </h5>
@@ -265,8 +297,10 @@
                           <thead>
                           <tr class="table-active">
                             <th scope="col" style="width: 50px;">#</th>
-                            <th scope="col" class="text-start">Charger Name</th>
-                            <th scope="col" class="text-end">Power Usage</th>
+                            <th scope="col"
+                                class="text-start">{{ 'depot.config.chargers.charger-name' | translate }}
+                            </th>
+                            <th scope="col" class="text-end">{{ 'depot.config.intervals.table.limit' | translate }}</th>
                           </tr>
                           </thead>
                           <tbody id="products-list">
@@ -305,9 +339,11 @@
                           <table class="table table-borderless text-center table-nowrap align-middle mb-0">
                             <thead>
                             <tr class="table-active">
-                              <th scope="col" class="text-start">Start Time</th>
-                              <th scope="col" class="text-start">End Time</th>
-                              <th scope="col" class="text-end">Power Usage</th>
+                              <th scope="col" class="text-start">{{ 'base.labels.start-time' | translate }}</th>
+                              <th scope="col" class="text-start">{{ 'base.labels.end-time' | translate }}</th>
+                              <th scope="col"
+                                  class="text-end">{{ 'depot.config.intervals.table.limit' | translate }}
+                              </th>
                             </tr>
                             </thead>
                             <tbody id="time-intervals">
@@ -315,7 +351,7 @@
                                 <tr>
                                   <th class="text-start">{{ interval.startTime.toDate() | date }}</th>
                                   <td class="text-start">{{ interval.endTime.toDate() | date }}</td>
-                                  <td class="text-end">{{ interval.energyLimit | power }}</td>
+                                  <td class="text-end">{{ interval.energyLimit | energy }}</td>
                                 </tr>
                               }
                             </tbody>
@@ -345,12 +381,12 @@
                     type="button" class="btn btn-light btn-label previestab"
                     data-previous="pills-bill-address-tab">
                     <i icon="arrow_back" class="label-icon align-middle fs-16 me-2"></i>
-                    Back to Time slots
+                    {{ 'depot.config.back-to-time' | translate }}
                   </button>
                   <button class="btn btn-success btn-label right ms-auto nexttab"
                           data-nexttab="pills-finish-tab">
                     <i icon="save" class="label-icon align-middle fs-16 ms-2"></i>
-                    Save Configuration
+                    {{ 'depot.config.save' | translate }}
                   </button>
                 </div>
               </ng-template>

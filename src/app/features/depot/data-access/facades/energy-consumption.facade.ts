@@ -129,7 +129,7 @@ export class EnergyConsumptionFacade {
       chargePointsLimits: [],
       validFrom: dayjs().startOf('week').toISOString(),
       validTo: dayjs().endOf('week').toISOString(),
-      createdAt: dayjs().toISOString(),
+      createdAt: '',
       depotId,
       depotEnergyLimit: defaultDepotEnergyLimit
     };
