@@ -1,8 +1,17 @@
 import { CommonModule, NgForOf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
+import { EnergyPipe } from '@shared/pipes/energy.pipe';
+import { PowerPipe } from '@shared/pipes/power.pipe';
 import { getChartColorsArray } from '@shared/utils/get-chart-colors.util';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import dayjs from 'dayjs';
+import * as localizedFormat from 'dayjs/plugin/localizedFormat';
+import { ApexAxisChartSeries, NgApexchartsModule } from 'ng-apexcharts';
+import { forkJoin, take } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+dayjs.extend(localizedFormat);
 
 @Component({
   selector: 'ev-stats-root',
@@ -12,7 +21,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
   styles: ``
 })
 export default class StatsRootComponent {
-  VisitorChart: any;
+  EnergyUsageChart: any;
   splineAreaChart: any;
   OverviewChart: any;
 
@@ -111,10 +120,11 @@ export default class StatsRootComponent {
       colors: colors,
       tooltip: {
         shared: true,
+        theme: 'dark',
         y: [{
           formatter: function (y: any) {
             if (typeof y !== 'undefined') {
-              return y.toFixed(2) + 'kW';
+              return new EnergyPipe().transform(y);
             }
             return y;
 
@@ -122,7 +132,7 @@ export default class StatsRootComponent {
         }, {
           formatter: function (y: any) {
             if (typeof y !== 'undefined') {
-              return y.toFixed(0) + 'kW';
+              return new EnergyPipe().transform(y);
             }
             return y;
 
@@ -134,12 +144,13 @@ export default class StatsRootComponent {
 
   private _visitorChart(colors: any) {
     colors = getChartColorsArray(colors);
-    this.VisitorChart = {
+    this.EnergyUsageChart = {
       series: [{
-        data: [{
-          x: '123ASD',
-          y: 321
-        },
+        data: [
+          {
+            x: '123ASD',
+            y: 321
+          },
           {
             x: '123ASD1',
             y: 165
@@ -197,8 +208,28 @@ export default class StatsRootComponent {
         height: 350,
         type: 'treemap',
         toolbar: {
-          show: false,
+          show: true,
+          tools: {
+            download: true,
+            reset: false
+          },
+          export: {
+            csv: {
+              filename: 'Energy Usage Details',
+              columnDelimiter: ',',
+              headerCategory: 'Charger Name',
+              headerValue: 'Energy Usage (Wh)'
+            }
+          }
         },
+      },
+      tooltip: {
+        theme: 'dark',
+        y: {
+          formatter: function (val: any) {
+            return new EnergyPipe().transform(val);
+          }
+        }
       },
       colors: colors,
       plotOptions: {
@@ -208,23 +239,97 @@ export default class StatsRootComponent {
         },
       },
     };
+
+    // Add a custom button for exporting the CSV
+    this.EnergyUsageChart.chart.toolbar.tools.customIcons = [{
+      icon: '<i class="fa fa-download"></i>',
+      index: -1,
+      title: 'Download CSV',
+      click: this.exportEnergyUsageCsv.bind(this)
+    }];
+
   }
+
+  private translateService = inject(TranslateService);
+
+  private exportEnergyUsageCsv() {
+    this.getLocalizedHeaders(['depot.config.chargers.charger-name', 'stats.energy-usage.title'])
+        .pipe(
+          take(1),
+          map((headers) => {
+            const data = this.getChartAxiesData(this.EnergyUsageChart.series);
+
+            return [headers, data];
+          }),
+          map(([headers, data]) => [headers, data] as [string[], string[]])
+        )
+        .subscribe({
+          next: (csvData) => this.downloadCsvContent(csvData)
+        });
+  };
+
+  private getLocalizedHeaders(headerKeys: Array<string>) {
+    return forkJoin(headerKeys.map(key => this.translateService.get(key)));
+  }
+
+  private getChartAxiesData(series: ApexAxisChartSeries) {
+    return series[0].data.map((row: any) => [row.x, row.y]);
+  }
+
+  private downloadCsvContent(content: [string[], string[]]) {
+    const csvContent = content.map(e => e.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', `${this.getFileNameTimeRange()} .csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  private getFileNameTimeRange() {
+    const start = dayjs().startOf('week');
+    const end = dayjs().endOf('week');
+
+    return [start, end].map((date) => date.format('LLL')).join(' - ');
+  }
+
 
   private _splineAreaChart(colors: any) {
     colors = getChartColorsArray(colors);
     this.splineAreaChart = {
-      series: [{
-        name: '',
-        data: [33, 28, 30, 110, 150, 180, 35, 40, 55, 70, 210, 250].map(power => power * 10)
-      },
+      series: [
+        {
+          name: '',
+          data: [33, 28, 30, 110, 150, 180, 35, 40, 55, 70, 210, 250].map(power => power * 10)
+        },
       ],
       chart: {
         height: 320,
         type: 'area',
-        toolbar: 'false',
+        toolbar: {
+          show: true,
+        },
+        export: {
+          csv: {
+            filename: 'power-consumption',
+            columnDelimiter: ',',
+            headerCategory: 'Month',
+            headerValue: 'Power'
+          },
+        }
       },
       dataLabels: {
         enabled: false
+      },
+      tooltip: {
+        theme: 'dark',
+        y: {
+          formatter: function (val: any) {
+            return new PowerPipe().transform(val);
+          }
+        }
       },
       stroke: {
         curve: 'smooth',
@@ -238,7 +343,15 @@ export default class StatsRootComponent {
         opacity: 0.06,
         colors: colors,
         type: 'solid'
-      }
+      },
+
     };
+  }
+
+  private readonly energyUsageData = {};
+
+
+  private generatePowerConsumptionCsv() {
+
   }
 }

@@ -23,9 +23,10 @@
     <div id="distributed_treemap"
          data-colors='["--vz-primary", "--vz-secondary", "--vz-success", "--vz-info","--vz-warning", "--vz-danger"]'
          class="apex-charts" dir="ltr">
-      <apx-chart [series]="VisitorChart.series" [legend]="VisitorChart.legend"
-                 [chart]="VisitorChart.chart" [title]="VisitorChart.title" [colors]="VisitorChart.colors"
-                 [plotOptions]="VisitorChart.plotOptions" dir="ltr"></apx-chart>
+      <apx-chart [series]="EnergyUsageChart.series" [legend]="EnergyUsageChart.legend"
+                 [chart]="EnergyUsageChart.chart" [title]="EnergyUsageChart.title" [colors]="EnergyUsageChart.colors"
+                 [tooltip]="EnergyUsageChart.tooltip"
+                 [plotOptions]="EnergyUsageChart.plotOptions" dir="ltr"></apx-chart>
     </div>
   </div>
 </div>
@@ -51,16 +52,22 @@
   </div><!-- end card header -->
   <div class="card-body px-0">
     <div id="revenue-expenses-charts" class="apex-charts" dir="ltr">
-      <apx-chart [series]="splineAreaChart.series" [chart]="splineAreaChart.chart"
-                 [dataLabels]="splineAreaChart.dataLabels" [stroke]="splineAreaChart.stroke"
-                 [xaxis]="splineAreaChart.xaxis" [yaxis]="splineAreaChart.yaxis"
-                 [colors]="splineAreaChart.colors" [fill]="splineAreaChart.fill" dir="ltr"></apx-chart>
+      <apx-chart [series]="splineAreaChart.series"
+                 [chart]="splineAreaChart.chart"
+                 [dataLabels]="splineAreaChart.dataLabels"
+                 [stroke]="splineAreaChart.stroke"
+                 [xaxis]="splineAreaChart.xaxis"
+                 [yaxis]="splineAreaChart.yaxis"
+                 [colors]="splineAreaChart.colors"
+                 [tooltip]="splineAreaChart.tooltip"
+                 [fill]="splineAreaChart.fill"
+                 dir="ltr"></apx-chart>
     </div>
   </div>
 </div>
 
 
-<div class="col-xxl-8">
+<div class="col-xxl-12">
   <div class="row">
     <div class="col-xl-12">
       <div class="card">
@@ -86,13 +93,13 @@
           <div class="row g-0 text-center">
             <div class="col-6">
               <div class="p-3 border border-dashed border-start-0">
-                <h5 class="mb-1"><span class="counter-value"> 1234 kW </span></h5>
+                <h5 class="mb-1"><span class="counter-value"> 1234 kWh </span></h5>
                 <p class="text-muted mb-0">Expected consumption</p>
               </div>
             </div><!--end col-->
             <div class="col-6">
               <div class="p-3 border border-dashed border-start-0 border-end-0">
-                <h5 class="mb-1 text-success"><span class="counter-value"></span> 789 kW </h5>
+                <h5 class="mb-1 text-success"><span class="counter-value"></span> 789 kWh </h5>
                 <p class="text-muted mb-0">Actual consumption</p>
               </div>
             </div><!--end col-->
