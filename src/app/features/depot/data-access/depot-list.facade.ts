@@ -18,8 +18,9 @@ export class DepotListFacade {
 
   readonly $actions = computed(() => {
     const actions = this.actionService.$actions();
+    const roles = this.$role();
 
-    return hasRole(this.$role(), ERole.SuperAdministrator) ? actions : [];
+    return hasRole(roles, ERole.SuperAdministrator) ? actions : [];
   });
 
   readonly $viewModel = computed(() => {

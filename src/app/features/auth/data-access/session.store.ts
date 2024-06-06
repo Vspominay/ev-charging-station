@@ -11,7 +11,7 @@ interface SessionStore {
 const initialState: SessionStore = {
   user: {
     fullName: '',
-    role: ERole.Employee,
+    roles: [ERole.Employee],
     email: '',
     id: ''
   },

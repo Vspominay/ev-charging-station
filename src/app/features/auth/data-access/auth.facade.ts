@@ -74,7 +74,7 @@ export class AuthFacade {
 
     return {
       email: jwtData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] ?? 'admin@gmail.com',
-      role: jwtData['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
+      roles: jwtData['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
       fullName: camelCaseToWords(jwtData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || EMPTY_PLACEHOLDER),
       id: jwtData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
     };

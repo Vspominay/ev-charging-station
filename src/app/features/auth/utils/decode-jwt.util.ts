@@ -30,11 +30,8 @@ function base64UrlDecode(str: string) {
 
 export const decodeJWT = (token: string): TDecodedToken => {
   const [headerEncoded, payloadEncoded, signatureEncoded] = token.split('.');
-
-  // const headerJson = base64UrlDecode(headerEncoded);
   const payloadJson = base64UrlDecode(payloadEncoded);
 
-  // Parse JSON
-  // const header = JSON.parse(headerJson);
   return JSON.parse(payloadJson);
 };
+
