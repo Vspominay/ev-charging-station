@@ -17,6 +17,9 @@ import { TViewActionItem } from '@shared/utils/types/actions.types';
     ReactiveFormsModule,
     ActionPlacementPipe
   ],
+  host: {
+    class: 'd-block'
+  },
   templateUrl: './list-control-bar.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

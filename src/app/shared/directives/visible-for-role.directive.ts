@@ -17,7 +17,6 @@ export class VisibleForRoleDirective {
 
   $neededRoles = input.required({ alias: 'visibleForRole', transform: (role: ERole | Array<ERole>) => toArray(role) });
 
-
   constructor() {
     this.listenRoleChanges();
   }

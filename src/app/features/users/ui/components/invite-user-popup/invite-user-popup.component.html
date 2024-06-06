@@ -27,14 +27,17 @@
         </ng-select>
       </app-form-control>
 
-      <app-form-control class="col" [label]="'ocpp-tags.labels.tag' | translate">
+      <app-form-control class="col" [label]="'auth.role.title' | translate">
         <ng-select
-          class="p-0"
-          [items]="$ocppTags()"
-          bindLabel="tagId"
           [placeholder]="'base.placeholders.click-to-select' | translate"
-          [formControlName]="formControlNames.ocppTagId"
-        />
+          class="p-0"
+          [clearable]="false"
+          bindValue="value"
+          [items]="roles"
+          [formControlName]="formControlNames.role"
+        >
+          <ng-template ng-label-tmp ng-option-tmp let-item="item">{{ item.label | translate }}</ng-template>
+        </ng-select>
       </app-form-control>
 
       <app-form-control class="col" [label]="'auth.labels.first-name' | translate">
@@ -47,19 +50,6 @@
         <input type="text"
                [placeholder]="'auth.labels.last-name' | translate"
                [formControlName]="formControlNames.lastName">
-      </app-form-control>
-
-      <app-form-control class="col" [label]="'auth.role.title' | translate">
-        <ng-select
-          [placeholder]="'base.placeholders.click-to-select' | translate"
-          class="p-0"
-          [clearable]="false"
-          bindValue="value"
-          [items]="roles"
-          [formControlName]="formControlNames.role"
-        >
-          <ng-template ng-label-tmp ng-option-tmp let-item="item">{{ item.label | translate }}</ng-template>
-        </ng-select>
       </app-form-control>
     </div>
 

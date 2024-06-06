@@ -108,7 +108,7 @@ export default class CalendarComponent implements OnInit, AfterViewInit {
     eventDragStop: this.handleResize.bind(this),
   };
 
-// bread crumb items
+  // bread crumb items
   breadCrumbItems!: Array<{}>;
 
   // calendar

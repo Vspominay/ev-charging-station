@@ -3,7 +3,7 @@ import { EMPTY_PLACEHOLDER } from '@core/constants/empty-placeholder.constant';
 import { TLabelStyledConfig } from '@core/types/color-style.type';
 import { TDepot } from '@features/depot/data-access/models/depot.model';
 import { AddressPipe } from '@shared/pipes/address.pipe';
-import { PowerPipe } from '@shared/pipes/power.pipe';
+import { EnergyPipe } from '@shared/pipes/energy.pipe';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import timezone from 'dayjs/plugin/timezone';
@@ -24,10 +24,10 @@ type TDepotMainPanelStats = TLabelStyledConfig & {
   standalone: true
 })
 export class DepotMainPanelStatsPipe implements PipeTransform {
-  private energyPipe = new PowerPipe();
+  private energyPipe = new EnergyPipe();
   private addressPipe = new AddressPipe();
 
-  transform(depot: TDepot, currentTime: number): Array<TDepotMainPanelStats> {
+  transform(depot: TDepot, currentTime: number, lang: string): Array<TDepotMainPanelStats> {
     return [
       this.getMaxProvisionPower(depot),
       this.getLocalTime(depot, currentTime),
@@ -40,7 +40,7 @@ export class DepotMainPanelStatsPipe implements PipeTransform {
       icon: 'data_usage',
       style: 'primary',
       value: numberAttribute(depot.energyLimit) ? `${this.energyPipe.transform(depot.energyLimit)}` : EMPTY_PLACEHOLDER,
-      subtitle: '10:00 - 19:23',
+      subtitle: '10:00 - 23:23',
       label: 'depot.configuration.max-provision'
     };
   }
