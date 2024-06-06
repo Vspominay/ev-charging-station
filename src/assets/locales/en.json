@@ -26,7 +26,14 @@
       "name": "Name",
       "email": "Email",
       "actions": "Actions",
-      "last-update": "Last update"
+      "last-update": "Last update",
+      "start-date": "Start date",
+      "end-date": "End date",
+      "start-time": "Start time",
+      "end-time": "End time",
+      "address": "Address",
+      "energy": "Energy",
+      "power": "Power"
     },
     "errors": {
       "validators": {
@@ -165,16 +172,23 @@
       }
     },
     "stats": {
-      "power-usage-overview": "Power/Energy usage overview"
+      "power-usage-overview": "Power/Energy usage overview",
+      "max-energy-usage": "Max. energy usage"
     },
     "configuration": {
-      "max-provision": "Max. provision power",
+      "title": "Depot configuration",
+      "max-provision": "Max. energy usage",
       "location": {
         "title": "Location"
       },
       "timezone": {
         "title": "Timezone",
         "local-time": "Depot local time"
+      },
+      "general": {
+        "title": "General",
+        "subtitle": "General depot configuration & restrictions",
+        "move-to-chargers": "Proceed to chargers config"
       }
     },
     "statuses": {
@@ -189,7 +203,7 @@
       "general": {
         "title": "General Details",
         "contact-tel": "Contact number",
-        "energy-limit": "Energy limit (kWh)",
+        "energy-limit": "Depot energy limit (kWh)",
         "name": {
           "title": "Depot name",
           "placeholder": "Main City Depot"
@@ -220,6 +234,9 @@
       }
     },
     "config": {
+      "finish": "Finish",
+      "save": "Save Configuration",
+      "back-to-time": "Back to Time Intervals",
       "charger-stats": {
         "total-chargers": "Total chargers",
         "configured-chargers": "Configured chargers",
@@ -231,7 +248,19 @@
         "title": "Note",
         "message": "Please note that if any issues arise, they will be displayed on the depot dashboard. You can adjust the settings at any time."
       },
+      "chargers": {
+        "tab-title": "Chargers",
+        "title": "Chargers energy limits",
+        "subtitle": "Configure power limits for each connector",
+        "charger-name": "Charger Name",
+        "back-general": "Back to general",
+        "to-time": "Continue to time slots"
+      },
       "intervals": {
+        "title": "Time Slots",
+        "subtitle": "Configure time slots for energy consumption",
+        "back-chargers": "Back to chargers",
+        "review-config": "Review configuration",
         "table": {
           "interval": "Interval",
           "limit": "Limit (Wh)",
@@ -339,6 +368,16 @@
     "title": "Ocpp tags",
     "labels": {
       "tag": "Ocpp Tag"
+    },
+    "id": "ID",
+    "parent-tag": "Parent tag",
+    "expiration": "Expiration date",
+    "status": "Status",
+    "actions": "Actions"
+  },
+  "stats": {
+    "energy-usage": {
+      "title": "Energy usage (Wh)"
     }
   }
 }
