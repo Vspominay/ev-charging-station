@@ -2,10 +2,10 @@ import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy, Component, ElementRef, EventEmitter, inject, OnInit, Output, ViewChild
 } from '@angular/core';
-import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { SidebarService } from '@core/layouts/sidebar/sidebar.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { IconDirective } from '../../../shared/directives/icon.directive';
+import { IconDirective } from '@shared/directives/icon.directive';
 import { MenuItem } from './menu.model';
 
 @Component({
@@ -19,7 +19,8 @@ import { MenuItem } from './menu.model';
     NgForOf,
     TranslateModule,
     IconDirective,
-    NgOptimizedImage
+    NgOptimizedImage,
+    RouterLinkActive
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

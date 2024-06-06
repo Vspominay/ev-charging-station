@@ -6,14 +6,34 @@ import { RolePipe } from '@features/auth/ui/pipes/role.pipe';
 import {
   NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbNavContent, NgbNavOutlet
 } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { IconDirective } from '@shared/directives/icon.directive';
+
+import dayjs from 'dayjs';
+import { Locale as DayJsLocale } from 'dayjs/locale/*';
+import dayEn from 'dayjs/locale/en';
+import dayUk from 'dayjs/locale/uk';
 
 // Language
 //Logout
 import { cartData } from './data';
 
 import { CartModel } from './topbar.model';
+
+
+export enum Locales {
+  UK = 'UK',
+  EN = 'EN',
+}
+
+export const LOCALES_CONFIG: Record<Locales, { dayJs: DayJsLocale }> = {
+  [Locales.UK]: {
+    dayJs: dayUk,
+  },
+  [Locales.EN]: {
+    dayJs: dayEn,
+  },
+};
 
 @Component({
   selector: 'app-topbar',
@@ -161,16 +181,24 @@ export class TopbarComponent implements OnInit {
    * Language Listing
    */
   listLang = [
-    { text: 'English', flag: 'assets/images/flags/us.svg', lang: 'en' },
+    { text: 'English', flag: 'assets/images/flags/us.svg', lang: Locales.EN },
+    { text: 'Ukrainian', flag: 'assets/images/flags/uk.svg', lang: Locales.UK },
   ];
+
+  private readonly translateService = inject(TranslateService);
 
   /***
    * Language Value Set
    */
-  setLanguage(text: string, lang: string, flag: string) {
+  setLanguage(text: string, lang: Locales, flag: string) {
     this.countryName = text;
     this.flagvalue = flag;
     this.cookieValue = lang;
+
+    this.translateService.setDefaultLang(lang);
+    dayjs.locale({
+      ...LOCALES_CONFIG[lang].dayJs,
+    });
     // this.languageService.setLanguage(lang);
   }
 
