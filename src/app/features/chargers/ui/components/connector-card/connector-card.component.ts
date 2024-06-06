@@ -1,5 +1,5 @@
 import { CommonModule, NgForOf, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TConnector, TConnectorView } from '@features/chargers/data-access/models/connector.model';
 import { ConnectorAction } from '@features/chargers/data-access/services/connectors-actions.service';
 import { ConnectorActionsPipe } from '@features/chargers/ui/pipes/connector-actions.pipe';
@@ -11,13 +11,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ActionsCardDirective, withActionsCard } from '@shared/components/card/actions-card.directive';
 import { BadgeDirective } from '@shared/directives/badge.directive';
 import { IconDirective } from '@shared/directives/icon.directive';
+import { EmptyValuePipe } from '@shared/pipes/empty-value.pipe';
+import { EnergyPipe } from '@shared/pipes/energy.pipe';
 import { PowerPipe } from '@shared/pipes/power.pipe';
+import { RemainingTimePipe } from '@shared/pipes/time-remaining.pipe';
 import { TViewActionItem } from '@shared/utils/types/actions.types';
 
 @Component({
   selector: 'ev-connector-card',
   standalone: true,
-  imports: [CommonModule, NgForOf, NgIf, NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbProgressbar, NgbTooltip, BadgeDirective, ConnectorStatusPipe, TranslateModule, PowerPipe, IconDirective, NgbDropdownItem, ConnectorActionsPipe],
+  imports: [CommonModule, NgForOf, NgIf, NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbProgressbar, NgbTooltip, BadgeDirective, ConnectorStatusPipe, TranslateModule, PowerPipe, IconDirective, NgbDropdownItem, ConnectorActionsPipe, EnergyPipe, RemainingTimePipe, EmptyValuePipe],
   template: `
     @if (connector.currentStatus?.currentStatus | connectorStatus; as statusConfig) {
       <div class="card tasks-box">
@@ -44,9 +47,15 @@ import { TViewActionItem } from '@shared/utils/types/actions.types';
             </div>
           </div>
 
-          <h6 class="fs-15 text-truncate">
-            <a href="tasks/details">{{ connector.energy | power }}</a>
-          </h6>
+          <div class="fs-15">
+            <span class="text-muted me-1">{{ 'base.labels.power' | translate }}:</span>
+            <span>{{ connector.power | power }}</span>
+          </div>
+
+          <div class="fs-15">
+            <span class="text-muted me-1">{{ 'base.labels.energy' | translate }}:</span>
+            <span>{{ connector.energy | energy }}</span>
+          </div>
 
           <!--        <p class="text-muted">{{ connector.vehicleNum }}</p>-->
 
@@ -74,7 +83,7 @@ import { TViewActionItem } from '@shared/utils/types/actions.types';
           <div class="d-flex">
             <div class="flex-grow-1">
             <span class="text-muted"><i class="ri-time-line align-bottom"></i>
-              40 min.
+              {{ connector.approximateChargingEndTime | remainingTime | emptyValue }}
             </span>
             </div>
             <div class="flex-shrink-0">
@@ -99,7 +108,7 @@ import { TViewActionItem } from '@shared/utils/types/actions.types';
           </div>
         </div>
         <!--end card-body-->
-        <ngb-progressbar [value]="connector.soc || 20"
+        <ngb-progressbar [value]="connector.soC || 0"
                          [type]="statusConfig.style"
                          class="progress-sm"></ngb-progressbar>
       </div>
@@ -108,8 +117,12 @@ import { TViewActionItem } from '@shared/utils/types/actions.types';
   hostDirectives: [withActionsCard],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ConnectorCardComponent {
+export class ConnectorCardComponent implements OnChanges {
   readonly hostActions: ActionsCardDirective<TViewActionItem<ConnectorAction, TConnector>> = inject(ActionsCardDirective<TViewActionItem<ConnectorAction, TConnector>>);
 
   @Input({ required: true }) connector!: TConnectorView;
+
+  public ngOnChanges(changes: SimpleChanges) {
+    console.log('ConnectorCardComponent', changes);
+  }
 }

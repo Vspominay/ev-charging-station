@@ -65,8 +65,10 @@ export type TConnectorView = TConnectorSnapshotCharging & TUpsertInfo & WithGuid
 }>;
 
 type TConnectorSnapshotCharging = {
-  soc?: number;
+  soC?: number;
   energy?: number
+  power?: number;
+  approximateChargingEndTime?: string;
 }
 
 export type TConnectorChangeMessage = TConnectorSnapshotCharging & {

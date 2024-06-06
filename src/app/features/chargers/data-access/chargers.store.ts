@@ -177,8 +177,10 @@ export const ChargersStore = signalStore(
           ...currentStatus,
           currentStatus: data.status ?? currentStatus?.currentStatus ?? ConnectorStatus16.Unavailable,
         } as TConnectorView['currentStatus'],
-        soc: data.soc,
-        energy: data.energy
+        soC: data.soC,
+        energy: data.energy,
+        power: data.power,
+        approximateChargingEndTime: data.approximateChargingEndTime
       };
       patchState(store, { connectors: mergeConnectors(store.connectors(), [updatedConnector]) });
     },

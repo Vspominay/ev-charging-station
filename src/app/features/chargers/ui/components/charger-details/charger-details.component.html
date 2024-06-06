@@ -94,7 +94,7 @@
       </div><!-- end row -->
       <div class="row">
         <div class="col-xxl-8">
-          <div class="card">
+          <div class="card mb-3">
             <div class="card-header">
               <h5 class="card-title mb-0">Charger Description</h5>
             </div>
@@ -176,6 +176,7 @@
 
         <div class="col-12">
           <ev-list-control-bar
+            class="mb-3"
             [actions]="$profileActions().bar"
             (selectAction)="handleProfileAction($event)"
             (changeSearch)="search($event)"
