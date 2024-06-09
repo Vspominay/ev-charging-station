@@ -199,10 +199,9 @@ export class TopbarComponent implements OnInit {
     dayjs.locale({
       ...LOCALES_CONFIG[lang].dayJs,
     });
-    // this.languageService.setLanguage(lang);
   }
 
   logout() {
-    this.logout();
+    this.authFacade.logout();
   }
 }
