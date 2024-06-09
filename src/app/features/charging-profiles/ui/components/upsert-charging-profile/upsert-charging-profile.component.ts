@@ -312,7 +312,7 @@ export class UpsertChargingProfileComponent {
   }
 
   private addEventFromTimeInterval(interval: TTimeRange) {
-    this.calendar.addEvent({
+    this.calendar?.addEvent({
       id: createEventId(),
       resourceId: '1',
       title: this.getIntervalTitle(interval),
