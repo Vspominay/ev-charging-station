@@ -58,7 +58,7 @@ export class UsersActionsService extends AActionService<UserAction, TUser | null
       label: 'base.buttons.delete',
       handler: (user) => user && this.store.delete(user.id),
       data: {
-        icon: 'trash',
+        icon: 'delete',
         style: 'danger',
         position: 'item'
       }
