@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { TLoginRequest } from '@features/auth/data-access/models/login.model';
-import { TRegisterRequest } from '@features/auth/data-access/models/register.model';
-import { TUserUpsert } from '@features/users/data-access/models/user.type';
+import { TConfirmRegisterRequest, TRegisterRequest } from '@features/auth/data-access/models/register.model';
+import { TInviteUser } from '@features/users/data-access/models/user.type';
 import { catchError, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
@@ -36,12 +36,19 @@ export class AuthClient {
                );
   }
 
-  inviteUser(user: TUserUpsert): Observable<boolean> {
+  inviteUser(user: TInviteUser): Observable<boolean> {
     return this.http.post(`${this.fullUrl}/invite`, user)
                .pipe(
                  catchError(() => of(false)),
                  map(() => true)
                );
+  }
+
+  confirmRegistration(payload: TConfirmRegisterRequest) {
+    return this.http.post<boolean>(`${this.fullUrl}/confirm-registration`, payload).pipe(
+      catchError(() => of(false)),
+      map(() => true)
+    );
   }
 
   protected get fullUrl(): string {

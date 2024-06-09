@@ -7,10 +7,22 @@ import { toArray } from '@shared/utils/to-array.util';
   standalone: true
 })
 export class RolePipe implements PipeTransform {
-  public transform(roles: Array<ERole> | ERole): string {
-    const role = toArray(roles)[0];
-    if (!role) return 'auth.role.unspecified';
+  // roles sorted by priority
+  private readonly roles: Array<ERole> = [
+    ERole.SuperAdministrator,
+    ERole.Administrator,
+    ERole.Employee,
+    ERole.Driver
+  ];
 
-    return `auth.role.${role}`;
+  public transform(roles: Array<ERole> | ERole): string {
+    const highPriorityRole = this.sortRoles(toArray(roles))[0];
+    if (!highPriorityRole) return 'auth.role.unspecified';
+
+    return `auth.role.${highPriorityRole}`;
+  }
+
+  private sortRoles(roles: Array<ERole>): Array<ERole> {
+    return roles.sort((a, b) => this.roles.indexOf(a) - this.roles.indexOf(b));
   }
 }

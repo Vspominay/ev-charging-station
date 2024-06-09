@@ -6,7 +6,7 @@ import { TUser } from '@features/users/data-access/models/user.type';
   standalone: true
 })
 export class UserLabelPipe implements PipeTransform {
-  transform(user: TUser): string {
+  transform(user: Pick<TUser, 'firstName' | 'lastName' | 'email'>): string {
     const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
     const isFullNameExist = fullName.length;
 

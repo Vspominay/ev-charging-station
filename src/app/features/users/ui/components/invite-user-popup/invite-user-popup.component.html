@@ -7,7 +7,7 @@
     </div>
 
     <div class="modal-body row row-cols-1 row-cols-md-2">
-      <app-form-control class="col" [label]="'users.invite.user' | translate">
+      <app-form-control class="col" [label]="'users.invite.new-user-email' | translate">
         <ng-select class="p-0"
                    [items]="$filteredUsers().entities"
                    [editableSearchTerm]="true"
@@ -27,6 +27,27 @@
         </ng-select>
       </app-form-control>
 
+      <app-form-control class="col" [label]="'auth.labels.first-name' | translate">
+        <input type="text"
+               [placeholder]="'auth.labels.first-name' | translate"
+               [formControlName]="formControlNames.firstName">
+      </app-form-control>
+
+      <app-form-control class="col" [label]="'auth.labels.last-name' | translate">
+        <input type="text"
+               [placeholder]="'auth.labels.last-name' | translate"
+               [formControlName]="formControlNames.lastName">
+      </app-form-control>
+
+      @if (!$isUserExist()) {
+        <app-form-control class="col" [label]="'auth.labels.phone-number' | translate">
+          <input type="text"
+                 [mask]="PHONE_MASK"
+                 [showMaskTyped]="true"
+                 [formControlName]="formControlNames.phone">
+        </app-form-control>
+      }
+
       <app-form-control class="col" [label]="'auth.role.title' | translate">
         <ng-select
           [placeholder]="'base.placeholders.click-to-select' | translate"
@@ -40,17 +61,22 @@
         </ng-select>
       </app-form-control>
 
-      <app-form-control class="col" [label]="'auth.labels.first-name' | translate">
-        <input type="text"
-               [placeholder]="'auth.labels.first-name' | translate"
-               [formControlName]="formControlNames.firstName">
-      </app-form-control>
+      @if (!$isUserExist()) {
 
-      <app-form-control class="col" [label]="'auth.labels.last-name' | translate">
-        <input type="text"
-               [placeholder]="'auth.labels.last-name' | translate"
-               [formControlName]="formControlNames.lastName">
-      </app-form-control>
+        <div class="position-relative col">
+          <app-form-control
+            vcrContainer
+            #container="vcrContainer"
+            [label]="'base.password.title' | translate">
+            <input type="text"
+                   passwordField
+                   withoutValidation
+                   [container]="container.container"
+                   [placeholder]="'base.password.placeholder' | translate"
+                   [formControlName]="formControlNames.password">
+          </app-form-control>
+        </div>
+      }
     </div>
 
     <div class="modal-footer">

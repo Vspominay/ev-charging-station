@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { EMPTY_PLACEHOLDER } from '@core/constants/empty-placeholder.constant';
 import { AuthClient, TTokenResponse } from '@features/auth/data-access/auth.client';
 import { TLoginRequest } from '@features/auth/data-access/models/login.model';
-import { TRegisterRequest } from '@features/auth/data-access/models/register.model';
+import { TConfirmRegisterRequest, TRegisterRequest } from '@features/auth/data-access/models/register.model';
 import { TSessionUser } from '@features/auth/data-access/models/user.type';
 import { SessionStore, STORAGE_TOKEN_KEY } from '@features/auth/data-access/session.store';
 import { decodeJWT } from '@features/auth/utils/decode-jwt.util';
@@ -34,6 +34,18 @@ export class AuthFacade {
                });
   }
 
+  confirmRegistration(payload: TConfirmRegisterRequest) {
+    this.client.confirmRegistration(payload)
+        .pipe(take(1))
+        .subscribe({
+          next: (isSuccess) => {
+            if (!isSuccess) return;
+
+            this.login(payload);
+          }
+        });
+  }
+
   logout() {
     this.store.reset();
     this.router.navigateByUrl('auth/login');
@@ -57,6 +69,17 @@ export class AuthFacade {
     };
   });
 
+  adaptJwtToUser(jwt: string): TSessionUser {
+    const jwtData = decodeJWT(jwt);
+
+    return {
+      email: jwtData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] ?? 'admin@gmail.com',
+      roles: jwtData['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
+      fullName: camelCaseToWords(jwtData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || EMPTY_PLACEHOLDER),
+      id: jwtData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
+    };
+  }
+
   private handleSuccessAuth({ token }: TTokenResponse) {
     const user = this.adaptJwtToUser(token);
     this.updateSessionUser(user, token);
@@ -67,16 +90,5 @@ export class AuthFacade {
     this.store.setUser(user);
     this.store.setToken(token);
     this.store.setLoading(false);
-  }
-
-  private adaptJwtToUser(jwt: string): TSessionUser {
-    const jwtData = decodeJWT(jwt);
-
-    return {
-      email: jwtData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] ?? 'admin@gmail.com',
-      roles: jwtData['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
-      fullName: camelCaseToWords(jwtData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || EMPTY_PLACEHOLDER),
-      id: jwtData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
-    };
   }
 }

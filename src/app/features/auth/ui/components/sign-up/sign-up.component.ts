@@ -12,6 +12,7 @@ import { AuthFacade } from '@features/auth/data-access/auth.facade';
 import { TRegisterRequest } from '@features/auth/data-access/models/register.model';
 import { ERole } from '@features/auth/data-access/models/roles.enum';
 import { NgbCarousel, NgbSlide } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import {
   PasswordFieldDirective
 } from '@shared/components/form-control/directives/password-field/password-field.directive';
@@ -38,7 +39,8 @@ import { NgxMaskDirective } from 'ngx-mask';
     PasswordFieldDirective,
     StrengthCheckDirective,
     VcrContainerDirective,
-    NgxMaskDirective
+    NgxMaskDirective,
+    TranslateModule
   ]
 })
 export default class SignUpComponent {

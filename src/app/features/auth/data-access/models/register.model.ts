@@ -8,3 +8,5 @@ export type TRegisterRequest = {
   phone?: string,
   role: ERole
 };
+
+export type TConfirmRegisterRequest = Pick<TRegisterRequest, 'email' | 'password'>;
