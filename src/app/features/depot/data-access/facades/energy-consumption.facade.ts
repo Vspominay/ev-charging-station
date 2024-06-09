@@ -87,10 +87,10 @@ export class EnergyConsumptionFacade {
   }
 
   private adaptConfigToClient(config: TDepotConfigForm): TDepotConfiguration {
-    const { depotId, id, createdAt, updatedAt } = this.$config();
+    const { depotId } = this.$config();
 
     return {
-      depotId, createdAt, updatedAt, id,
+      depotId,
       ...config.general,
       depotEnergyLimit: numberAttribute(config.general.depotEnergyLimit, 0) * 1000,
       intervals: config.intervals.map(({ startTime, endTime, energyLimit }) => ({
