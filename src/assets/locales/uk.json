@@ -89,7 +89,8 @@
     "labels": {
       "first-name": "Ім'я",
       "last-name": "Прізвище",
-      "full-name": "Повне ім'я"
+      "full-name": "Повне ім'я",
+      "phone-number": "Номер телефону"
     },
     "placeholders": {
       "first-name": "Іван",

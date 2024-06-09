@@ -52,6 +52,7 @@ export const appConfig: ApplicationConfig = {
     ChargingProfileStore,
     SessionStore,
     provideFlatPicker(),
-    provideIonicAngular({})
+    provideIonicAngular({}),
+
   ],
 };
