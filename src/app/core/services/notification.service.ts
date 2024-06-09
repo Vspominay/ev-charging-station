@@ -18,4 +18,14 @@ export class NotificationService {
       text: error.error
     });
   }
+
+  showSuccess(message: string = 'Changes have been saved') {
+    return Swal.fire({
+      icon: 'success',
+      title: 'Success',
+      text: message,
+      timer: 2000,
+      timerProgressBar: true
+    });
+  }
 }

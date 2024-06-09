@@ -1,5 +1,6 @@
 import { computed, inject, Injectable, numberAttribute, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { NotificationService } from '@core/services/notification.service';
 import { CHARGERS_CLIENT_GATEWAY } from '@features/chargers/data-access/chargers.store';
 import { TCharger } from '@features/chargers/data-access/models/charger.model';
 import {
@@ -78,6 +79,8 @@ export class EnergyConsumptionFacade {
 
   reset() {}
 
+  private readonly notificationService = inject(NotificationService);
+
   save(config: TDepotConfigForm) {
     const adaptedConfig = this.adaptConfigToClient(config);
 
@@ -85,7 +88,8 @@ export class EnergyConsumptionFacade {
         .pipe(take(1))
         .subscribe({
           next: () => {
-            this.router.navigate(['/depots', this.$config().depotId]);
+            this.notificationService.showSuccess()
+                .then(() => this.router.navigate(['/depots', this.$config().depotId]));
           }
         });
   }
