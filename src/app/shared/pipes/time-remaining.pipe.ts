@@ -22,10 +22,10 @@ export class RemainingTimePipe implements PipeTransform {
 
     const diff = dayjs.duration(target.diff(now));
 
-    const days = diff.days();
-    const hours = diff.hours();
-    const minutes = diff.minutes();
-    const seconds = diff.seconds();
+    const days = Math.abs(diff.days());
+    const hours = Math.abs(diff.hours());
+    const minutes = Math.abs(diff.minutes());
+    const seconds = Math.abs(diff.seconds());
 
     const timeStr = days ? `${days}d ` : '';
     return `${timeStr}${hours}h ${minutes}m ${seconds}s`;
