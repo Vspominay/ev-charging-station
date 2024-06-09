@@ -35,6 +35,10 @@
       "energy": "Енергія",
       "power": "Потужність"
     },
+    "modals": {
+      "error": "Помилка",
+      "info": "Інфо"
+    },
     "errors": {
       "validators": {
         "required": "Обов'язково",
@@ -100,6 +104,17 @@
     "logout": "Вийти"
   },
   "profile": {
+    "events": {
+      "set": {
+        "accepted": "Профіль успішно збережено",
+        "rejected": "Не вдалося зберегти профіль",
+        "not-supported": "Смарт-профіль не підтримується"
+      },
+      "clear": {
+        "accepted": "Профіль успішно видалено",
+        "rejected": "Не вдалося видалити профіль"
+      }
+    },
     "upsert": {
       "add": "Додати смарт-профіль",
       "edit": "Переглянути смарт-профіль",
@@ -169,11 +184,12 @@
       "title": "Список депо",
       "view": "Переглянути деталі",
       "alerts": {
-        "energy-limit-reached": "Досягнуто ліміт енергії"
+        "energy-limit-reached": "Досягнуто ліміт енергії ({{actual}}/{{total}}). Змініть налаштування, або зупиніть зарядку",
+        "automatic-disable": "Станція {{charger}} вимкнена через перевищення ліміту енергії"
       }
     },
     "stats": {
-      "power-usage-overview": "Огляд використання потужності/енергії",
+      "power-usage-overview": "Огляд використання енергії",
       "max-energy-usage": "Макс. використання енергії"
     },
     "configuration": {
@@ -302,6 +318,13 @@
     }
   },
   "connector": {
+    "events": {
+      "change-availability": {
+        "accepted": "Доступність конектора {{connector}} станції {{charger}} успішно змінено",
+        "rejected": "Не вдалося змінити доступність конектора {{connector}} станції {{charger}}",
+        "scheduled": "Зміна доступності конектора {{connector}} станції {{charger}} запланована"
+      }
+    },
     "statuses": {
       "available": "Доступний",
       "occupied": "Зайнятий",
@@ -374,6 +397,12 @@
   "stats": {
     "energy-usage": {
       "title": "Використання енергії (Вт·год)"
+    }
+  },
+  "transactions": {
+    "title": "Транзакції",
+    "events": {
+      "connector": "Оновлення транзакції конектора {{connector}} станції {{charger}}"
     }
   }
 }

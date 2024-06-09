@@ -35,6 +35,10 @@
       "energy": "Energy",
       "power": "Power"
     },
+    "modals": {
+      "error": "Error",
+      "info": "Info"
+    },
     "errors": {
       "validators": {
         "required": "Required",
@@ -100,6 +104,18 @@
     "logout": "Logout"
   },
   "profile": {
+    "title": "Charge Profile",
+    "events": {
+      "set": {
+        "accepted": "Profile successfully saved",
+        "rejected": "Failed to save profile",
+        "not-supported": "Smart profile is not supported"
+      },
+      "clear": {
+        "accepted": "Profile successfully deleted",
+        "rejected": "Failed to delete profile"
+      }
+    },
     "upsert": {
       "add": "Add smart profile",
       "edit": "View smart profile",
@@ -169,11 +185,12 @@
       "title": "Depot list",
       "view": "View details",
       "alerts": {
-        "energy-limit-reached": "Energy limit reached"
+        "energy-limit-reached": "Energy limit reached ({{actual}}/{{total}}). Change settings or stop charging",
+        "automatic-disable": "Station {{charger}} is unavailable due to exceeding the energy limit"
       }
     },
     "stats": {
-      "power-usage-overview": "Power/Energy usage overview",
+      "power-usage-overview": "Energy usage overview",
       "max-energy-usage": "Max. energy usage"
     },
     "configuration": {
@@ -302,6 +319,13 @@
     }
   },
   "connector": {
+    "events": {
+      "change-availability": {
+        "accepted": "Availability of connector {{connector}} of station {{charger}} successfully changed",
+        "rejected": "Failed to change availability of connector {{connector}} of station {{charger}}",
+        "scheduled": "Change of availability for connector {{connector}} of station {{charger}} is scheduled"
+      }
+    },
     "statuses": {
       "available": "Available",
       "occupied": "Occupied",
@@ -379,6 +403,12 @@
   "stats": {
     "energy-usage": {
       "title": "Energy usage (Wh)"
+    }
+  },
+  "transactions": {
+    "title": "Transactions",
+    "events": {
+      "connector": "Transaction update for connector {{connector}} of station {{charger}}"
     }
   }
 }
