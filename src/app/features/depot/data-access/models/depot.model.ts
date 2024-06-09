@@ -33,7 +33,10 @@ export type TCreateDepot = PartialByKeys<Omit<TDepot, 'id' | 'createdAt' | 'upda
 
 export type TDepotChargerStats = Record<ConnectorStatus, number>;
 
-export type TDepotListItem = TDepot & { chargePointsStatistics: TDepotChargerStats };
+export type TDepotListItem = TDepot & {
+  chargePointsStatistics: TDepotChargerStats,
+  energyConsumptionSettings?: TDepotViewConfiguration | null
+};
 
 export type TDepotDetailsResponse = TDepot & {
   energyConsumptionSettings: TDepotViewConfiguration | null

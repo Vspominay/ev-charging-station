@@ -95,9 +95,8 @@ const ROUTES: Routes = [
       {
         path: 'users',
         resolve: {
-          list: (route: ActivatedRouteSnapshot) => {
+          list: () => {
             inject(UsersFacade).search();
-
           }
         },
         loadComponent: () => import('@features/users/ui/components/users.component')

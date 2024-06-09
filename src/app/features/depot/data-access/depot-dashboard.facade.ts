@@ -7,6 +7,7 @@ import { DepotClientService } from '@features/depot/data-access/depot.client';
 
 import { DepotStore } from '@features/depot/data-access/depot.store';
 import { TDepot, TDepotListItem } from '@features/depot/data-access/models/depot.model';
+import { getCurrentInterval } from '@features/depot/utils/get-current-interval.util';
 import { take } from 'rxjs';
 import Swal from 'sweetalert2';
 
@@ -48,27 +49,39 @@ export class DepotDashboardFacade {
   });
 
   selectDepot(depotId: TDepot['id']) {
+    this.store.setSelectedEntity({ id: depotId } as TDepotListItem);
+
     this.client.getById(depotId)
         .pipe(take(1))
         .subscribe((depot) => {
           this.store.setSelectedEntity(depot);
 
-          if (depot.energyLimit) return;
+          if (!depot.energyLimit) {
+            this.showConfigureDepotModal('Depot requires energy consumption configuration', depotId);
+            return;
+          }
 
-          Swal.fire({
-            title: 'Pay attention!',
-            text: 'Depot requires energy consumption configuration',
-            icon: 'warning',
-            confirmButtonColor: '#34c38f',
-            confirmButtonText: 'Ok, set it up',
-            allowEscapeKey: false,
-            allowOutsideClick: false,
-          }).then((configureDepot) => {
-            if (!configureDepot) return;
-
-            this.router.navigate(['depots', depotId, 'configuration']);
-          });
+          const currentInterval = getCurrentInterval(depot);
+          if (!currentInterval) {
+            this.showConfigureDepotModal('Depot configuration is outdated. Please set it up', depotId);
+          }
         });
     this.chargerStore.loadChargers(depotId);
+  }
+
+  private showConfigureDepotModal(message: string, depotId: string) {
+    Swal.fire({
+      title: 'Pay attention!',
+      text: message,
+      icon: 'warning',
+      confirmButtonColor: '#34c38f',
+      confirmButtonText: 'Ok, set it up',
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+    }).then((configureDepot) => {
+      if (!configureDepot) return;
+
+      this.router.navigate(['depots', depotId, 'configuration']);
+    });
   }
 }

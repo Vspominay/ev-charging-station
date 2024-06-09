@@ -1,10 +1,12 @@
 import { numberAttribute, Pipe, PipeTransform } from '@angular/core';
 import { EMPTY_PLACEHOLDER } from '@core/constants/empty-placeholder.constant';
 import { TLabelStyledConfig } from '@core/types/color-style.type';
+import { TDepotEnergyIntervalView } from '@features/depot/data-access/models/depot-configuration.model';
 import { TDepot } from '@features/depot/data-access/models/depot.model';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { EnergyPipe } from '@shared/pipes/energy.pipe';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
@@ -12,6 +14,7 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(localizedFormat);
 dayjs.extend(utc);
 dayjs.extend(timezone);
+dayjs.extend(customParseFormat);
 
 type TDepotMainPanelStats = TLabelStyledConfig & {
   icon: string;
@@ -27,20 +30,21 @@ export class DepotMainPanelStatsPipe implements PipeTransform {
   private energyPipe = new EnergyPipe();
   private addressPipe = new AddressPipe();
 
-  transform(depot: TDepot, currentTime: number, lang: string): Array<TDepotMainPanelStats> {
+  transform(depot: TDepot, currentInterval: TDepotEnergyIntervalView, currentTime: number, lang: string): Array<TDepotMainPanelStats> {
+    console.log(currentInterval);
     return [
-      this.getMaxProvisionPower(depot),
+      this.getMaxProvisionPower(currentInterval),
       this.getLocalTime(depot, currentTime),
       this.getLocation(depot)
     ];
   }
 
-  private getMaxProvisionPower(depot: TDepot): TDepotMainPanelStats {
+  private getMaxProvisionPower(currentInterval: TDepotEnergyIntervalView): TDepotMainPanelStats {
     return {
       icon: 'data_usage',
       style: 'primary',
-      value: numberAttribute(depot.energyLimit) ? `${this.energyPipe.transform(depot.energyLimit)}` : EMPTY_PLACEHOLDER,
-      subtitle: '10:00 - 23:23',
+      value: numberAttribute(currentInterval.energyLimit) ? `${this.energyPipe.transform(currentInterval.energyLimit)}` : EMPTY_PLACEHOLDER,
+      subtitle: `${this.getHourlyTime(currentInterval.startTime)} - ${this.getHourlyTime(currentInterval.endTime)}`,
       label: 'depot.configuration.max-provision'
     };
   }
@@ -63,5 +67,9 @@ export class DepotMainPanelStatsPipe implements PipeTransform {
       subtitle: depot.country,
       label: 'depot.configuration.location.title'
     };
+  }
+
+  private getHourlyTime(time: Dayjs | string): string {
+    return dayjs(time).format('DD.MM HH:mm');
   }
 }
