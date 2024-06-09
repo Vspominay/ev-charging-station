@@ -2,12 +2,15 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SignalrService } from '@core/services/signalr.service';
 import { NgSelectConfig } from '@ng-select/ng-select';
+import { ToastsContainer } from '@shared/components/toastr/toasts-container.component';
 
 @Component({
   selector: 'bv-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, ToastsContainer],
   template: `
+    <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+
     <router-outlet></router-outlet>
   `,
   styles: [],
