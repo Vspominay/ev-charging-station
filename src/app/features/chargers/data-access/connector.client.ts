@@ -4,6 +4,7 @@ import { TCharger } from '@features/chargers/data-access/models/charger.model';
 import { ConnectorAvailability, TConnectorView } from '@features/chargers/data-access/models/connector.model';
 
 import { catchError } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
 
@@ -17,7 +18,10 @@ export class ConnectorClient {
 
   getConnectorsByChargers(chargePoints: Array<TCharger['id']>) {
     return this.http.post<Array<TConnectorView>>(`${this.baseUrl}${this.domain}/GetByChargePoints`, chargePoints)
-               .pipe(catchError(() => []));
+               .pipe(
+                 catchError(() => []),
+                 map((connectors) => connectors.sort((a, b) => a.connectorId - b.connectorId))
+               );
   }
 
   changeAvailability(connectorId: TConnectorView['id'], availability: ConnectorAvailability) {
