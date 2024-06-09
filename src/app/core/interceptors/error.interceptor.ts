@@ -13,13 +13,27 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error) => {
       if (error.status === 401) {
         authFacade.logout();
+        notificationService.showErrorToast(getErrorMessage(error));
+
         return EMPTY;
       }
 
-      return from(notificationService.showServerError(error.error))
+      return from(notificationService.showServerError({
+        error: getErrorMessage(error)
+      }))
         .pipe(map(() => {
           throw error;
         }));
     })
   );
+};
+
+
+export const getErrorMessage = (error: any): string => {
+  if (typeof error === 'string') return error;
+
+  const isObject = typeof error === 'object';
+  if (isObject) return getErrorMessage(error.error);
+
+  return 'Unknown error';
 };
