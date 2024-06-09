@@ -2,6 +2,10 @@ import { numberAttribute } from '@angular/core';
 import { TDepotListItem } from '@features/depot/data-access/models/depot.model';
 import dayjs from 'dayjs';
 
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+
 export const getCurrentInterval = ({ energyConsumptionSettings, energyLimit }: TDepotListItem) => {
   const todayUtc = dayjs().utc();
 

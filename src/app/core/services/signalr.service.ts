@@ -19,11 +19,13 @@ export enum ChargerEvent {
   Connection = 'StationConnection',
   Changes = 'ConnectorChanges',
   AutomaticDisable = 'ChargePointAutomaticDisable',
-  ChargingProfileSet = 'ChargingProfileSet',
-  ChargingProfileCleared = 'ChargingProfileCleared',
   ReservationProcessed = 'ReservationProcessed',
   ReservationCancellationProcessed = 'ReservationCancellationProcessed',
   ChangeAvailability = 'ChangeAvailability',
+}
+
+export enum TransactionEvent {
+  Transaction = 'Transaction'
 }
 
 export interface TransactionMessage extends BaseMessage {
@@ -31,27 +33,27 @@ export interface TransactionMessage extends BaseMessage {
   transactionId: number;
 }
 
-export interface EnergyLimitExceededMessage extends BaseMessage {
-  depotId: string;
-  warningTimestamp: Date;
-  energyConsumption: number;
-  energyConsumptionLimit: number;
-}
 
 export interface ChargePointAutomaticDisableMessage extends BaseMessage {
   depotId: string;
 }
 
-export interface ChargingProfileSetMessage extends BaseMessage {
-  connectorId: TConnector['id'];
-  status: SetChargingProfileResponseStatus;
-  chargingProfileId: string;
+// profile
+export enum ProfileEvent {
+  ChargingProfileSet = 'ChargingProfileSet',
+  ChargingProfileCleared = 'ChargingProfileCleared',
 }
 
 export enum SetChargingProfileResponseStatus {
   Accepted,
   Rejected,
   NotSupported
+}
+
+export interface ChargingProfileSetMessage extends BaseMessage {
+  connectorId: number;
+  status: SetChargingProfileResponseStatus;
+  chargingProfileId: string;
 }
 
 export interface ChargingProfileClearedMessage extends BaseMessage {
@@ -65,6 +67,18 @@ export interface ChargingProfileClearedMessage extends BaseMessage {
 export enum ClearChargingProfileResponseStatus {
   Accepted,
   Unknown
+}
+
+// depot
+export enum DepotEvent {
+  EnergyLimitExceeded = 'EnergyLimitExceeded'
+}
+
+export interface EnergyLimitExceededMessage extends BaseMessage {
+  depotId: string;
+  warningTimestamp: Date;
+  energyConsumption: number;
+  energyConsumptionLimit: number;
 }
 
 export interface ReservationProcessedMessage extends BaseMessage {
@@ -142,29 +156,30 @@ export class SignalrService {
       this.eventBus.emit(new EmitEvent(ChargerEvent.Changes, data));
     });
 
-    this.hubConnection.on('Transaction', (data: TransactionMessage) => {
-      console.log('Transaction: ', data);
-      this.eventBus.emit(new EmitEvent('Transaction', data));
+    // charge profiles
+    this.hubConnection.on(ProfileEvent.ChargingProfileSet, (data: ChargingProfileSetMessage) => {
+      console.log('ChargingProfileSet: ', data);
+      this.eventBus.emit(new EmitEvent(ProfileEvent.ChargingProfileSet, data));
     });
 
-    this.hubConnection.on('EnergyLimitExceeded', (data: EnergyLimitExceededMessage) => {
+    this.hubConnection.on(ProfileEvent.ChargingProfileCleared, (data: ChargingProfileClearedMessage) => {
+      console.log('ChargingProfileCleared: ', data);
+      this.eventBus.emit(new EmitEvent(ProfileEvent.ChargingProfileCleared, data));
+    });
+
+    this.hubConnection.on(TransactionEvent.Transaction, (data: TransactionMessage) => {
+      console.log('Transaction: ', data);
+      this.eventBus.emit(new EmitEvent(TransactionEvent.Transaction, data));
+    });
+
+    this.hubConnection.on(DepotEvent.EnergyLimitExceeded, (data: EnergyLimitExceededMessage) => {
       console.log('EnergyLimitExceeded: ', data);
-      this.eventBus.emit(new EmitEvent('EnergyLimitExceeded', data));
+      this.eventBus.emit(new EmitEvent(DepotEvent.EnergyLimitExceeded, data));
     });
 
     this.hubConnection.on(ChargerEvent.AutomaticDisable, (data: ChargePointAutomaticDisableMessage) => {
       console.log('ChargePointAutomaticDisable: ', data);
       this.eventBus.emit(new EmitEvent(ChargerEvent.AutomaticDisable, data));
-    });
-
-    this.hubConnection.on(ChargerEvent.ChargingProfileSet, (data: ChargingProfileSetMessage) => {
-      console.log('ChargingProfileSet: ', data);
-      this.eventBus.emit(new EmitEvent(ChargerEvent.ChargingProfileSet, data));
-    });
-
-    this.hubConnection.on(ChargerEvent.ChargingProfileCleared, (data: ChargingProfileClearedMessage) => {
-      console.log('ChargingProfileCleared: ', data);
-      this.eventBus.emit(new EmitEvent(ChargerEvent.ChargingProfileCleared, data));
     });
 
     this.hubConnection.on(ChargerEvent.ReservationProcessed, (data: ReservationProcessedMessage) => {
