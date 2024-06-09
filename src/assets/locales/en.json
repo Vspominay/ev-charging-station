@@ -242,8 +242,8 @@
         "total-chargers": "Total chargers",
         "configured-chargers": "Configured chargers",
         "available-chargers": "Available chargers",
-        "total-power": "Total used power",
-        "left-power": "Left power"
+        "total-power": "Total used energy",
+        "left-power": "Left energy"
       },
       "notify": {
         "title": "Note",

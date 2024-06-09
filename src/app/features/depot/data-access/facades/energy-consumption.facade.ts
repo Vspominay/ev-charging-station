@@ -1,4 +1,5 @@
 import { computed, inject, Injectable, numberAttribute, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { CHARGERS_CLIENT_GATEWAY } from '@features/chargers/data-access/chargers.store';
 import { TCharger } from '@features/chargers/data-access/models/charger.model';
 import {
@@ -18,6 +19,7 @@ import { map } from 'rxjs/operators';
 export class EnergyConsumptionFacade {
   private readonly chargersClient = inject(CHARGERS_CLIENT_GATEWAY);
   private readonly configClient = inject(EnergyConsumptionsClient);
+  private readonly router = inject(Router);
 
   private $chargersSource = signal<Array<TCharger>>([]);
   private $configSource = signal<TDepotViewConfiguration>(
@@ -79,11 +81,13 @@ export class EnergyConsumptionFacade {
   save(config: TDepotConfigForm) {
     const adaptedConfig = this.adaptConfigToClient(config);
 
-    console.log(adaptedConfig);
-
     this.configClient.setDepotConfiguration(adaptedConfig)
         .pipe(take(1))
-        .subscribe(console.log);
+        .subscribe({
+          next: () => {
+            this.router.navigate(['/depots', this.$config().depotId]);
+          }
+        });
   }
 
   private adaptConfigToClient(config: TDepotConfigForm): TDepotConfiguration {

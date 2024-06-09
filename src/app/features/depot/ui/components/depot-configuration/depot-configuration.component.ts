@@ -136,13 +136,14 @@ export default class DepotConfigurationComponent {
     this.intervalBuilder.processTimeRanges(timeRanges, {
       startTime,
       finishTime: endTime,
-      power: energyLimit
+      power: 0
     }).forEach(({ startTime, finishTime, power }) => {
       this.intervalsArrayControl.push(this.fb.control({
-        startTime,
-        endTime: finishTime,
-        energyLimit: power
-      }), { emitEvent: false });
+          startTime,
+          endTime: finishTime,
+          energyLimit: power
+        }),
+        { emitEvent: false });
     });
 
     this.intervalsArrayControl.updateValueAndValidity();

@@ -1,6 +1,6 @@
 import { numberAttribute, Pipe, PipeTransform } from '@angular/core';
 import { TChargerLimit } from '@features/depot/data-access/models/depot-configuration.model';
-import { PowerPipe } from '@shared/pipes/power.pipe';
+import { EnergyPipe } from '@shared/pipes/energy.pipe';
 
 type TChargerStats = {
   label: string;
@@ -12,7 +12,7 @@ type TChargerStats = {
   standalone: true
 })
 export class DepotConfigChargerStatsPipe implements PipeTransform {
-  private readonly energyPipe = new PowerPipe();
+  private readonly energyPipe = new EnergyPipe();
 
   transform(
     chargers: Record<TChargerLimit['chargePointId'], TChargerLimit['chargePointEnergyLimit']>,

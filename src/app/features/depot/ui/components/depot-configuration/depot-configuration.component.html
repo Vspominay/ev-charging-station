@@ -350,7 +350,7 @@
                               @for (interval of intervalsArrayControl.value; track interval.energyLimit) {
                                 <tr>
                                   <th class="text-start">{{ interval.startTime.toDate() | date }}</th>
-                                  <td class="text-start">{{ interval.endTime.toDate() | date }}</td>
+                                  <th class="text-start">{{ interval.endTime.toDate() | date }}</th>
                                   <td class="text-end">{{ interval.energyLimit | energy }}</td>
                                 </tr>
                               }
