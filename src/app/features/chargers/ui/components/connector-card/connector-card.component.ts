@@ -1,5 +1,5 @@
 import { CommonModule, NgForOf, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { TConnector, TConnectorView } from '@features/chargers/data-access/models/connector.model';
 import { ConnectorAction } from '@features/chargers/data-access/services/connectors-actions.service';
 import { ConnectorActionsPipe } from '@features/chargers/ui/pipes/connector-actions.pipe';
@@ -117,12 +117,8 @@ import { TViewActionItem } from '@shared/utils/types/actions.types';
   hostDirectives: [withActionsCard],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ConnectorCardComponent implements OnChanges {
+export class ConnectorCardComponent {
   readonly hostActions: ActionsCardDirective<TViewActionItem<ConnectorAction, TConnector>> = inject(ActionsCardDirective<TViewActionItem<ConnectorAction, TConnector>>);
 
   @Input({ required: true }) connector!: TConnectorView;
-
-  public ngOnChanges(changes: SimpleChanges) {
-    console.log('ConnectorCardComponent', changes);
-  }
 }

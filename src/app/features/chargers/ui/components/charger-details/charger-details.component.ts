@@ -144,14 +144,14 @@ export default class ChargerDetailsComponent {
     const connector = <TConnectorView & { profileId?: TChargingProfile['id'] }>event.data;
 
     const isProfileExit = connector.chargingProfilesIds?.findIndex((id) => id === profileId) !== -1;
-    if(isProfileExit) return;
-
-    this.profileFacade.applyProfileForConnector(connector, profileId);
+    if (isProfileExit) return;
 
     const originProfile = connector.profileId;
-    if (!originProfile) return;
+    if (originProfile) {
+      this.profileFacade.removeProfileFromConnector(connector, originProfile);
+    }
 
-    this.profileFacade.removeProfileFromConnector(connector, originProfile);
+    this.profileFacade.applyProfileForConnector(connector, profileId);
   }
 
 
@@ -159,7 +159,7 @@ export default class ChargerDetailsComponent {
     const connector = <TConnectorView & { profileId?: TChargingProfile['id'] }>event.data;
 
     const originProfileId = connector.profileId;
-    if(!originProfileId) return;
+    if (!originProfileId) return;
 
     this.profileFacade.removeProfileFromConnector(connector, originProfileId);
   }
@@ -168,7 +168,7 @@ export default class ChargerDetailsComponent {
     return {
       ...connector,
       profileId
-    }
+    };
   }
 
   // edit charger

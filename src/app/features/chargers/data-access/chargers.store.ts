@@ -178,21 +178,32 @@ export const ChargersStore = signalStore(
           currentStatus: data.status ?? currentStatus?.currentStatus ?? ConnectorStatus16.Unavailable,
         } as TConnectorView['currentStatus'],
         soC: data.soC,
-        energy: data.energy,
-        power: data.power,
+        energy: numberAttribute(data.energy, connectorDetails.energy ?? 0),
+        power: numberAttribute(data.power, connectorDetails.power ?? 0),
         approximateChargingEndTime: data.approximateChargingEndTime
       };
       patchState(store, { connectors: mergeConnectors(store.connectors(), [updatedConnector]) });
     },
-    setConnectorProfiles: (
+    addConnectorProfiles: (
       connectorId: TConnectorView['id'],
       chargingProfileIds: Array<TConnectorView['id']>
     ) => {
       const connector = store.connectors().find((connector) => connector.id === connectorId);
-
       if (!connector) return;
 
-      connector.chargingProfilesIds = chargingProfileIds ?? [];
+      connector.chargingProfilesIds = [...new Set([...connector.chargingProfilesIds ?? [], ...chargingProfileIds])];
+      patchState(store, { connectors: mergeConnectors(store.connectors(), [connector]) });
+    },
+    removeConnectorProfiles: (
+      connectorId: TConnectorView['id'],
+      chargingProfileIds: Array<TConnectorView['id']>
+    ) => {
+      const connector = store.connectors().find((connector) => connector.id === connectorId);
+      if (!connector) return;
+
+      const profilesToRemove = new Set(chargingProfileIds);
+
+      connector.chargingProfilesIds = (connector.chargingProfilesIds ?? []).filter((id) => !profilesToRemove.has(id));
       patchState(store, { connectors: mergeConnectors(store.connectors(), [connector]) });
     },
     upsertCharger: (charger: TCharger) => {
