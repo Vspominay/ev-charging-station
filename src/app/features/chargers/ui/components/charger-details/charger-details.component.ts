@@ -143,7 +143,7 @@ export default class ChargerDetailsComponent {
     console.log('Event: ', event, profileId);
     const connector = <TConnectorView & { profileId?: TChargingProfile['id'] }>event.data;
 
-    const isProfileExit = connector.chargingProfilesIds?.findIndex((id) => id === profileId) !== -1;
+    const isProfileExit = connector.chargingProfilesIds?.find((id) => id === profileId);
     if (isProfileExit) return;
 
     const originProfile = connector.profileId;

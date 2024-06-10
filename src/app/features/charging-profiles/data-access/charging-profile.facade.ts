@@ -71,7 +71,7 @@ export class ChargingProfileFacade {
 
   applyProfileForConnector(connector: TConnectorView, chargingProfileId: TChargingProfile['id']) {
     if (!connector) {
-      console.warn(`You tru to apply profile for an undefined connector`);
+      console.warn(`You try to apply profile for an undefined connector`);
       return;
     }
 

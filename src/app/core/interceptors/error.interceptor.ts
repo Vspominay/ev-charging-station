@@ -35,5 +35,5 @@ export const getErrorMessage = (error: any): string => {
   const isObject = typeof error === 'object';
   if (isObject) return getErrorMessage(error.error);
 
-  return 'Unknown error';
+  return 'Something went wrong. Please try again later.';
 };
