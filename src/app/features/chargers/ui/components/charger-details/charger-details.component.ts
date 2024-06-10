@@ -66,7 +66,7 @@ import { DndDropEvent, DndModule } from 'ngx-drag-drop';
   templateUrl: './charger-details.component.html',
 })
 export default class ChargerDetailsComponent {
-  private readonly chargerFacade = inject(ChargersFacade);
+  readonly chargerFacade = inject(ChargersFacade);
   private readonly depotFacade = inject(DepotDashboardFacade);
   private readonly profileFacade = inject(ChargingProfileFacade);
   private readonly fb = inject(NonNullableFormBuilder);

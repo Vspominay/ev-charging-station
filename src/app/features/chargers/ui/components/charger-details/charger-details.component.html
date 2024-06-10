@@ -134,7 +134,11 @@
                    dndEffectAllowed="copyMove"
                    (dndStart)="updateCurrentConnector(connector)"
               >
-                <ev-connector-card [connector]="connector"/>
+                <ev-connector-card
+                  [connector]="connector"
+                  [actions]="$any(chargerFacade.$actions().connector)"
+                  (selectAction)="chargerFacade.handleConnectorAction($event.value, connector)"
+                />
               </div>
             } @empty {
               <div class="w-100 text-center">
@@ -258,7 +262,11 @@
   }
   <ng-template #ConnectorContent let-connector="connector">
     <div class="tasks-box">
-      <ev-connector-card [connector]="connector"/>
+      <ev-connector-card
+        [connector]="connector"
+        [actions]="$any(chargerFacade.$actions().connector)"
+        (selectAction)="chargerFacade.handleConnectorAction($event.value, connector)"
+      />
     </div>
   </ng-template>
 </form>
