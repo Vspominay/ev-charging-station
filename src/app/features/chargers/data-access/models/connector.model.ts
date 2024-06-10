@@ -54,15 +54,21 @@ export type TConnectorWithCharger = TConnector & {
   charger: Pick<TCharger, 'id' | 'chargePointSerialNumber'>;
 };
 
-/**
- * BE Response
- */
-export type TConnectorView = TConnectorSnapshotCharging & TUpsertInfo & WithGuid<{
+type TBaseConnector = TUpsertInfo & WithGuid<{
   chargePointId: TCharger['id'];
   connectorId: number;
   currentStatus: TConnectorStatus | null;
   chargingProfilesIds: Array<TChargingProfile['id']> | null;
 }>;
+
+/**
+ * BE Response
+ */
+export type TConnectorView = TBaseConnector & TConnectorSnapshotCharging;
+
+export type TAggregatedConnector = TBaseConnector & {
+  consumption: Record<'power' | 'consumedEnergy', number>;
+};
 
 type TConnectorSnapshotCharging = {
   soC?: number;

@@ -171,6 +171,8 @@ export const ChargersStore = signalStore(
       }
 
       const { currentStatus, ...connectorDetails } = connector;
+      const currentEnergy = connectorDetails.energy ?? 0;
+
       const updatedConnector: TConnectorView = {
         ...connectorDetails,
         currentStatus: {
@@ -178,7 +180,7 @@ export const ChargersStore = signalStore(
           currentStatus: data.status ?? currentStatus?.currentStatus ?? ConnectorStatus16.Unavailable,
         } as TConnectorView['currentStatus'],
         soC: data.soC,
-        energy: numberAttribute(data.energy, connectorDetails.energy ?? 0),
+        energy: currentEnergy + numberAttribute(data.energy, 0),
         power: numberAttribute(data.power, connectorDetails.power ?? 0),
         approximateChargingEndTime: data.approximateChargingEndTime
       };

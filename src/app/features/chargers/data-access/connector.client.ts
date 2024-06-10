@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { TCharger } from '@features/chargers/data-access/models/charger.model';
-import { ConnectorAvailability, TConnectorView } from '@features/chargers/data-access/models/connector.model';
+import {
+  ConnectorAvailability, TAggregatedConnector, TConnectorView
+} from '@features/chargers/data-access/models/connector.model';
 
-import { catchError } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
@@ -16,11 +18,12 @@ export class ConnectorClient {
   private readonly domain = 'Connector';
   private readonly baseUrl = environment.baseUrl;
 
-  getConnectorsByChargers(chargePoints: Array<TCharger['id']>) {
-    return this.http.post<Array<TConnectorView>>(`${this.baseUrl}${this.domain}/GetByChargePoints`, chargePoints)
+  getConnectorsByChargers(chargePoints: Array<TCharger['id']>): Observable<Array<TConnectorView>> {
+    return this.http.post<Array<TAggregatedConnector>>(`${this.baseUrl}aggregator/${this.domain}/GetByChargePoints`, chargePoints)
                .pipe(
                  catchError(() => []),
-                 map((connectors) => connectors.sort((a, b) => a.connectorId - b.connectorId))
+                 map((connectors) => connectors.sort((a, b) => a.connectorId - b.connectorId)),
+                 map((connectors) => connectors.map(this.adaptAggregatedConnectorToConnectorView))
                );
   }
 
@@ -29,5 +32,16 @@ export class ConnectorClient {
       connectorId,
       availabilityType: availability
     });
+  }
+
+  private adaptAggregatedConnectorToConnectorView({
+    consumption,
+    ...baseConnector
+  }: TAggregatedConnector): TConnectorView {
+    return {
+      ...baseConnector,
+      power: consumption.power,
+      energy: consumption.consumedEnergy
+    };
   }
 }
