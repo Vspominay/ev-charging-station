@@ -42,7 +42,6 @@ export class UpsertChargingProfileService {
   }
 
 
-
   private getLabels(isExistDepot: boolean): Record<'label' | 'save', string> {
     const label = isExistDepot ? 'profile.upsert.edit' : 'profile.upsert.add';
     const save = isExistDepot ? 'base.buttons.close' : 'base.buttons.create';

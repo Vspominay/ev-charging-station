@@ -74,7 +74,6 @@ export class UpsertChargingProfileComponent {
 
     console.log(profile);
 
-
     const timeRanges: Array<TTimeRange> = this.adaptChargingSchedulePeriodsToTimeRange(chargingSchedulePeriods);
     timeRanges.forEach((interval) => this.addEventFromTimeInterval(interval));
 

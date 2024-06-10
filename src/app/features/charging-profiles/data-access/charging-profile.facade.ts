@@ -134,7 +134,7 @@ export class ChargingProfileFacade {
         const connectorId = this.getConnectorInChargeStation(data.chargePointId, data.connectorId)?.id;
 
         if (connectorId) {
-          this.chargerStore.addConnectorProfiles(connectorId, [data.chargingProfileId]);
+          this.chargerStore.removeConnectorProfiles(connectorId, [data.chargingProfileId]);
         }
       }
 
