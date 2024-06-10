@@ -7,6 +7,8 @@ import { ChargersFacade } from '@features/chargers/data-access/chargers.facade';
 import { TConnectorView } from '@features/chargers/data-access/models/connector.model';
 import { ConnectorCardComponent } from '@features/chargers/ui/components/connector-card/connector-card.component';
 import { ChargerDetailsPipe } from '@features/chargers/ui/pipes/charger-details.pipe';
+import { ConnectorImportantStatusPipe } from '@features/chargers/ui/pipes/connector-important-status.pipe';
+import { ConnectorStatusPipe } from '@features/chargers/ui/pipes/connector-status.pipe';
 import { ChargingProfileFacade } from '@features/charging-profiles/data-access/charging-profile.facade';
 import { TChargingProfile } from '@features/charging-profiles/data-access/models/charging-profile.model';
 import {
@@ -60,6 +62,8 @@ import { DndDropEvent, DndModule } from 'ngx-drag-drop';
     ViewModeDirective,
     NgbCollapse,
     EmptyResultsComponent,
+    ConnectorImportantStatusPipe,
+    ConnectorStatusPipe,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [DatePipe],

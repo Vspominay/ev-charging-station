@@ -4,6 +4,8 @@ import { RouterLink } from '@angular/router';
 import { ChargersFacade } from '@features/chargers/data-access/chargers.facade';
 import { TChargerWithConnectors } from '@features/chargers/data-access/models/charger.model';
 import { ConnectorCardComponent } from '@features/chargers/ui/components/connector-card/connector-card.component';
+import { ConnectorImportantStatusPipe } from '@features/chargers/ui/pipes/connector-important-status.pipe';
+import { ConnectorStatusPipe } from '@features/chargers/ui/pipes/connector-status.pipe';
 import { DepotDashboardFacade } from '@features/depot/data-access/depot-dashboard.facade';
 import { NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
@@ -26,7 +28,9 @@ import { ListControlBarComponent } from '@shared/widgets/list-control-bar/list-c
     NgbDropdownItem,
     TranslateModule,
     ListControlBarComponent,
-    EmptyResultsComponent
+    EmptyResultsComponent,
+    ConnectorImportantStatusPipe,
+    ConnectorStatusPipe
   ],
   templateUrl: './charger-list.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

@@ -193,7 +193,10 @@
                   <div class="flex-grow-1">
                     <h6 class="fs-14 text-uppercase fw-semibold mb-0">
                       {{ profile.name }}
-                      <small class="badge bg-success align-bottom ms-1 totaltask-badge">{{ profile.connectors?.length ?? 0 }}</small>
+
+                      @if (charger.connectors | connectorImportantStatus | connectorStatus; as chargerStatus) {
+                        <small class="badge bg-{{chargerStatus.style}} align-bottom ms-1 totaltask-badge">{{ charger.connectors.length }}</small>
+                      }
                     </h6>
                   </div>
 
