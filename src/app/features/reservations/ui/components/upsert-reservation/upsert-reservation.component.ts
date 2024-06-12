@@ -1,4 +1,4 @@
-import { Component, inject, Injector, Input, runInInjectionContext } from '@angular/core';
+import { Component, inject, Injector, Input, runInInjectionContext, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DESCRIPTION_MAX_LENGTH, FIELD_MAX_LENGTH } from '@core/validators/field-max-length.validators';
@@ -19,6 +19,10 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 import { switchMap } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
+export enum ReservationAction {
+  Delete = 'delete'
+}
+
 @Component({
   selector: 'ev-upsert-reservation',
   standalone: true,
@@ -29,9 +33,12 @@ import { debounceTime } from 'rxjs/operators';
 export class UpsertReservationComponent extends AbstractUpsertEntityModalDirective<ControlsOf<TUpsertReservation>> {
   private readonly injector = inject(Injector);
 
+  readonly $isEventExist = signal(false);
+
   @Input() labels!: Record<'label' | 'save', string>;
 
   @Input() set reservation(value: TUpsertReservation) {
+    this.$isEventExist.set(Boolean(value.name));
     this.upsertForm.patchValue(value);
   }
 
@@ -50,6 +57,9 @@ export class UpsertReservationComponent extends AbstractUpsertEntityModalDirecti
   });
   formControlNames = getFormControlsNames(this.upsertForm);
 
+  delete() {
+    this.dialog.close({ action: ReservationAction.Delete });
+  }
 
   readonly $connectors = toSignal(this.upsertForm.controls.chargePointId.valueChanges
                                       .pipe(

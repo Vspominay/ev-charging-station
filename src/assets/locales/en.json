@@ -4,6 +4,7 @@
       "create": "Create",
       "edit": "Edit",
       "delete": "Delete",
+      "cancel": "Cancel",
       "add": "Add",
       "save": "Save",
       "close": "Close",
@@ -364,7 +365,21 @@
     }
   },
   "reservation": {
+    "title": "Reservations",
+    "events": {
+      "accepted": "Connector {{connector}} on charger {{charger}} is reserved",
+      "faulted": "Fault at connector {{connector}} on charger {{charger}}",
+      "occupied": "Connector {{connector}} on charger {{charger}} is occupied",
+      "rejected": "Reservation for connector {{connector}} on charger {{charger}} rejected",
+      "unavailable": "Connector {{connector}} on charger {{charger}} is unavailable",
+      "cancel": {
+        "accepted": "Reservation for connector {{connector}} on charger {{charger}} is canceled",
+        "rejected": "Failed to cancel reservation for connector {{connector}} on charger {{charger}}"
+      }
+    },
     "upsert": {
+      "edit": "Edit reservation",
+      "create": "Create reservation",
       "connector": {
         "title": "Connector",
         "placeholder": "Please select charge station first"

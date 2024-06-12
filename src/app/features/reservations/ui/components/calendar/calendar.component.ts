@@ -1,12 +1,10 @@
 import { NgClass } from '@angular/common';
-import {
-  AfterViewInit, ChangeDetectorRef, Component, computed, effect, inject, OnInit, TemplateRef, ViewChild
-} from '@angular/core';
-import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AfterViewInit, Component, computed, effect, inject, ViewChild } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { TReservation, TUpsertReservation } from '@features/reservations/data-access/models/reservation.model';
-import { RESERVATION_CLIENT_GATEWAY, ReservationStore } from '@features/reservations/data-access/reservation.store';
+import { ReservationFacade } from '@features/reservations/data-access/reservation.facade';
 import {
-  UpsertReservationComponent
+  ReservationAction, UpsertReservationComponent
 } from '@features/reservations/ui/components/upsert-reservation/upsert-reservation.component';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 
@@ -24,14 +22,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BreadcrumbsComponent } from '@shared/components/breadcrumbs/breadcrumbs.component';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import dayjs from 'dayjs';
-import { filter, switchMap, take } from 'rxjs';
-import { tap } from 'rxjs/operators';
-// Sweet Alert
-import Swal from 'sweetalert2';
-
-// Calendar Services
-// import { restApiService } from "../../../core/services/rest-api.service";
-import { category } from './data';
+import { filter, take } from 'rxjs';
 
 @Component({
   selector: 'app-calendar',
@@ -46,20 +37,16 @@ import { category } from './data';
   ],
   styleUrls: ['./calendar.component.scss']
 })
+export default class CalendarComponent implements AfterViewInit {
+  private readonly modalService = inject(NgbModal);
 
-/**
- * Calendar Component
- */
-export default class CalendarComponent implements OnInit, AfterViewInit {
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
 
-  readonly #store = inject(ReservationStore);
-  readonly #client = inject(RESERVATION_CLIENT_GATEWAY);
+  private readonly facade = inject(ReservationFacade);
+  currentEvents: EventApi[] = [];
 
   readonly $reservations = computed<Array<EventInput>>(() => {
-    const reservations = this.#store.entities();
-
-    console.log(reservations);
+    const reservations = this.facade.$entities();
 
     return reservations.map((reservation) => ({
       id: reservation.id,
@@ -76,9 +63,8 @@ export default class CalendarComponent implements OnInit, AfterViewInit {
     }));
   });
 
-
   private readonly validRange: DateRangeInput = {
-    start: dayjs().add(4, 'hours').toISOString(),
+    start: dayjs().toISOString(),
     end: dayjs().add(3, 'months').toISOString(),
   };
 
@@ -96,6 +82,7 @@ export default class CalendarComponent implements OnInit, AfterViewInit {
     },
     initialView: 'dayGridMonth',
     themeSystem: 'bootstrap',
+    nowIndicator: true,
     initialEvents: [],
     weekends: true,
     editable: true,
@@ -105,25 +92,10 @@ export default class CalendarComponent implements OnInit, AfterViewInit {
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this),
     eventResize: this.handleResize.bind(this),
-    eventDragStop: this.handleResize.bind(this),
+    eventDrop: this.handleResize.bind(this),
   };
 
-  // bread crumb items
-  breadCrumbItems!: Array<{}>;
-
-  // calendar
-  calendarEvents!: EventInput[];
-  editEvent: any;
-  formEditData!: UntypedFormGroup;
-  newEventDate: any;
-  category!: any[];
-  submitted = false;
-
-  // Calendar click Event
-  formData!: UntypedFormGroup;
-  @ViewChild('editmodalShow') editmodalShow!: TemplateRef<any>;
-
-  constructor(private modalService: NgbModal, private formBuilder: UntypedFormBuilder, private changeDetector: ChangeDetectorRef) {
+  constructor() {
     effect(() => {
       const reservations = this.$reservations();
 
@@ -131,57 +103,13 @@ export default class CalendarComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private updateCalendarEvents(events: EventInput[]) {
-    if (!this.calendar) return;
-
-    this.calendar.removeAllEvents();
-
-    events.forEach((reservation) => {
-      this.calendar.addEvent(reservation);
-    });
-  }
-
   ngAfterViewInit() {
     this.updateCalendarEvents(this.$reservations());
   }
 
-  ngOnInit(): void {
-    /**
-     * BreadCrumb
-     */
-    this.breadCrumbItems = [
-      { label: 'Apps' },
-      { label: 'Calendar', active: true }
-    ];
-
-    // Validation
-    this.formData = this.formBuilder.group({
-      title: ['', [Validators.required]],
-      category: ['', [Validators.required]],
-      location: ['', [Validators.required]],
-      description: ['', [Validators.required]],
-      date: ['', Validators.required],
-      start: ['', Validators.required],
-      end: ['', Validators.required]
-    });
-
-    this._fetchData();
-  }
-
-
-  private get calendar() {
+  get calendar() {
     return this.calendarComponent?.getApi();
   }
-
-
-  /**
-   * Fetches the data
-   */
-  private _fetchData() {
-    this.category = category;
-  }
-
-  currentEvents: EventApi[] = [];
 
   /**
    * Event add modal
@@ -201,27 +129,10 @@ export default class CalendarComponent implements OnInit, AfterViewInit {
              .pipe(
                filter(Boolean),
                take(1),
-               tap((data: TUpsertReservation) => {
-                 this.#store.upsert({
-                   ...data,
-                   reservationId: '',
-                   transactionId: '',
-                   tagId: data.ocppTagId,
-                   status: 'active',
-                   isCancelled: false,
-                   id: ''
-                 });
-               }),
-               switchMap((data: TUpsertReservation) => this.#client.create(data))
              )
-             .subscribe();
-  }
-
-  private getLabels(isUpsert: boolean): Record<'label' | 'save', string> {
-    return {
-      label: isUpsert ? 'Edit Reservation' : 'Create Reservation',
-      save: isUpsert ? 'Save' : 'Create'
-    };
+             .subscribe((reservation) => {
+               this.facade.create(reservation);
+             });
   }
 
   /**
@@ -229,9 +140,8 @@ export default class CalendarComponent implements OnInit, AfterViewInit {
    */
   handleEventClick(clickInfo: EventClickArg) {
     const dialogRef = this.modalService.open(UpsertReservationComponent);
-    const { tagId, startDateTime, expiryDateTime, ...reservation } = clickInfo.event.extendedProps as TReservation;
-
-    console.log(clickInfo.event.extendedProps);
+    const fullReservation = clickInfo.event.extendedProps as TReservation;
+    const { tagId, startDateTime, expiryDateTime, ...reservation } = fullReservation;
 
     Object.assign(dialogRef.componentInstance, {
       labels: this.getLabels(true),
@@ -247,10 +157,17 @@ export default class CalendarComponent implements OnInit, AfterViewInit {
              .pipe(
                filter(Boolean),
                take(1),
-               switchMap((updatedReservation: TUpsertReservation) => this.#client.update(reservation.id, updatedReservation))
              )
-             .subscribe((reservation) => {
-               this.#store.upsert(reservation);
+             .subscribe((upsertPayload: TUpsertReservation | { action: ReservationAction }) => {
+               const isDeleteAction = (upsertPayload as {
+                 action: ReservationAction
+               }).action === ReservationAction.Delete;
+
+               if (isDeleteAction) {
+                 this.facade.delete(reservation.id);
+               } else {
+                 this.facade.edit(reservation.id, upsertPayload as TUpsertReservation, fullReservation);
+               }
              });
   }
 
@@ -265,60 +182,29 @@ export default class CalendarComponent implements OnInit, AfterViewInit {
       ocppTagId: reservation.tagId
     };
 
-    this.#client.update(reservation.id, reservationUpsert)
-        .subscribe((reservation) => {
-          this.#store.upsert(reservation);
-        });
+    console.log(reservationUpsert, args.event.toJSON());
+
+    this.facade.edit(reservation.id, reservationUpsert, reservation);
   }
 
-  /**
-   * Events bind in calander
-   * @param events events
-   */
   handleEvents(events: EventApi[]) {
-
     this.currentEvents = events;
-    // this.changeDetector.detectChanges();
   }
 
-  /***
-   * Model Position Set
-   */
-  position() {
-    Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: 'Event has been saved',
-      showConfirmButton: false,
-      timer: 1000,
+  private updateCalendarEvents(events: EventInput[]) {
+    if (!this.calendar) return;
+
+    this.calendar.removeAllEvents();
+
+    events.forEach((reservation) => {
+      this.calendar.addEvent(reservation);
     });
   }
 
-  /***
-   * Model Edit Position Set
-   */
-  Editposition() {
-    Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: 'Event has been Updated',
-      showConfirmButton: false,
-      timer: 1000,
-    });
-  }
-
-  /**
-   * Event Data Get
-   */
-  get form() {
-    return this.formData.controls;
-  }
-
-  /**
-   * Delete event
-   */
-  deleteEventData() {
-    this.editEvent.remove();
-    this.modalService.dismissAll();
+  private getLabels(isUpsert: boolean): Record<'label' | 'save', string> {
+    return {
+      label: isUpsert ? 'reservation.upsert.edit' : 'reservation.upsert.create',
+      save: isUpsert ? 'base.buttons.save' : 'base.buttons.create'
+    };
   }
 }

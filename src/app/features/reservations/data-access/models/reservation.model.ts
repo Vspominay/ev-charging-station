@@ -22,5 +22,9 @@ export type TReservation = WithGuid<{
 export type TUpsertReservation =
   Pick<TReservation, 'chargePointId' | 'connectorId' | 'startDateTime' | 'expiryDateTime' | 'name' | 'description'>
   & {
-  ocppTagId: TOcppTag['id'],
+  ocppTagId: TOcppTag['id']
 };
+
+export type TUpsertReservationRequest = Omit<TUpsertReservation, 'connectorId'> & {
+  connectorId: number;
+}

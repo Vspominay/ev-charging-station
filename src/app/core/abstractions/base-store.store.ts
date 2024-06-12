@@ -102,6 +102,11 @@ export function createGenericStore<T extends GenericEntity, TCreateEntity = T>(
           })
         )
       ),
+      localDelete: (id: T['id']) => {
+        patchState(store, {
+          entities: store.entities().filter((entity) => entity.id !== id)
+        });
+      },
       setSelectedEntity: (entity: T) => {
         patchState(store, { currentEntity: entity });
       },

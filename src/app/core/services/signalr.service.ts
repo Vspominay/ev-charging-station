@@ -19,8 +19,6 @@ export enum ChargerEvent {
   Connection = 'StationConnection',
   Changes = 'ConnectorChanges',
   AutomaticDisable = 'ChargePointAutomaticDisable',
-  ReservationProcessed = 'ReservationProcessed',
-  ReservationCancellationProcessed = 'ReservationCancellationProcessed',
   ChangeAvailability = 'ChangeAvailability',
 }
 
@@ -79,6 +77,11 @@ export interface EnergyLimitExceededMessage extends BaseMessage {
   warningTimestamp: Date;
   energyConsumption: number;
   energyConsumptionLimit: number;
+}
+
+export enum ReservationEvent {
+  ReservationProcessed = 'ReservationProcessed',
+  ReservationCancellationProcessed = 'ReservationCancellationProcessed',
 }
 
 export interface ReservationProcessedMessage extends BaseMessage {
@@ -182,14 +185,14 @@ export class SignalrService {
       this.eventBus.emit(new EmitEvent(ChargerEvent.AutomaticDisable, data));
     });
 
-    this.hubConnection.on(ChargerEvent.ReservationProcessed, (data: ReservationProcessedMessage) => {
+    this.hubConnection.on(ReservationEvent.ReservationProcessed, (data: ReservationProcessedMessage) => {
       console.log('ReservationProcessed: ', data);
-      this.eventBus.emit(new EmitEvent(ChargerEvent.ReservationProcessed, data));
+      this.eventBus.emit(new EmitEvent(ReservationEvent.ReservationProcessed, data));
     });
 
-    this.hubConnection.on(ChargerEvent.ReservationCancellationProcessed, (data: ReservationCancellationProcessedMessage) => {
+    this.hubConnection.on(ReservationEvent.ReservationCancellationProcessed, (data: ReservationCancellationProcessedMessage) => {
       console.log('ReservationCancellationProcessed: ', data);
-      this.eventBus.emit(new EmitEvent(ChargerEvent.ReservationCancellationProcessed, data));
+      this.eventBus.emit(new EmitEvent(ReservationEvent.ReservationCancellationProcessed, data));
     });
 
     this.hubConnection.on(ChargerEvent.ChangeAvailability, (data: ChangeAvailabilityMessage) => {
