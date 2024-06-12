@@ -194,8 +194,8 @@
                     <h6 class="fs-14 text-uppercase fw-semibold mb-0">
                       {{ profile.name }}
 
-                      @if (charger.connectors | connectorImportantStatus | connectorStatus; as chargerStatus) {
-                        <small class="badge bg-{{chargerStatus.style}} align-bottom ms-1 totaltask-badge">{{ charger.connectors.length }}</small>
+                      @if (profile.connectors | connectorImportantStatus | connectorStatus; as chargerStatus) {
+                        <small class="badge bg-{{chargerStatus.style}} align-bottom ms-1 totaltask-badge">{{ profile.connectors.length }}</small>
                       }
                     </h6>
                   </div>

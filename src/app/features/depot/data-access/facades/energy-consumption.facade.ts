@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { NotificationService } from '@core/services/notification.service';
 import { CHARGERS_CLIENT_GATEWAY } from '@features/chargers/data-access/chargers.store';
 import { TCharger } from '@features/chargers/data-access/models/charger.model';
+import { DepotDashboardFacade } from '@features/depot/data-access/depot-dashboard.facade';
 import {
   TChargerLimit, TDepotConfiguration, TDepotViewConfiguration
 } from '@features/depot/data-access/models/depot-configuration.model';
@@ -21,6 +22,7 @@ export class EnergyConsumptionFacade {
   private readonly chargersClient = inject(CHARGERS_CLIENT_GATEWAY);
   private readonly configClient = inject(EnergyConsumptionsClient);
   private readonly router = inject(Router);
+  private readonly dashboardFacade = inject(DepotDashboardFacade);
 
   private $chargersSource = signal<Array<TCharger>>([]);
   private $configSource = signal<TDepotViewConfiguration>(
@@ -89,7 +91,12 @@ export class EnergyConsumptionFacade {
         .subscribe({
           next: () => {
             this.notificationService.showSuccess()
-                .then(() => this.router.navigate(['/depots', this.$config().depotId]));
+                .then(() => {
+                  const depotId = this.$config().depotId;
+
+                  this.dashboardFacade.selectDepot(depotId);
+                  this.router.navigate(['/depots', depotId]);
+                });
           }
         });
   }

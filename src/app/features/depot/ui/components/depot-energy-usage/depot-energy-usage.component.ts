@@ -86,7 +86,7 @@ export class DepotEnergyUsageComponent {
               color: '#fff',
               background: panelStyle,
             },
-            text: this.translate.instant('depot.stats.max-energy-usage'),
+            text: 'Max. Energy Usage',
           },
         }
       ],
@@ -94,7 +94,7 @@ export class DepotEnergyUsageComponent {
   });
 
   $panelStyle = computed<TColorStyle>(() => {
-    const { energyLimit } = this.depot();
+    const energyLimit = this.$currentInterval().energyLimit;
     const energyUsage = this.energyUsage();
     const [primary, danger] = this.colors;
 

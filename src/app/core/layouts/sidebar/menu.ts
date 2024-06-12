@@ -7,7 +7,7 @@ export const MENU: MenuItem[] = [
   },
   {
     label: 'sidebar.depots',
-    link: 'depots',
+    link: 'depots/list',
     icon: 'emoji_transportation',
   },
   {
@@ -15,10 +15,11 @@ export const MENU: MenuItem[] = [
     link: 'dashboard',
     icon: 'dashboard',
   },
-  // {
-  //   label: 'sidebar.statistics',
-  //   icon: 'query_stats',
-  // },
+  {
+    label: 'sidebar.statistics',
+    icon: 'query_stats',
+    link: 'dashboard/stats',
+  },
   {
     label: 'sidebar.depot-config',
     link: 'configuration',
@@ -43,6 +44,7 @@ export const MENU: MenuItem[] = [
 
 export const DEPOT_SCOPED_LINKS: Set<string> = new Set([
   'dashboard',
+  'dashboard/stats',
   'configuration',
   'users',
   'ocpp-tags',

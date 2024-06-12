@@ -122,9 +122,6 @@ export class ChargersFacade {
       const { message, ...config } = this.getToastChangeAvailability(data.status);
 
       this.toastService.show(message, { ...config, params });
-
-      const isSuccess = data.status === ChangeAvailabilityResponseStatus.Accepted;
-      if (!isSuccess) return;
     });
   }
 
