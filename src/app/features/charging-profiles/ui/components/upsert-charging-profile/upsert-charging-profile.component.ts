@@ -66,16 +66,18 @@ export class UpsertChargingProfileComponent {
 
   @Input() labels!: Record<'label' | 'save', string>;
 
+  initTimeRanges: Array<TTimeRange> = [];
+
   @Input() set profile(value: TChargingProfile | null) {
     if (!value || !Object.keys(value).length) return;
 
     const { chargingSchedulePeriods, ...profile } = value;
     this.form.patchValue(profile);
 
-    console.log(profile);
 
     const timeRanges: Array<TTimeRange> = this.adaptChargingSchedulePeriodsToTimeRange(chargingSchedulePeriods);
     timeRanges.forEach((interval) => this.addEventFromTimeInterval(interval));
+    this.initTimeRanges = timeRanges;
 
     if (!value.id) return;
     this.form.disable();
@@ -90,13 +92,13 @@ export class UpsertChargingProfileComponent {
 
       if (i + 1 < periods.length) {
         const nextPeriod = periods[i + 1];
-        finishTime = dayjs(nextPeriod.startPeriod).subtract(1, 'seconds');
+        finishTime = dayjs().startOf('day').add(nextPeriod.startPeriod - 1, 'seconds');
       } else {
         finishTime = dayjs(timeRanges.at(-1)?.finishTime).endOf('day');
       }
 
       timeRanges.push({
-        startTime: dayjs(startPeriod),
+        startTime: dayjs().startOf('day').add(startPeriod, 'seconds'),
         finishTime,
         power: limit
       });
@@ -186,10 +188,10 @@ export class UpsertChargingProfileComponent {
       selectable: !this.isProfileExist,
       selectMirror: true,
       dayMaxEvents: true,
-      validRange,
+      // validRange,
       select: this.handleDateSelect.bind(this),
       eventClick: this.handleEventClick.bind(this),
-      eventsSet: this.handleEvents.bind(this)
+      eventsSet: this.handleEvents.bind(this),
     };
   });
 
@@ -222,7 +224,7 @@ export class UpsertChargingProfileComponent {
 
       if (!timeRange || !this.calendar) return;
 
-      const intervals = this.timeIntervals;
+      const intervals = this.initTimeRanges;
 
       if (!intervals.length) {
         this.calendar.removeAllEvents();
